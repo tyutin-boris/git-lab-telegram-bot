@@ -3,22 +3,22 @@ package org.boris.bot.api;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 public class Label {
-    int id;
+    Long id;
     String title;
     String color;
     @JsonProperty("project_id")
-    int projectId;
+    Long projectId;
     @JsonProperty("created_at")
-    LocalDateTime createdAt;
+    OffsetDateTime createdAt;
     @JsonProperty("updated_at")
-    LocalDateTime updatedAt;
-    int template;
+    OffsetDateTime updatedAt;
+    Boolean template;
     String description;
     String type;
     @JsonProperty("group_id")
-    int groupId;
+    Long groupId;
 }

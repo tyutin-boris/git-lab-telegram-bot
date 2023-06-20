@@ -3,36 +3,36 @@ package org.boris.bot.api;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Data
 public class ObjectAttributes {
-    int id;
-    int iid;
+    Long id;
+    Long iid;
     @JsonProperty("target_branch")
     String targetBranch;
     @JsonProperty("source_branch")
     String sourceBranch;
     @JsonProperty("source_project_id")
-    int sourceProjectId;
+    Long sourceProjectId;
     @JsonProperty("author_id")
-    int authorId;
+    Long authorId;
     @JsonProperty("assignee_ids")
     List<Integer> assigneeIds;
     @JsonProperty("assignee_id")
-    int assigneeId;
+    Long assigneeId;
     @JsonProperty("reviewer_ids")
     List<Integer> reviewerIds;
     String title;
     @JsonProperty("created_at")
-    LocalDateTime createdAt;
+    OffsetDateTime createdAt;
     @JsonProperty("updated_at")
-    LocalDateTime updatedAt;
+    OffsetDateTime updatedAt;
     @JsonProperty("last_edited_at")
-    LocalDateTime lastEditedAt;
+    OffsetDateTime lastEditedAt;
     @JsonProperty("last_edited_by_id")
-    int lastEditedById;
+    Long lastEditedById;
     @JsonProperty("milestone_id")
     Long milestoneId;
     @JsonProperty("state_id")

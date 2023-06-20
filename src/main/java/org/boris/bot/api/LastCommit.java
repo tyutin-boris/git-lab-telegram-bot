@@ -2,14 +2,14 @@ package org.boris.bot.api;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Data
 public class LastCommit {
-    Long id;
+    String id;
     String message;
     String title;
-    LocalDateTime timestamp;
+    OffsetDateTime timestamp;
     String url;
     Author author;
 }

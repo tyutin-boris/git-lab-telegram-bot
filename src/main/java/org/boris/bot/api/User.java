@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class User {
-    int id;
+    Long id;
     String name;
     String username;
     @JsonProperty("avatar_url")

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class Project {
-        int id;
+        Long id;
         String name;
         String description;
         @JsonProperty("web_url")
@@ -18,7 +18,7 @@ public class Project {
         String gitHttpUrl;
         String namespace;
         @JsonProperty("visibility_level")
-        int visibilityLevel;
+        Long visibilityLevel;
         @JsonProperty("path_with_namespace")
         String pathWithNamespace;
         @JsonProperty("default_branch")
