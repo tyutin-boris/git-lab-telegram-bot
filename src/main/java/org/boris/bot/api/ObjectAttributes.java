@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -26,15 +27,12 @@ public class ObjectAttributes {
     @JsonProperty("reviewer_ids")
     List<Integer> reviewerIds;
     String title;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty("created_at")
-    OffsetDateTime createdAt;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    LocalDateTime createdAt;
     @JsonProperty("updated_at")
-    OffsetDateTime updatedAt;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    LocalDateTime updatedAt;
     @JsonProperty("last_edited_at")
-    OffsetDateTime lastEditedAt;
+    LocalDateTime lastEditedAt;
     @JsonProperty("last_edited_by_id")
     Long lastEditedById;
     @JsonProperty("milestone_id")
