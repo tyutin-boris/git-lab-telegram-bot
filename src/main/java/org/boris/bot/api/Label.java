@@ -1,5 +1,6 @@
 package org.boris.bot.api;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -12,6 +13,7 @@ public class Label {
     String color;
     @JsonProperty("project_id")
     Long projectId;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty("created_at")
     OffsetDateTime createdAt;
     @JsonProperty("updated_at")

@@ -1,5 +1,6 @@
 package org.boris.bot.api;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -25,10 +26,13 @@ public class ObjectAttributes {
     @JsonProperty("reviewer_ids")
     List<Integer> reviewerIds;
     String title;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty("created_at")
     OffsetDateTime createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty("updated_at")
     OffsetDateTime updatedAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty("last_edited_at")
     OffsetDateTime lastEditedAt;
     @JsonProperty("last_edited_by_id")
