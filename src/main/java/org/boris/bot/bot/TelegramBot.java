@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import org.boris.bot.config.BotConfig;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.api.methods.ActionType;
-import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -27,23 +24,11 @@ public class TelegramBot extends TelegramLongPollingBot {
         System.out.println(chatId);
         switch (text) {
             case "/start":
-                sendMessage(chatId, "Привет человек из чата " + chatId);
+//                sendMessage("Привет человек из чата " + chatId);
                 break;
             case "/love":
-                sendMessage(chatId, "Я счастлив, что бог дал мне глаза, и я смог разглядеть тебя в толпе. И благодарен ему за возможность называть тебя своей половинкой.");
+//                sendMessage("Я счастлив, что бог дал мне глаза, и я смог разглядеть тебя в толпе. И благодарен ему за возможность называть тебя своей половинкой.");
         }
-    }
-
-    public void sendAction() throws TelegramApiException {
-
-        System.out.println("Отправка сообщения");
-
-        String chatId = "586815794";
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.setText("МР");
-        execute(sendMessage);
-        System.out.println("Сообщение отправленно");
     }
 
     @Override
@@ -66,12 +51,9 @@ public class TelegramBot extends TelegramLongPollingBot {
         super.onRegister();
     }
 
-    private void sendMessage(Long chatId, String textToSend) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(String.valueOf(chatId));
-        sendMessage.setText(textToSend);
+    public void sendMessage(SendMessage message) {
         try {
-            execute(sendMessage);
+            execute(message);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }

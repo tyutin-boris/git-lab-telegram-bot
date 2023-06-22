@@ -1,8 +1,9 @@
 package org.boris.bot.controller;
 
-import lombok.SneakyThrows;
-import org.boris.bot.bot.TelegramBot;
+import org.boris.bot.api.MergeRequest;
+import org.boris.bot.services.MergeRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,17 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/merges/requests")
 public class MergeRequestController {
 
-    @Autowired
-    private final TelegramBot bot;
+    private final MergeRequestService mergeRequestService;
 
-    public MergeRequestController(TelegramBot bot) {this.bot = bot;}
+    public MergeRequestController(MergeRequestService mergeRequestService) {
+        this.mergeRequestService = mergeRequestService;
+    }
 
-    @SneakyThrows
     @PostMapping
-    public void mergeRequestEvent(@RequestBody String request) {
-//    public void mergeRequestEvent(@RequestBody String request) {
-//        System.out.println(request);
-
-        bot.sendAction();
+    public void mergeRequestEvent(@RequestBody MergeRequest request) {
+        mergeRequestService.sendMergeRequest(request);
     }
 }
