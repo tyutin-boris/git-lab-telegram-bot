@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MergeRequestController {
 
     @PostMapping
-    public void mergeRequestEvent(@RequestBody MergeRequest request) {
+    public void mergeRequestEvent(@RequestBody String request) {
 //    public void mergeRequestEvent(@RequestBody String request) {
         System.out.println(request);
     }
