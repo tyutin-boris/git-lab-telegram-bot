@@ -1,10 +1,11 @@
 package org.boris.bot.api;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
+import java.util.Date;
+
 
 @Data
 public class Previous {
@@ -14,9 +15,11 @@ public class Previous {
     @JsonProperty("project_id")
     Long projectId;
     @JsonProperty("created_at")
-    LocalDateTime createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Zagreb")
+    Date createdAt;
     @JsonProperty("updated_at")
-    LocalDateTime updatedAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Zagreb")
+    Date updatedAt;
     Boolean template;
     String description;
     String type;
