@@ -2,7 +2,10 @@ package org.boris.bot.api;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.OffsetTimeDeserializer;
 import lombok.Data;
+import org.boris.bot.api.serializer.OffsetDateTimeDeserializer;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -28,11 +31,14 @@ public class ObjectAttributes {
     List<Integer> reviewerIds;
     String title;
     @JsonProperty("created_at")
-    LocalDateTime createdAt;
+    @JsonDeserialize(using = OffsetDateTimeDeserializer.class)
+    OffsetDateTime createdAt;
     @JsonProperty("updated_at")
-    LocalDateTime updatedAt;
+    @JsonDeserialize(using = OffsetDateTimeDeserializer.class)
+    OffsetDateTime updatedAt;
     @JsonProperty("last_edited_at")
-    LocalDateTime lastEditedAt;
+    @JsonDeserialize(using = OffsetDateTimeDeserializer.class)
+    OffsetDateTime lastEditedAt;
     @JsonProperty("last_edited_by_id")
     Long lastEditedById;
     @JsonProperty("milestone_id")
