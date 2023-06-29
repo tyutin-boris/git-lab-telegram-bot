@@ -5,10 +5,13 @@ import org.boris.bot.config.BotConfig;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @AllArgsConstructor
@@ -16,10 +19,19 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private final BotConfig botConfig;
 
+    private final List<Long> chatId = new ArrayList<>();
+
     @Override
     public void onUpdateReceived(Update update) {
-        String text = update.getMessage().getText();
-        long chatId = update.getMessage().getChatId();
+        chatId.add(update.getMyChatMember()
+                           .getChat()
+                           .getId());
+        String text = Optional.ofNullable(update.getMessage())
+                .map(Message::getText)
+                .orElse("Сообщения нет");
+        long chatId = Optional.ofNullable(update.getMessage())
+                .map(Message::getChatId)
+                .orElse(0L);
 
         System.out.println(chatId);
         switch (text) {
@@ -51,11 +63,17 @@ public class TelegramBot extends TelegramLongPollingBot {
         super.onRegister();
     }
 
-    public void sendMessage(SendMessage message) {
-        try {
-            execute(message);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
+    public void sendMessage(String text) {
+        chatId.forEach(id -> {
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.setChatId(id);
+            sendMessage.setText(text);
+            try {
+                execute(sendMessage);
+            } catch (TelegramApiException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
     }
 }

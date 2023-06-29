@@ -15,9 +15,7 @@ public class MergeRequestSenderImpl implements MergeRequestSender {
 
     @Override
     public void sendMessage(String text, String chatId) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(chatId);
-        sendMessage.setText(text);
-        telegramBot.sendMessage(sendMessage);
+
+        telegramBot.sendMessage(text);
     }
 }
