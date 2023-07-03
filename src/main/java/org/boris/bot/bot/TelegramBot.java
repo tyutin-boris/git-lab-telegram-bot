@@ -1,8 +1,11 @@
 package org.boris.bot.bot;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.boris.bot.config.BotConfig;
+import org.boris.bot.services.handlers.UpdateHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -13,16 +16,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Component
 @AllArgsConstructor
 public class TelegramBot extends TelegramLongPollingBot {
 
     private final BotConfig botConfig;
+    private final List<UpdateHandler> handlers;
 
     private final List<Long> chatId = new ArrayList<>();
 
     @Override
     public void onUpdateReceived(Update update) {
+
+        if(CollectionUtils.isEmpty(handlers)) {
+            log.warn("Update handlers not found");
+            return;
+        }
+
+        handlers.forEach(handler -> handler.handle(update));
+
         chatId.add(update.getMyChatMember()
                            .getChat()
                            .getId());
