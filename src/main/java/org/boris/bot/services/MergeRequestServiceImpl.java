@@ -1,12 +1,14 @@
 package org.boris.bot.services;
 
+import lombok.RequiredArgsConstructor;
 import org.boris.bot.api.MergeRequest;
 import org.boris.bot.api.ObjectAttributes;
 import org.boris.bot.api.Project;
 import org.boris.bot.api.Reviewer;
+import org.boris.bot.model.ChatEntity;
+import org.boris.bot.repository.ChatRepository;
 import org.boris.bot.senders.MergeRequestSender;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.time.OffsetDateTime;
 import java.util.Collections;
@@ -14,15 +16,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class MergeRequestServiceImpl implements MergeRequestService {
 
     private static final String DEFAULT_PREFIX = "Тут могло быть ";
-    private final MergeRequestSender sender;
-    private final String chatId = "586815794";
 
-    public MergeRequestServiceImpl(MergeRequestSender sender) {
-        this.sender = sender;
-    }
+    private final MergeRequestSender sender;
+    private final ChatRepository chatRepository;
 
     @Override
     public void sendMergeRequest(MergeRequest request) {
@@ -48,7 +48,8 @@ public class MergeRequestServiceImpl implements MergeRequestService {
         String name = request.getUser()
                 .getName();
 
-        List<Reviewer> reviewers = Optional.ofNullable(request.getReviewers()).orElse(Collections.emptyList());
+        List<Reviewer> reviewers = Optional.ofNullable(request.getReviewers())
+                .orElse(Collections.emptyList());
         Reviewer reviewer = reviewers.stream()
                 .findFirst()
                 .orElse(null);
@@ -61,6 +62,9 @@ public class MergeRequestServiceImpl implements MergeRequestService {
                 "\n\n" + "Reviewer: " + reviewerName + "\n\n" + "Source branch: " + sourceBranch + " ==> " +
                 "Target branch: " + targetBranch;
 
-        sender.sendMessage(text, chatId);
+        chatRepository.findAll()
+                .stream()
+                .map(ChatEntity::getId)
+                .forEach(chatId -> sender.sendMessage(text, chatId));
     }
 }

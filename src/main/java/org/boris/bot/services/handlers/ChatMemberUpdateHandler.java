@@ -2,18 +2,23 @@ package org.boris.bot.services.handlers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.boris.bot.model.ChatEntity;
+import org.boris.bot.repository.ChatRepository;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.ChatMemberUpdated;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class ChatMemberUpdateHandler implements UpdateHandler {
+
+    private final ChatRepository chatRepository;
 
     @Override
     public void handle(Update update) {
@@ -34,11 +39,21 @@ public class ChatMemberUpdateHandler implements UpdateHandler {
                     .orElse("");
 
             if (ChatMemberStatus.KICKED.toString().equalsIgnoreCase(newMemberStatus)) {
+                chatRepository.findById(chatId).ifPresent(chatRepository::delete);
                 log.debug(String.format("Boot was kicked from %s %s with id %s.", chatType, chatTitle, chatId));
-
             } else if (ChatMemberStatus.ADMINISTRATOR.toString().equalsIgnoreCase(newMemberStatus)) {
+                chatRepository.save(createChatEntity(chat));
                 log.debug(String.format("Boot was add to %s %s with id %s.", chatType, chatTitle, chatId));
             }
         }
+    }
+
+    private ChatEntity createChatEntity(Chat chat) {
+        ChatEntity chatEntity = new ChatEntity();
+        chatEntity.setId(chat.getId());
+        chatEntity.setTitle(chat.getTitle());
+        chatEntity.setType(chat.getType());
+        chatEntity.setCreateDate(OffsetDateTime.now());
+        return chatEntity;
     }
 }

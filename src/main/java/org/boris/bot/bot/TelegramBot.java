@@ -11,7 +11,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -21,7 +20,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private final BotConfig botConfig;
     private final List<UpdateHandler> handlers;
-    private final List<Long> chatId = new ArrayList<>();
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -75,17 +73,15 @@ public class TelegramBot extends TelegramLongPollingBot {
         super.onRegister();
     }
 
-    public void sendMessage(String text) {
-        chatId.forEach(id -> {
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId(id);
-            sendMessage.setText(text);
-            try {
-                execute(sendMessage);
-            } catch (TelegramApiException e) {
-                throw new RuntimeException(e);
-            }
-        });
+    public void sendMessage(String text, Long chatId) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+        sendMessage.setText(text);
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 }
