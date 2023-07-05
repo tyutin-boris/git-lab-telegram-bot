@@ -21,7 +21,11 @@ public class MergeRequestController {
 
     @PostMapping
     public void mergeRequestEvent(@RequestBody MergeRequest request) {
-        log.info(request.toString());
-        mergeRequestService.sendMergeRequest(request);
+        log.debug(request.toString());
+        if ("open".equalsIgnoreCase(request.getObjectAttributes().getAction())) {
+            mergeRequestService.sendMergeRequest(request);
+        } else if("update".equalsIgnoreCase(request.getObjectAttributes().getAction())) {
+            log.debug("Get MR with action status update");
+        }
     }
 }
