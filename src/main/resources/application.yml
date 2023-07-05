@@ -1,6 +1,9 @@
 bot:
-  name: LigaNNGitLabBot
-  token: 6016141424:AAGsG-Z32bMvE5pXve8cslGnjR5VWLEGyao
+#  name: LigaNNGitLabBot
+#  token: 6016141424:AAGsG-Z32bMvE5pXve8cslGnjR5VWLEGyao
+#  test
+  name: bnnligalabgit_test_bot
+  token: 6308490047:AAGbBo8c8Bniz5P0uXKY0YNqQ-lACPi6SjI
 logging:
   level:
     org.boris.bot: DEBUG

@@ -29,15 +29,21 @@ public class MergeRequestServiceImpl implements MergeRequestService {
         String projectName = Optional.ofNullable(request.getProject())
                 .map(Project::getName)
                 .orElse(DEFAULT_PREFIX + "название проекта.");
-        String title = Optional.ofNullable(request.getObjectAttributes())
+        Optional<ObjectAttributes> objectAttributes = Optional.ofNullable(request.getObjectAttributes());
+        String title = objectAttributes
                 .map(ObjectAttributes::getTitle)
                 .orElse(DEFAULT_PREFIX + "название МРа.");
-        String description = Optional.ofNullable(request.getObjectAttributes())
+        String description = objectAttributes
                 .map(ObjectAttributes::getDescription)
                 .orElse(DEFAULT_PREFIX + "описание МРа");
-        OffsetDateTime createdAt = Optional.ofNullable(request.getObjectAttributes())
-                .map(ObjectAttributes::getCreatedAt)
-                .orElse(OffsetDateTime.now());
+        //TODO Fix date deserializer
+//        OffsetDateTime createdAt = objectAttributes
+//                .map(ObjectAttributes::getCreatedAt)
+//                .orElse(OffsetDateTime.now());
+        OffsetDateTime createdAt = OffsetDateTime.now();
+        String mrUrl = objectAttributes
+                .map(ObjectAttributes::getUrl)
+                .orElse("");
         String sourceBranch = request.getObjectAttributes()
                 .getSourceBranch();
         String targetBranch = request.getObjectAttributes()
@@ -57,10 +63,10 @@ public class MergeRequestServiceImpl implements MergeRequestService {
                 .map(Reviewer::getName)
                 .orElse("");
 
-        String text = "Project: " + projectName + "\n\n" + "Title: " + title + "\n\n" + "Description: " + description +
+        String text = "Project: " + projectName + "\n\n" +"MP: " + mrUrl + "\n\n" + "Title: " + title + "\n\n" + "Description: " + description +
                 "\n\n" + "Create date: " + createdAt + "\n\n" + "Autor: " + name + "\n\n" + "Username: " + username +
-                "\n\n" + "Reviewer: " + reviewerName + "\n\n" + "Source branch: " + sourceBranch + " ==> " +
-                "Target branch: " + targetBranch;
+                "\n\n" + "Reviewer: " + reviewerName + "\n\n" + "Source: " + sourceBranch + " ==> " +
+                "Target: " + targetBranch;
 
         chatRepository.findAll()
                 .stream()
