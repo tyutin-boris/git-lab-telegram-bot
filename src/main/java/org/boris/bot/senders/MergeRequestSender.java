@@ -1,5 +1,7 @@
 package org.boris.bot.senders;
 
+import org.telegram.telegrambots.meta.api.objects.Message;
+
 public interface MergeRequestSender {
-    void sendMessage(String text, Long chatId);
+    Message sendMessage(String text, Long chatId);
 }
