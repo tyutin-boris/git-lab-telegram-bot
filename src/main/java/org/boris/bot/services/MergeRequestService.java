@@ -4,5 +4,7 @@ import org.boris.bot.api.MergeRequest;
 
 public interface MergeRequestService {
 
-    void sendMergeRequest(MergeRequest request);
+    void sendMergeRequestOpen(MergeRequest request);
+
+    void sendMergeRequestClose(MergeRequest request);
 }

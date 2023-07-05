@@ -73,7 +73,8 @@ public class ObjectAttributes {
     @JsonProperty("last_commit")
     LastCommit lastCommit;
     List<Label> labels;
-    String action;
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
+    Action action;
     @JsonProperty("detailed_merge_status")
     String detailedMergeStatus;
 }

@@ -27,7 +27,7 @@ public class MergeRequestServiceImpl implements MergeRequestService {
     private final ChatRepository chatRepository;
 
     @Override
-    public void sendMergeRequest(MergeRequest request) {
+    public void sendMergeRequestOpen(MergeRequest request) {
         String projectName = Optional.ofNullable(request.getProject())
                 .map(Project::getName)
                 .orElse(DEFAULT_PREFIX + "название проекта.");
@@ -78,5 +78,10 @@ public class MergeRequestServiceImpl implements MergeRequestService {
             Message message = sender.sendMessage(text, id);
             System.out.println();
         }
+    }
+
+    @Override
+    public void sendMergeRequestClose(MergeRequest request) {
+
     }
 }
