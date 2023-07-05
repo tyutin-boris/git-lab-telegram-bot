@@ -73,15 +73,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         super.onRegister();
     }
 
-    public void sendMessage(String text, Long chatId) {
+    public void sendMessage(String text, Long chatId) throws TelegramApiException {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.setText(text);
-        try {
-            execute(sendMessage);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
-
+        execute(sendMessage);
     }
 }

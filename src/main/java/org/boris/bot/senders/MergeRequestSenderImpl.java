@@ -1,20 +1,24 @@
 package org.boris.bot.senders;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.boris.bot.bot.TelegramBot;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+@Slf4j
 @Component
+@RequiredArgsConstructor
 public class MergeRequestSenderImpl implements MergeRequestSender {
 
     private final TelegramBot telegramBot;
 
-    public MergeRequestSenderImpl(TelegramBot telegramBot) {
-        this.telegramBot = telegramBot;
-    }
-
     @Override
     public void sendMessage(String text, Long chatId) {
-        telegramBot.sendMessage(text, chatId);
+        try {
+            telegramBot.sendMessage(text, chatId);
+        } catch (TelegramApiException e) {
+            log.warn("Не удалось отправить сообщение. chat id " + chatId);
+        }
     }
 }
