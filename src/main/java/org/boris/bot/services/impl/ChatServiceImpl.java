@@ -1,9 +1,10 @@
-package org.boris.bot.services;
+package org.boris.bot.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.boris.bot.dto.ChatDto;
 import org.boris.bot.mapper.ChatMapper;
-import org.boris.bot.repository.ChatRepository;
+import org.boris.bot.model.repository.ChatRepository;
+import org.boris.bot.services.ChatService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

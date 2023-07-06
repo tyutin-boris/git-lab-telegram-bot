@@ -1,9 +1,9 @@
-package org.boris.bot.services.handlers;
+package org.boris.bot.services.handlers.member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.boris.bot.model.ChatEntity;
-import org.boris.bot.repository.ChatRepository;
+import org.boris.bot.model.entities.ChatEntity;
+import org.boris.bot.model.repository.ChatRepository;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.ChatMemberUpdated;

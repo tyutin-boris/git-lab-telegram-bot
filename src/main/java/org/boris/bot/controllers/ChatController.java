@@ -1,4 +1,4 @@
-package org.boris.bot.controller;
+package org.boris.bot.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.boris.bot.dto.ChatDto;

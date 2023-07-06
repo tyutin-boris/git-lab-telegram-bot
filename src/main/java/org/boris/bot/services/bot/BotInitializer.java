@@ -1,4 +1,4 @@
-package org.boris.bot.bot;
+package org.boris.bot.services.bot;
 
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;

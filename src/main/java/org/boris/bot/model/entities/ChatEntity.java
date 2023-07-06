@@ -1,4 +1,4 @@
-package org.boris.bot.model;
+package org.boris.bot.model.entities;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +16,7 @@ import java.time.OffsetDateTime;
 @Table(name = "chat")
 @NoArgsConstructor
 public class ChatEntity {
+
     @Id
     private Long id;
 
