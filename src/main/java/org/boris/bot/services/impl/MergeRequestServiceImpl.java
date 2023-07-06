@@ -6,16 +6,16 @@ import org.boris.bot.api.Action;
 import org.boris.bot.api.MergeRequest;
 import org.boris.bot.api.ObjectAttributes;
 import org.boris.bot.model.repository.ChatRepository;
-import org.boris.bot.services.senders.MergeRequestSender;
 import org.boris.bot.services.MergeRequestService;
+import org.boris.bot.services.senders.MergeRequestSender;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.boris.bot.utils.MergeRequestUtils.createMergeRequestMessage;
-import static org.boris.bot.api.Action.INDEFINITELY;
+import static org.boris.bot.utils.ObjectAttributesUtils.getAction;
+import static org.boris.bot.utils.ObjectAttributesUtils.getObjectAttributes;
 
 @Slf4j
 @Service
@@ -83,16 +83,5 @@ public class MergeRequestServiceImpl implements MergeRequestService {
 //            sender.deleteMessage(id, );
 //            System.out.println();
 //        }
-    }
-
-    private Action getAction(ObjectAttributes objectAttributes) {
-        return Optional.ofNullable(objectAttributes.getAction())
-                .orElse(INDEFINITELY);
-    }
-
-    private ObjectAttributes getObjectAttributes(MergeRequest request) {
-        return Optional.of(request)
-                .map(MergeRequest::getObjectAttributes)
-                .orElseThrow(() -> new RuntimeException("Merge request without object attributes"));
     }
 }
