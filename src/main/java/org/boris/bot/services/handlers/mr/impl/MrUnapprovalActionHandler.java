@@ -9,6 +9,7 @@ import org.boris.bot.services.handlers.mr.MrActionHandler;
 import org.springframework.stereotype.Service;
 
 import static org.boris.bot.api.Action.APPROVAL;
+import static org.boris.bot.api.Action.UNAPPROVAL;
 import static org.boris.bot.utils.ObjectAttributesUtils.getObjectAttributes;
 
 @Slf4j
@@ -26,6 +27,6 @@ public class MrUnapprovalActionHandler implements MrActionHandler {
 
     @Override
     public Action getAction() {
-        return APPROVAL;
+        return UNAPPROVAL;
     }
 }

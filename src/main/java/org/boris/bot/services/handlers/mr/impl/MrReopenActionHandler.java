@@ -28,7 +28,7 @@ public class MrReopenActionHandler implements MrActionHandler {
     public void handleAction(MergeRequest request) {
         ObjectAttributes objectAttributes = getObjectAttributes(request);
         Long mrId = objectAttributes.getId();
-        log.debug("Merge request action REOPEN. MR id: " + mrId);
+        log.debug("Merge request action " + getAction() + ". MR id: " + mrId);
 
         String text = createMergeRequestMessage(request);
         List<Long> chatsId = chatRepository.getAllId();

@@ -21,7 +21,7 @@ public class MrUpdateActionHandler implements MrActionHandler {
         ObjectAttributes objectAttributes = getObjectAttributes(request);
         Long mrId = objectAttributes.getId();
 
-        log.debug("Merge request action UPDATE. MR id: " + mrId);
+        log.debug("Merge request action " + getAction() + ". MR id: " + mrId);
     }
 
     @Override

@@ -22,7 +22,7 @@ public class MrApprovedActionHandler implements MrActionHandler {
         ObjectAttributes objectAttributes = getObjectAttributes(request);
         Long mrId = objectAttributes.getId();
 
-        log.debug("Merge request action APPROVED. MR id: " + mrId);
+        log.debug("Merge request action " + getAction() + ". MR id: " + mrId);
     }
 
     @Override

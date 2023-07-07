@@ -21,7 +21,7 @@ public class MrMergeActionHandler implements MrActionHandler {
         ObjectAttributes objectAttributes = getObjectAttributes(request);
         Long mrId = objectAttributes.getId();
 
-        log.warn("Merge request action CLOSE, message about MR with id " + mrId + " should delete");
+        log.warn("Merge request action " + getAction() + ", message about MR with id " + mrId + " should delete");
     }
 
     @Override
