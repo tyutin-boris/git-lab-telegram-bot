@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
-import ru.git.lab.bot.api.mr.serializer.OffsetDateTimeDeserializer;
+import ru.git.lab.bot.api.serializers.OffsetDateTimeDeserializer;
 
 import java.time.OffsetDateTime;
 import java.util.List;

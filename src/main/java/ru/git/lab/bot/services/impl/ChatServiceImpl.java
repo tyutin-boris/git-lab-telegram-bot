@@ -2,7 +2,7 @@ package ru.git.lab.bot.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import ru.git.lab.bot.dto.ChatDto;
-import ru.git.lab.bot.mapper.ChatMapper;
+import ru.git.lab.bot.mappers.ChatMapper;
 import ru.git.lab.bot.model.repository.ChatRepository;
 import ru.git.lab.bot.services.ChatService;
 import org.springframework.stereotype.Service;

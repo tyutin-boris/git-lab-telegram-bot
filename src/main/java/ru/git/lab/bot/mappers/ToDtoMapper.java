@@ -1,4 +1,4 @@
-package ru.git.lab.bot.mapper;
+package ru.git.lab.bot.mappers;
 
 import java.util.List;
 

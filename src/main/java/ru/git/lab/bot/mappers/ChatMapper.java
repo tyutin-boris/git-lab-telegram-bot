@@ -1,4 +1,4 @@
-package ru.git.lab.bot.mapper;
+package ru.git.lab.bot.mappers;
 
 import ru.git.lab.bot.dto.ChatDto;
 import ru.git.lab.bot.model.entities.ChatEntity;
