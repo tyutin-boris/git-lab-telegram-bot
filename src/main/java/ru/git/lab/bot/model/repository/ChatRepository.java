@@ -11,6 +11,6 @@ import java.util.List;
 public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
 
     @Query("select id from ChatEntity")
-    List<Long> getAllId();
+    List<Long> getAllChatId();
 
 }

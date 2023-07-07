@@ -13,7 +13,7 @@ import java.time.OffsetDateTime;
 @Entity
 @Setter
 @Getter
-@Table(name = "chat")
+@Table(name = "chats")
 @NoArgsConstructor
 public class ChatEntity {
 

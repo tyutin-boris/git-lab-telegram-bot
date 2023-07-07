@@ -54,7 +54,7 @@ public class MergeRequestUtils {
                 .orElse("");
 
         String text = "Project: " + projectName + "\n\n" + "MP: " + mrUrl + "\n\n" + "Title: " + title + "\n\n" + "Description: " + description +
-                "\n\n" + "Create date: " + createdAt + "\n\n" + "Autor: " + name + "\n\n" +
+                "\n\n" + "Create date: " + createdAt + "\n\n" + "Author: " + name + "\n\n" +
                 "\n\n" + "Reviewer: " + reviewerName + "\n\n" + "Source: " + sourceBranch + " ==> " +
                 "Target: " + targetBranch;
         return text;
