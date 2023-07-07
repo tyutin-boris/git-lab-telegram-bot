@@ -2,7 +2,7 @@ package ru.git.lab.bot.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ru.git.lab.bot.api.MergeRequest;
+import ru.git.lab.bot.api.mr.MergeRequest;
 import ru.git.lab.bot.services.MergeRequestService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

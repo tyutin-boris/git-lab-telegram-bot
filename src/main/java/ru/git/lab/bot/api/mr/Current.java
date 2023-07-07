@@ -1,4 +1,4 @@
-package ru.git.lab.bot.api;
+package ru.git.lab.bot.api.mr;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -2,9 +2,9 @@ package ru.git.lab.bot.services.handlers.mr.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ru.git.lab.bot.api.Action;
-import ru.git.lab.bot.api.MergeRequest;
-import ru.git.lab.bot.api.ObjectAttributes;
+import ru.git.lab.bot.api.mr.Action;
+import ru.git.lab.bot.api.mr.MergeRequest;
+import ru.git.lab.bot.api.mr.ObjectAttributes;
 import ru.git.lab.bot.model.repository.ChatRepository;
 import ru.git.lab.bot.services.handlers.mr.MrActionHandler;
 import ru.git.lab.bot.services.senders.MergeRequestSender;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static ru.git.lab.bot.api.Action.REOPEN;
+import static ru.git.lab.bot.api.mr.Action.REOPEN;
 import static ru.git.lab.bot.utils.MergeRequestUtils.createMergeRequestMessage;
 import static ru.git.lab.bot.utils.ObjectAttributesUtils.getObjectAttributes;
 

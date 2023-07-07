@@ -1,10 +1,10 @@
-package ru.git.lab.bot.api;
+package ru.git.lab.bot.api.mr;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class Source {
+public class Target {
     String name;
     String description;
     @JsonProperty("web_url")

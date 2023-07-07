@@ -1,4 +1,4 @@
-package ru.git.lab.bot.api;
+package ru.git.lab.bot.api.mr;
 
 import lombok.Data;
 

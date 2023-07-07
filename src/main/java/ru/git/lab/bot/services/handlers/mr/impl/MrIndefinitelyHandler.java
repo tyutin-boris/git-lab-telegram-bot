@@ -2,14 +2,14 @@ package ru.git.lab.bot.services.handlers.mr.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ru.git.lab.bot.api.Action;
-import ru.git.lab.bot.api.MergeRequest;
-import ru.git.lab.bot.api.ObjectAttributes;
+import ru.git.lab.bot.api.mr.Action;
+import ru.git.lab.bot.api.mr.MergeRequest;
+import ru.git.lab.bot.api.mr.ObjectAttributes;
 import ru.git.lab.bot.services.handlers.mr.MrActionHandler;
 import ru.git.lab.bot.utils.ObjectAttributesUtils;
 import org.springframework.stereotype.Service;
 
-import static ru.git.lab.bot.api.Action.INDEFINITELY;
+import static ru.git.lab.bot.api.mr.Action.INDEFINITELY;
 import static ru.git.lab.bot.utils.ObjectAttributesUtils.getObjectAttributes;
 
 @Slf4j

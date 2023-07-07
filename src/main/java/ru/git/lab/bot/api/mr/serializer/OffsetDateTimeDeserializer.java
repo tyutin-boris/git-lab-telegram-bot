@@ -1,4 +1,4 @@
-package ru.git.lab.bot.api.serializer;
+package ru.git.lab.bot.api.mr.serializer;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;

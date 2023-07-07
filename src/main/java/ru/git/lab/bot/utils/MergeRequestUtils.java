@@ -1,9 +1,9 @@
 package ru.git.lab.bot.utils;
 
-import ru.git.lab.bot.api.MergeRequest;
-import ru.git.lab.bot.api.ObjectAttributes;
-import ru.git.lab.bot.api.Project;
-import ru.git.lab.bot.api.Reviewer;
+import ru.git.lab.bot.api.mr.MergeRequest;
+import ru.git.lab.bot.api.mr.ObjectAttributes;
+import ru.git.lab.bot.api.mr.Project;
+import ru.git.lab.bot.api.mr.Reviewer;
 
 import java.time.OffsetDateTime;
 import java.util.Collections;

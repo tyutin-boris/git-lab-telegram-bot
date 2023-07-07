@@ -1,8 +1,8 @@
 package ru.git.lab.bot.utils;
 
-import ru.git.lab.bot.api.Action;
-import ru.git.lab.bot.api.MergeRequest;
-import ru.git.lab.bot.api.ObjectAttributes;
+import ru.git.lab.bot.api.mr.Action;
+import ru.git.lab.bot.api.mr.MergeRequest;
+import ru.git.lab.bot.api.mr.ObjectAttributes;
 
 import java.util.Optional;
 

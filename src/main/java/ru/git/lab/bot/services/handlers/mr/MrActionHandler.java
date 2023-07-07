@@ -1,7 +1,7 @@
 package ru.git.lab.bot.services.handlers.mr;
 
-import ru.git.lab.bot.api.Action;
-import ru.git.lab.bot.api.MergeRequest;
+import ru.git.lab.bot.api.mr.Action;
+import ru.git.lab.bot.api.mr.MergeRequest;
 
 public interface MrActionHandler {
 
