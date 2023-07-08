@@ -23,8 +23,10 @@ public class UserServiceImpl implements UserService {
     public void saveUser(User user) {
         Optional.ofNullable(user)
                 .ifPresent(u -> {
-                    UserEntity userEntity = userMapper.toEntity(user);
-                    userRepository.save(userEntity);
+                    if (!userRepository.existsByUsernameAndEmail(u.getUsername(), u.getEmail())) {
+                        UserEntity userEntity = userMapper.toEntity(user);
+                        userRepository.save(userEntity);
+                    }
                 });
     }
 }

@@ -12,7 +12,7 @@ public class MergeRequest {
     @JsonProperty("event_type")
     String eventType;
     User user;
-        Project project;
+    Project project;
     Repository repository;
     @JsonProperty("object_attributes")
     ObjectAttributes objectAttributes;

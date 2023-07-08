@@ -28,9 +28,7 @@ public class MergeRequestServiceImpl implements MergeRequestService {
         ObjectAttributes objectAttributes = getObjectAttributes(request);
         Action action = getAction(objectAttributes);
 
-        actionHandlers.get(action)
-                .handleAction(request);
-
         userService.saveUser(request.getUser());
+        actionHandlers.get(action).handleAction(request);
     }
 }
