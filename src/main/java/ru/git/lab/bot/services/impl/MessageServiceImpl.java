@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
 import ru.git.lab.bot.api.mr.User;
+import ru.git.lab.bot.dto.MessageToDelete;
 import ru.git.lab.bot.model.entities.MessageEntity;
 import ru.git.lab.bot.model.repository.MessageRepository;
 import ru.git.lab.bot.services.MessageService;
@@ -25,6 +26,11 @@ public class MessageServiceImpl implements MessageService {
         messageRepository.save(messageEntity);
         log.debug("Save message with id " + messageEntity.getMessageId() + ", authorUsername " +
                           messageEntity.getAuthorUsername());
+    }
+
+    @Override
+    public MessageToDelete getMessageToDelete(Long mrId, String email, String username) {
+        return messageRepository.getMessageToDelete(mrId, email, username);
     }
 
     private MessageEntity createMessage(Message message, ObjectAttributes attributes, User user) {
