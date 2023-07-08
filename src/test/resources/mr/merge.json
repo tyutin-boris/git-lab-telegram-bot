@@ -1,0 +1,159 @@
+{
+  "object_kind": "merge_request",
+  "event_type": "merge_request",
+  "user": {
+    "id": 14826841,
+    "name": "Борис Тютин",
+    "username": "boris919323",
+    "avatar_url": "https://secure.gravatar.com/avatar/5828ce2cfc161d1ab0e98b40e12f2c70?s=80&d=identicon",
+    "email": "[REDACTED]"
+  },
+  "project": {
+    "id": 46771870,
+    "name": "first-project",
+    "description": null,
+    "web_url": "https://gitlab.com/may-first-progect/first-project",
+    "avatar_url": null,
+    "git_ssh_url": "git@gitlab.com:may-first-progect/first-project.git",
+    "git_http_url": "https://gitlab.com/may-first-progect/first-project.git",
+    "namespace": "may-first-progect",
+    "visibility_level": 0,
+    "path_with_namespace": "may-first-progect/first-project",
+    "default_branch": "main",
+    "ci_config_path": "",
+    "homepage": "https://gitlab.com/may-first-progect/first-project",
+    "url": "git@gitlab.com:may-first-progect/first-project.git",
+    "ssh_url": "git@gitlab.com:may-first-progect/first-project.git",
+    "http_url": "https://gitlab.com/may-first-progect/first-project.git"
+  },
+  "object_attributes": {
+    "assignee_id": 14826841,
+    "author_id": 14826841,
+    "created_at": "2023-07-08 20:11:45 UTC",
+    "description": "",
+    "head_pipeline_id": null,
+    "id": 235412075,
+    "iid": 9,
+    "last_edited_at": null,
+    "last_edited_by_id": null,
+    "merge_commit_sha": "f46a7d17ed82b491cae493f55aa7d611b121b744",
+    "merge_error": null,
+    "merge_params": {
+      "force_remove_source_branch": "1"
+    },
+    "merge_status": "can_be_merged",
+    "merge_user_id": null,
+    "merge_when_pipeline_succeeds": false,
+    "milestone_id": null,
+    "source_branch": "dev",
+    "source_project_id": 46771870,
+    "state_id": 3,
+    "target_branch": "main",
+    "target_project_id": 46771870,
+    "time_estimate": 0,
+    "title": "dsdasdasd",
+    "updated_at": "2023-07-08 20:11:59 UTC",
+    "updated_by_id": null,
+    "url": "https://gitlab.com/may-first-progect/first-project/-/merge_requests/9",
+    "source": {
+      "id": 46771870,
+      "name": "first-project",
+      "description": null,
+      "web_url": "https://gitlab.com/may-first-progect/first-project",
+      "avatar_url": null,
+      "git_ssh_url": "git@gitlab.com:may-first-progect/first-project.git",
+      "git_http_url": "https://gitlab.com/may-first-progect/first-project.git",
+      "namespace": "may-first-progect",
+      "visibility_level": 0,
+      "path_with_namespace": "may-first-progect/first-project",
+      "default_branch": "main",
+      "ci_config_path": "",
+      "homepage": "https://gitlab.com/may-first-progect/first-project",
+      "url": "git@gitlab.com:may-first-progect/first-project.git",
+      "ssh_url": "git@gitlab.com:may-first-progect/first-project.git",
+      "http_url": "https://gitlab.com/may-first-progect/first-project.git"
+    },
+    "target": {
+      "id": 46771870,
+      "name": "first-project",
+      "description": null,
+      "web_url": "https://gitlab.com/may-first-progect/first-project",
+      "avatar_url": null,
+      "git_ssh_url": "git@gitlab.com:may-first-progect/first-project.git",
+      "git_http_url": "https://gitlab.com/may-first-progect/first-project.git",
+      "namespace": "may-first-progect",
+      "visibility_level": 0,
+      "path_with_namespace": "may-first-progect/first-project",
+      "default_branch": "main",
+      "ci_config_path": "",
+      "homepage": "https://gitlab.com/may-first-progect/first-project",
+      "url": "git@gitlab.com:may-first-progect/first-project.git",
+      "ssh_url": "git@gitlab.com:may-first-progect/first-project.git",
+      "http_url": "https://gitlab.com/may-first-progect/first-project.git"
+    },
+    "last_commit": {
+      "id": "7217f88433a8aed3fc7285174d9dc3e7162774e9",
+      "message": "dsdasdasd\n",
+      "title": "dsdasdasd",
+      "timestamp": "2023-07-08T23:11:20+03:00",
+      "url": "https://gitlab.com/may-first-progect/first-project/-/commit/7217f88433a8aed3fc7285174d9dc3e7162774e9",
+      "author": {
+        "name": "boris",
+        "email": "boris919323@gmail.com"
+      }
+    },
+    "work_in_progress": false,
+    "total_time_spent": 0,
+    "time_change": 0,
+    "human_total_time_spent": null,
+    "human_time_change": null,
+    "human_time_estimate": null,
+    "assignee_ids": [
+      14826841
+    ],
+    "reviewer_ids": [
+      14826841
+    ],
+    "labels": [],
+    "state": "merged",
+    "blocking_discussions_resolved": true,
+    "first_contribution": false,
+    "detailed_merge_status": "not_open",
+    "action": "merge"
+  },
+  "labels": [],
+  "changes": {
+    "state_id": {
+      "previous": 4,
+      "current": 3
+    },
+    "updated_at": {
+      "previous": "2023-07-08 20:11:59 UTC",
+      "current": "2023-07-08 20:11:59 UTC"
+    }
+  },
+  "repository": {
+    "name": "first-project",
+    "url": "git@gitlab.com:may-first-progect/first-project.git",
+    "description": null,
+    "homepage": "https://gitlab.com/may-first-progect/first-project"
+  },
+  "assignees": [
+    {
+      "id": 14826841,
+      "name": "Борис Тютин",
+      "username": "boris919323",
+      "avatar_url": "https://secure.gravatar.com/avatar/5828ce2cfc161d1ab0e98b40e12f2c70?s=80&d=identicon",
+      "email": "[REDACTED]"
+    }
+  ],
+  "reviewers": [
+    {
+      "id": 14826841,
+      "name": "Борис Тютин",
+      "username": "boris919323",
+      "avatar_url": "https://secure.gravatar.com/avatar/5828ce2cfc161d1ab0e98b40e12f2c70?s=80&d=identicon",
+      "email": "[REDACTED]"
+    }
+  ]
+}
