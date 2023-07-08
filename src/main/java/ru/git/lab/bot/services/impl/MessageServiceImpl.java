@@ -10,8 +10,12 @@ import ru.git.lab.bot.dto.MessageToDelete;
 import ru.git.lab.bot.model.entities.MessageEntity;
 import ru.git.lab.bot.model.repository.MessageRepository;
 import ru.git.lab.bot.services.MessageService;
+import ru.git.lab.bot.services.senders.MergeRequestSender;
 
+import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -19,6 +23,7 @@ import java.time.OffsetDateTime;
 public class MessageServiceImpl implements MessageService {
 
     private final MessageRepository messageRepository;
+    private final MergeRequestSender mergeRequestSender;
 
     @Override
     public void saveMessage(Message message, ObjectAttributes attributes, User user) {
@@ -29,8 +34,24 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public MessageToDelete getMessageToDelete(Long mrId, String email, String username) {
+    public List<MessageToDelete> getMessageToDelete(Long mrId, String email, String username) {
         return messageRepository.getMessageToDelete(mrId, email, username);
+    }
+
+    @Override
+    @Transactional
+    public void deleteMessages(List<MessageToDelete> messages) {
+        for (MessageToDelete message : messages) {
+            UUID messageId = message.getMessageId();
+            Long chatId = message.getChatId();
+            Integer telegramMessageId = message.getTelegramMessageId();
+            boolean messageWasDelete = mergeRequestSender.deleteMessage(chatId, telegramMessageId);
+
+            if (messageWasDelete) {
+                messageRepository.deleteById(messageId);
+                log.debug("Message was delete. id " + messageId + ", chatId " + chatId);
+            }
+        }
     }
 
     private MessageEntity createMessage(Message message, ObjectAttributes attributes, User user) {
