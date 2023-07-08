@@ -9,7 +9,7 @@ spring:
     driverClassName: org.h2.Driver
     username: bot
     password:
-    url: jdbc:h2:file:C:\\bot\\data\\bot-db
+    url: jdbc:h2:file:~\\bot\\data\\bot-db
   h2:
     console:
       enabled: true
@@ -18,7 +18,7 @@ spring:
         web-allow-others: true
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
     generate-ddl: true
     show-sql: true
     properties:
@@ -29,4 +29,4 @@ flyway:
   password:
   schema: bot-schema
   locations: filesystem:db/migration
-  url: jdbc:h2:file:C:\\bot\\data\\bot-db
+  url: jdbc:h2:file:~\\bot\\data\\bot-db

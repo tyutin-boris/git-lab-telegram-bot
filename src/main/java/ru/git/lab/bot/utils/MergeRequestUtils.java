@@ -6,6 +6,7 @@ import ru.git.lab.bot.api.mr.Project;
 import ru.git.lab.bot.api.mr.Reviewer;
 
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,8 @@ import java.util.Optional;
 public class MergeRequestUtils {
 
     private static final String DEFAULT_PREFIX = "Тут могло быть ";
+    private final static DateTimeFormatter DATE_TIME_FORMATTER
+            = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
 
     public static String createMergeRequestMessage(MergeRequest request) {
@@ -30,7 +33,7 @@ public class MergeRequestUtils {
 //        OffsetDateTime createdAt = objectAttributes
 //                .map(ObjectAttributes::getCreatedAt)
 //                .orElse(OffsetDateTime.now());
-        OffsetDateTime createdAt = OffsetDateTime.now();
+        String createdAt = OffsetDateTime.now().format(DATE_TIME_FORMATTER);
         String mrUrl = objectAttributes
                 .map(ObjectAttributes::getUrl)
                 .orElse("");
@@ -39,8 +42,6 @@ public class MergeRequestUtils {
         String targetBranch = request.getObjectAttributes()
                 .getTargetBranch();
 
-        String username = request.getUser()
-                .getUsername();
         String name = request.getUser()
                 .getName();
 
@@ -53,10 +54,14 @@ public class MergeRequestUtils {
                 .map(Reviewer::getName)
                 .orElse("");
 
-        String text = "Project: " + projectName + "\n\n" + "MP: " + mrUrl + "\n\n" + "Title: " + title + "\n\n" + "Description: " + description +
-                "\n\n" + "Create date: " + createdAt + "\n\n" + "Author: " + name + "\n\n" +
-                "\n\n" + "Reviewer: " + reviewerName + "\n\n" + "Source: " + sourceBranch + " ==> " +
-                "Target: " + targetBranch;
-        return text;
+        return "<b>Project:</b> " + projectName + "\n\n" +
+                "<b>Title:</b> " + title + "\n" +
+                "<b>Description:</b> " + description + "\n\n" +
+                "<b>Author:</b> " + name + "\n" +
+                "<b>Reviewer:</b> " + reviewerName + "\n\n" +
+                "<b>Source:</b> " + sourceBranch + " ==> " +
+                "<b>Target:</b> " + targetBranch + "\n\n" +
+                "<b>Create date:</b> " + createdAt + "\n\n" +
+                "<a href='" + mrUrl + "'><b><u>MR Hyperlink</u></b></a>";
     }
 }

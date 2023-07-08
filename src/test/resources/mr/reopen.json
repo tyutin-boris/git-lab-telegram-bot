@@ -3,7 +3,7 @@
   "event_type": "merge_request",
   "user": {
     "id": 14826841,
-    "name": "????? ?????",
+    "name": "Борис Тютин",
     "username": "boris919323",
     "avatar_url": "https://secure.gravatar.com/avatar/5828ce2cfc161d1ab0e98b40e12f2c70?s=80&d=identicon",
     "email": "[REDACTED]"
@@ -29,11 +29,11 @@
   "object_attributes": {
     "assignee_id": 14826841,
     "author_id": 14826841,
-    "created_at": "2023-06-22 08:51:40 UTC",
-    "description": "sdfadfdfdfdfd",
+    "created_at": "2023-07-08 19:43:00 UTC",
+    "description": "",
     "head_pipeline_id": null,
-    "id": 232260574,
-    "iid": 5,
+    "id": 235411595,
+    "iid": 7,
     "last_edited_at": null,
     "last_edited_by_id": null,
     "merge_commit_sha": null,
@@ -41,7 +41,7 @@
     "merge_params": {
       "force_remove_source_branch": "1"
     },
-    "merge_status": "cannot_be_merged",
+    "merge_status": "can_be_merged",
     "merge_user_id": null,
     "merge_when_pipeline_succeeds": false,
     "milestone_id": null,
@@ -51,10 +51,10 @@
     "target_branch": "main",
     "target_project_id": 46771870,
     "time_estimate": 0,
-    "title": "Draft: Dev",
-    "updated_at": "2023-06-22 11:46:32 UTC",
+    "title": "firs commit",
+    "updated_at": "2023-07-08 19:45:57 UTC",
     "updated_by_id": null,
-    "url": "https://gitlab.com/may-first-progect/first-project/-/merge_requests/5",
+    "url": "https://gitlab.com/may-first-progect/first-project/-/merge_requests/7",
     "source": {
       "id": 46771870,
       "name": "first-project",
@@ -92,17 +92,17 @@
       "http_url": "https://gitlab.com/may-first-progect/first-project.git"
     },
     "last_commit": {
-      "id": "be23bb858883b8e4944223ad0b1c408873c483b6",
-      "message": "Initial commit",
-      "title": "Initial commit",
-      "timestamp": "2023-06-11T20:41:25+00:00",
-      "url": "https://gitlab.com/may-first-progect/first-project/-/commit/be23bb858883b8e4944223ad0b1c408873c483b6",
+      "id": "a4ce38ebe6f5ac94b45554a76af3ab36b5ced6bb",
+      "message": "firs commit\n",
+      "title": "firs commit",
+      "timestamp": "2023-07-08T22:39:14+03:00",
+      "url": "https://gitlab.com/may-first-progect/first-project/-/commit/a4ce38ebe6f5ac94b45554a76af3ab36b5ced6bb",
       "author": {
-        "name": "????? ?????",
+        "name": "boris",
         "email": "boris919323@gmail.com"
       }
     },
-    "work_in_progress": true,
+    "work_in_progress": false,
     "total_time_spent": 0,
     "time_change": 0,
     "human_total_time_spent": null,
@@ -118,7 +118,7 @@
     "state": "opened",
     "blocking_discussions_resolved": true,
     "first_contribution": true,
-    "detailed_merge_status": "draft_status",
+    "detailed_merge_status": "mergeable",
     "action": "reopen"
   },
   "labels": [],
@@ -128,8 +128,8 @@
       "current": 1
     },
     "updated_at": {
-      "previous": "2023-06-22 11:46:26 UTC",
-      "current": "2023-06-22 11:46:32 UTC"
+      "previous": "2023-07-08 19:45:54 UTC",
+      "current": "2023-07-08 19:45:57 UTC"
     }
   },
   "repository": {
@@ -141,7 +141,7 @@
   "assignees": [
     {
       "id": 14826841,
-      "name": "????? ?????",
+      "name": "Борис Тютин",
       "username": "boris919323",
       "avatar_url": "https://secure.gravatar.com/avatar/5828ce2cfc161d1ab0e98b40e12f2c70?s=80&d=identicon",
       "email": "[REDACTED]"
@@ -150,7 +150,7 @@
   "reviewers": [
     {
       "id": 14826841,
-      "name": "????? ?????",
+      "name": "Борис Тютин",
       "username": "boris919323",
       "avatar_url": "https://secure.gravatar.com/avatar/5828ce2cfc161d1ab0e98b40e12f2c70?s=80&d=identicon",
       "email": "[REDACTED]"

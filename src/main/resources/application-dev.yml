@@ -9,7 +9,7 @@ spring:
     driverClassName: org.h2.Driver
     username: bot
     password:
-    url: jdbc:h2:file:C:\\Users\\btyutin\\bot\\data\\bot-db
+    url: jdbc:h2:file:C:\bot\data\bot-db
   h2:
     console:
       enabled: true
@@ -29,4 +29,4 @@ flyway:
   password:
   schema: bot-schema
   locations: filesystem:db/migration
-  url: jdbc:h2:file:C:\\Users\\btyutin\\bot\\data\\bot-db
+  url: jdbc:h2:file:C:\bot\data\bot-db
