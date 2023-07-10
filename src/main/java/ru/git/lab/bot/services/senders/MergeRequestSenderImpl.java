@@ -19,7 +19,7 @@ public class MergeRequestSenderImpl implements MergeRequestSender {
         try {
             return telegramBot.sendMessage(text, chatId);
         } catch (TelegramApiException e) {
-            log.warn("Failed to send message: chat id " + chatId);
+            log.warn("Failed to send message: chat id " + chatId, e);
         }
         return null;
     }
@@ -29,7 +29,7 @@ public class MergeRequestSenderImpl implements MergeRequestSender {
         try {
             return telegramBot.deleteMessage(chatId, messageId);
         } catch (TelegramApiException e) {
-            log.warn("Failed to delete message: chat id " + chatId + ", message id " + messageId);
+            log.warn("Failed to delete message: chat id " + chatId + ", message id " + messageId, e);
         }
         return false;
     }
