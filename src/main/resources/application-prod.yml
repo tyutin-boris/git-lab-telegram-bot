@@ -18,7 +18,7 @@ spring:
         web-allow-others: true
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     generate-ddl: true
     show-sql: true
     properties:
