@@ -33,4 +33,14 @@ public class MergeRequestSenderImpl implements MergeRequestSender {
         }
         return false;
     }
+
+    @Override
+    public Message sendSticker(Long chatId, Integer messageId) {
+        try {
+            return telegramBot.sendSticker(chatId, messageId);
+        } catch (TelegramApiException e) {
+            log.warn("Failed to send sticker: chat id " + chatId + ", message id " + messageId, e);
+        }
+        return null;
+    }
 }

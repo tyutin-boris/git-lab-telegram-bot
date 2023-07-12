@@ -18,4 +18,6 @@ public interface MessageRepository extends JpaRepository<MessageEntity, UUID> {
     List<MessageToDelete> getMessageToDelete(@Param("mrId") Long mrId,
                                              @Param("email") String email,
                                              @Param("username") String username);
+
+    List<MessageEntity> findByMrIdAndAuthorId(Long mrId, Long authorId);
 }
