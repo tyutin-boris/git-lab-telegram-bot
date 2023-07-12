@@ -1,4 +1,4 @@
-package ru.git.lab.bot.services.impl;
+package ru.git.lab.bot.services.impl.events;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

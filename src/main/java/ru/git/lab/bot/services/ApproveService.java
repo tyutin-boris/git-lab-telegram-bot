@@ -1,0 +1,12 @@
+package ru.git.lab.bot.services;
+
+import ru.git.lab.bot.api.mr.User;
+import ru.git.lab.bot.model.entities.ApproveEntity;
+
+import java.util.List;
+
+public interface ApproveService {
+    List<ApproveEntity> findAllByMrId(Long mrId);
+
+    void save(Long mrId, User user);
+}

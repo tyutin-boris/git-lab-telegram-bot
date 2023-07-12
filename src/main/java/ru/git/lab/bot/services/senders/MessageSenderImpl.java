@@ -2,10 +2,10 @@ package ru.git.lab.bot.services.senders;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ru.git.lab.bot.services.bot.TelegramBot;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.git.lab.bot.services.bot.TelegramBot;
 
 @Slf4j
 @Component
@@ -32,16 +32,6 @@ public class MessageSenderImpl implements MessageSender {
             log.warn("Failed to delete message: chat id " + chatId + ", message id " + messageId, e);
         }
         return false;
-    }
-
-    @Override
-    public Message sendSticker(Long chatId, Integer messageId) {
-//        try {
-//            return telegramBot.sendSticker(chatId, messageId);
-//        } catch (TelegramApiException e) {
-//            log.warn("Failed to send sticker: chat id " + chatId + ", message id " + messageId, e);
-//        }
-        return null;
     }
 
     @Override

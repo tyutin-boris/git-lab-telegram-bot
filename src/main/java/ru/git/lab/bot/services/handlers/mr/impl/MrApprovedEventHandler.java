@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import ru.git.lab.bot.api.mr.Action;
 import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
+import ru.git.lab.bot.model.entities.ApproveEntity;
 import ru.git.lab.bot.model.entities.MessageEntity;
+import ru.git.lab.bot.services.ApproveService;
 import ru.git.lab.bot.services.MessageService;
 import ru.git.lab.bot.services.handlers.mr.MrEventHandler;
 import ru.git.lab.bot.services.senders.MessageSender;
@@ -14,6 +16,7 @@ import ru.git.lab.bot.services.senders.MessageSender;
 import java.util.List;
 
 import static ru.git.lab.bot.api.mr.Action.APPROVED;
+import static ru.git.lab.bot.utils.MergeRequestUtils.createMergeRequestMessageWithApprove;
 import static ru.git.lab.bot.utils.ObjectAttributesUtils.getObjectAttributes;
 
 @Slf4j
@@ -23,6 +26,7 @@ public class MrApprovedEventHandler implements MrEventHandler {
 
     private final MessageSender sender;
     private final MessageService messageService;
+    private final ApproveService approveService;
 
     @Override
     public void handleEvent(MergeRequestEvent event) {
@@ -30,8 +34,13 @@ public class MrApprovedEventHandler implements MrEventHandler {
         Long mrId = objectAttributes.getId();
         Long authorId = objectAttributes.getAuthorId();
 
+        approveService.save(mrId, event.getUser());
+
+        List<ApproveEntity> approvalsForMr = approveService.findAllByMrId(mrId);
+        String text = createMergeRequestMessageWithApprove(event, approvalsForMr);
+
         MessageEntity messageEntity = messageService.getMessageByMrIdAndAuthorId(mrId, authorId);
-        sender.sendSticker(messageEntity.getChatId(), messageEntity.getMessageId());
+        sender.updateMessage(text, messageEntity.getChatId(), messageEntity.getMessageId());
 
         log.debug("Merge request action " + getAction() + ". MR id: " + mrId);
     }

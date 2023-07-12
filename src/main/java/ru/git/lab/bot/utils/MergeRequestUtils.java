@@ -1,9 +1,11 @@
 package ru.git.lab.bot.utils;
 
+import com.vdurmont.emoji.EmojiParser;
 import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
 import ru.git.lab.bot.api.mr.Project;
 import ru.git.lab.bot.api.mr.Reviewer;
+import ru.git.lab.bot.model.entities.ApproveEntity;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -13,16 +15,17 @@ import java.util.Optional;
 
 public class MergeRequestUtils {
 
+    private static final String likeEmoji = EmojiParser.parseToUnicode(":like");
     private static final String DEFAULT_PREFIX = "Тут могло быть ";
     private final static DateTimeFormatter DATE_TIME_FORMATTER
             = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
 
-    public static String createMergeRequestMessage(MergeRequestEvent request) {
-        String projectName = Optional.ofNullable(request.getProject())
+    public static String createMergeRequestMessage(MergeRequestEvent event) {
+        String projectName = Optional.ofNullable(event.getProject())
                 .map(Project::getName)
                 .orElse(DEFAULT_PREFIX + "название проекта.");
-        Optional<ObjectAttributes> objectAttributes = Optional.ofNullable(request.getObjectAttributes());
+        Optional<ObjectAttributes> objectAttributes = Optional.ofNullable(event.getObjectAttributes());
         String title = objectAttributes
                 .map(ObjectAttributes::getTitle)
                 .orElse(DEFAULT_PREFIX + "название МРа.");
@@ -37,15 +40,15 @@ public class MergeRequestUtils {
         String mrUrl = objectAttributes
                 .map(ObjectAttributes::getUrl)
                 .orElse("");
-        String sourceBranch = request.getObjectAttributes()
+        String sourceBranch = event.getObjectAttributes()
                 .getSourceBranch();
-        String targetBranch = request.getObjectAttributes()
+        String targetBranch = event.getObjectAttributes()
                 .getTargetBranch();
 
-        String name = request.getUser()
+        String name = event.getUser()
                 .getName();
 
-        List<Reviewer> reviewers = Optional.ofNullable(request.getReviewers())
+        List<Reviewer> reviewers = Optional.ofNullable(event.getReviewers())
                 .orElse(Collections.emptyList());
         Reviewer reviewer = reviewers.stream()
                 .findFirst()
@@ -63,5 +66,15 @@ public class MergeRequestUtils {
                 "<b>Target:</b> " + targetBranch + "\n\n" +
                 "<b>Create date:</b> " + createdAt + "\n\n" +
                 "<a href='" + mrUrl + "'><b><u>MR Hyperlink</u></b></a>";
+    }
+
+    public static String createMergeRequestMessageWithApprove(MergeRequestEvent event, List<ApproveEntity> approves) {
+        StringBuilder stringBuilder = new StringBuilder(createMergeRequestMessage(event));
+
+        approves.forEach(a -> {
+            String approveMessage = "\n\n" + a.getAuthorName() + " approved " + likeEmoji;
+            stringBuilder.append(approveMessage);
+        });
+        return  stringBuilder.toString();
     }
 }
