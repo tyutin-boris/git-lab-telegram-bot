@@ -5,13 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.git.lab.bot.api.mr.Action;
 import ru.git.lab.bot.api.mr.MergeRequestEvent;
-import ru.git.lab.bot.api.mr.User;
-import ru.git.lab.bot.dto.MessageToDelete;
-import ru.git.lab.bot.services.MessageService;
+import ru.git.lab.bot.api.mr.ObjectAttributes;
+import ru.git.lab.bot.services.EventOfCloseMrService;
 import ru.git.lab.bot.services.handlers.mr.MrEventHandler;
-import ru.git.lab.bot.utils.UserUtils;
-
-import java.util.List;
 
 import static ru.git.lab.bot.api.mr.Action.MERGE;
 import static ru.git.lab.bot.utils.ObjectAttributesUtils.getObjectAttributes;
@@ -21,19 +17,17 @@ import static ru.git.lab.bot.utils.ObjectAttributesUtils.getObjectAttributes;
 @RequiredArgsConstructor
 public class MrMergeEventHandler implements MrEventHandler {
 
-    private final MessageService messageService;
+    private final EventOfCloseMrService eventOfCloseMrService;
 
     @Override
-    public void handleEvent(MergeRequestEvent request) {
-        Long mrId = getObjectAttributes(request).getId();
-        User user = UserUtils.getUser(request);
-        String email = user.getEmail();
-        String username = user.getUsername();
+    public void handleEvent(MergeRequestEvent event) {
+        ObjectAttributes objectAttributes = getObjectAttributes(event);
+        Long mrId = objectAttributes.getId();
+        Long authorId = objectAttributes.getAuthorId();
 
-        log.debug("Merge request action " + getAction() + ". MR id: " + mrId);
+        log.debug("Merge event action " + getAction() + ". MR id: " + mrId);
 
-        List<MessageToDelete> messages = messageService.getMessageToDelete(mrId, email, username);
-        messageService.deleteMessages(messages);
+        eventOfCloseMrService.deleteMessage(mrId, authorId);
     }
 
     @Override

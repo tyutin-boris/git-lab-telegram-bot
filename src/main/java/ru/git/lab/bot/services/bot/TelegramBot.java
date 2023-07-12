@@ -2,16 +2,17 @@ package ru.git.lab.bot.services.bot;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ru.git.lab.bot.config.BotConfig;
-import ru.git.lab.bot.services.handlers.member.UpdateHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.git.lab.bot.config.BotConfig;
+import ru.git.lab.bot.services.handlers.member.UpdateHandler;
 
 import java.util.List;
 
@@ -80,6 +81,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         sendMessage.setChatId(chatId);
         sendMessage.setText(text);
         sendMessage.enableHtml(true);
+        log.debug("Send message to chat with id " + chatId);
         return execute(sendMessage);
     }
 
@@ -88,5 +90,14 @@ public class TelegramBot extends TelegramLongPollingBot {
         deleteMessage.setChatId(chatId);
         deleteMessage.setMessageId(messageId);
         return execute(deleteMessage);
+    }
+
+    public Message updateMessage(String text, Long chatId, Integer messageId) throws TelegramApiException {
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setChatId(chatId);
+        editMessageText.setMessageId(messageId);
+        editMessageText.setText(text);
+        editMessageText.enableHtml(true);
+        return (Message) execute(editMessageText);
     }
 }

@@ -1,15 +1,16 @@
 bot:
-  name: bnnligalabgit_test_bot
-  token: 6308490047:AAGbBo8c8Bniz5P0uXKY0YNqQ-lACPi6SjI
+  name: TestNNLigaGitLabBot
+  token: 6021072225:AAEDrP12sqw2NPjefzlcr4iiPnXk0RUwkoU
 logging:
   level:
     ru.git.lab.bot: DEBUG
+    org.flywaydb: DEBUG
 spring:
   datasource:
     driverClassName: org.h2.Driver
     username: bot
     password:
-    url: jdbc:h2:file:C:\bot\data\bot-db
+    url: jdbc:h2:file:C:\\Users\\btyutin\\bot\\data\\bot-db
   h2:
     console:
       enabled: true
@@ -29,4 +30,4 @@ flyway:
   password:
   schema: bot-schema
   locations: filesystem:db/migration
-  url: jdbc:h2:file:C:\bot\data\bot-db
+  url: jdbc:h2:file:C:\\Users\\btyutin\\bot\\data\\bot-db

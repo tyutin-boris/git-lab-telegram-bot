@@ -1,0 +1,11 @@
+ALTER TABLE IF EXISTS messages
+    ALTER COLUMN author_email DROP NOT NULL;
+
+ALTER TABLE IF EXISTS messages
+    ALTER COLUMN author_username DROP NOT NULL;
+
+ALTER TABLE IF EXISTS messages
+    DROP COLUMN IF EXISTS author_email;
+
+ALTER TABLE IF EXISTS messages
+    DROP COLUMN IF EXISTS author_username;

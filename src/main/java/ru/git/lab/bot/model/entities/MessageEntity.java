@@ -33,12 +33,6 @@ public class MessageEntity {
     @Column(name = "author_id")
     Long authorId;
 
-    @Column(name = "author_email")
-    String authorEmail;
-
-    @Column(name = "author_username")
-    String authorUsername;
-
     @Column(name = "create_date_time")
     OffsetDateTime createDateTime;
 }

@@ -8,16 +8,15 @@ import ru.git.lab.bot.dto.MessageToDelete;
 import ru.git.lab.bot.model.entities.MessageEntity;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface MessageRepository extends JpaRepository<MessageEntity, UUID> {
 
     @Query("select new ru.git.lab.bot.dto.MessageToDelete(m.id, m.chatId, m.messageId) from MessageEntity m " +
-            "where m.mrId = :mrId and m.authorEmail = :email and m.authorUsername = :username")
-    List<MessageToDelete> getMessageToDelete(@Param("mrId") Long mrId,
-                                             @Param("email") String email,
-                                             @Param("username") String username);
+            "where m.mrId = :mrId and m.authorId = :authorId")
+    List<MessageToDelete> getMessageToDelete(@Param("mrId") Long mrId, @Param("authorId") Long authorId);
 
-    List<MessageEntity> findByMrIdAndAuthorId(Long mrId, Long authorId);
+    Optional<MessageEntity> findByMrIdAndAuthorId(Long mrId, Long authorId);
 }

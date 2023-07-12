@@ -1,11 +1,11 @@
 package ru.git.lab.bot.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.git.lab.bot.dto.ChatDto;
 import ru.git.lab.bot.mappers.ChatMapper;
 import ru.git.lab.bot.model.repository.ChatRepository;
 import ru.git.lab.bot.services.ChatService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -13,8 +13,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
 
-    private final ChatRepository chatRepository;
     private final ChatMapper chatMapper;
+    private final ChatRepository chatRepository;
 
     @Override
     public List<ChatDto> getAll() {
@@ -23,7 +23,13 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public ChatDto getById(Long chatId) {
-        return chatRepository.findById(chatId).map(chatMapper::toDto)
+        return chatRepository.findById(chatId)
+                .map(chatMapper::toDto)
                 .orElseThrow(() -> new RuntimeException("Chat not found"));
+    }
+
+    @Override
+    public List<Long> getAllChatId() {
+        return chatRepository.getAllChatId();
     }
 }

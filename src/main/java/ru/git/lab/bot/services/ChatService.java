@@ -8,4 +8,6 @@ public interface ChatService {
     List<ChatDto> getAll();
 
     ChatDto getById(Long chatId);
+
+    List<Long> getAllChatId();
 }

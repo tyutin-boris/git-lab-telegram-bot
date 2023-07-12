@@ -5,7 +5,7 @@ import ru.git.lab.bot.api.mr.MergeRequestEvent;
 
 public interface MrEventHandler {
 
-    void handleEvent(MergeRequestEvent request);
+    void handleEvent(MergeRequestEvent event);
 
     default Action getAction() {
         return Action.INDEFINITELY;

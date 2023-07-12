@@ -5,12 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
-import ru.git.lab.bot.api.mr.User;
 import ru.git.lab.bot.dto.MessageToDelete;
 import ru.git.lab.bot.model.entities.MessageEntity;
 import ru.git.lab.bot.model.repository.MessageRepository;
 import ru.git.lab.bot.services.MessageService;
-import ru.git.lab.bot.services.senders.MergeRequestSender;
+import ru.git.lab.bot.services.senders.MessageSender;
 
 import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
@@ -23,19 +22,18 @@ import java.util.UUID;
 public class MessageServiceImpl implements MessageService {
 
     private final MessageRepository messageRepository;
-    private final MergeRequestSender mergeRequestSender;
+    private final MessageSender messageSender;
 
     @Override
-    public void saveMessage(Message message, ObjectAttributes attributes, User user) {
-        MessageEntity messageEntity = createMessage(message, attributes, user);
+    public void saveMessage(Message message, ObjectAttributes attributes) {
+        MessageEntity messageEntity = createMessage(message, attributes);
         messageRepository.save(messageEntity);
-        log.debug("Save message with id " + messageEntity.getMessageId() + ", authorUsername " +
-                          messageEntity.getAuthorUsername());
+        log.debug("Save message with id " + messageEntity.getMessageId() + ", authorId " + messageEntity.getAuthorId());
     }
 
     @Override
-    public List<MessageToDelete> getMessageToDelete(Long mrId, String email, String username) {
-        return messageRepository.getMessageToDelete(mrId, email, username);
+    public List<MessageToDelete> getMessageToDelete(Long mrId, Long authorId) {
+        return messageRepository.getMessageToDelete(mrId, authorId);
     }
 
     @Override
@@ -45,7 +43,7 @@ public class MessageServiceImpl implements MessageService {
             UUID messageId = message.getMessageId();
             Long chatId = message.getChatId();
             Integer telegramMessageId = message.getTelegramMessageId();
-            boolean messageWasDelete = mergeRequestSender.deleteMessage(chatId, telegramMessageId);
+            boolean messageWasDelete = messageSender.deleteMessage(chatId, telegramMessageId);
 
             if (messageWasDelete) {
                 messageRepository.deleteById(messageId);
@@ -54,15 +52,20 @@ public class MessageServiceImpl implements MessageService {
         }
     }
 
-    private MessageEntity createMessage(Message message, ObjectAttributes attributes, User user) {
+    @Override
+    public MessageEntity getMessageByMrIdAndAuthorId(Long mrId, Long authorId) {
+        return messageRepository.findByMrIdAndAuthorId(mrId, authorId)
+                .orElseThrow(() -> new RuntimeException(
+                        "Message not found. mrId: " + mrId + ", " + "authorId: " + authorId));
+    }
+
+    private MessageEntity createMessage(Message message, ObjectAttributes attributes) {
         MessageEntity messageEntity = new MessageEntity();
 
         messageEntity.setMessageId(message.getMessageId());
         messageEntity.setChatId(message.getChatId());
         messageEntity.setMrId(attributes.getId());
         messageEntity.setAuthorId(attributes.getAuthorId());
-        messageEntity.setAuthorEmail(user.getEmail());
-        messageEntity.setAuthorUsername(user.getUsername());
         messageEntity.setCreateDateTime(OffsetDateTime.now());
 
         return messageEntity;

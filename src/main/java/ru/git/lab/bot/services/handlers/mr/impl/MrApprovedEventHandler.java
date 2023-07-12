@@ -7,9 +7,9 @@ import ru.git.lab.bot.api.mr.Action;
 import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
 import ru.git.lab.bot.model.entities.MessageEntity;
-import ru.git.lab.bot.model.repository.MessageRepository;
+import ru.git.lab.bot.services.MessageService;
 import ru.git.lab.bot.services.handlers.mr.MrEventHandler;
-import ru.git.lab.bot.services.senders.MergeRequestSender;
+import ru.git.lab.bot.services.senders.MessageSender;
 
 import java.util.List;
 
@@ -21,17 +21,17 @@ import static ru.git.lab.bot.utils.ObjectAttributesUtils.getObjectAttributes;
 @RequiredArgsConstructor
 public class MrApprovedEventHandler implements MrEventHandler {
 
-    private final MergeRequestSender sender;
-    private final MessageRepository messageRepository;
+    private final MessageSender sender;
+    private final MessageService messageService;
 
     @Override
-    public void handleEvent(MergeRequestEvent request) {
-        ObjectAttributes objectAttributes = getObjectAttributes(request);
+    public void handleEvent(MergeRequestEvent event) {
+        ObjectAttributes objectAttributes = getObjectAttributes(event);
         Long mrId = objectAttributes.getId();
         Long authorId = objectAttributes.getAuthorId();
 
-        List<MessageEntity> messageEntity = messageRepository.findByMrIdAndAuthorId(mrId, authorId);
-        messageEntity.forEach(e -> sender.sendSticker(e.getChatId(), e.getMessageId()));
+        MessageEntity messageEntity = messageService.getMessageByMrIdAndAuthorId(mrId, authorId);
+        sender.sendSticker(messageEntity.getChatId(), messageEntity.getMessageId());
 
         log.debug("Merge request action " + getAction() + ". MR id: " + mrId);
     }

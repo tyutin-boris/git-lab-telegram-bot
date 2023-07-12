@@ -17,8 +17,8 @@ import static ru.git.lab.bot.utils.ObjectAttributesUtils.getObjectAttributes;
 public class MrApprovalEventHandler implements MrEventHandler {
 
     @Override
-    public void handleEvent(MergeRequestEvent request) {
-        ObjectAttributes objectAttributes = getObjectAttributes(request);
+    public void handleEvent(MergeRequestEvent event) {
+        ObjectAttributes objectAttributes = getObjectAttributes(event);
         Long mrId = objectAttributes.getId();
 
         log.debug("Merge request action " + getAction() + ". MR id: " + mrId);

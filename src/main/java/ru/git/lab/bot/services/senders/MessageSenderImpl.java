@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class MergeRequestSenderImpl implements MergeRequestSender {
+public class MessageSenderImpl implements MessageSender {
 
     private final TelegramBot telegramBot;
 
@@ -41,6 +41,16 @@ public class MergeRequestSenderImpl implements MergeRequestSender {
 //        } catch (TelegramApiException e) {
 //            log.warn("Failed to send sticker: chat id " + chatId + ", message id " + messageId, e);
 //        }
+        return null;
+    }
+
+    @Override
+    public Message updateMessage(String text, Long chatId, Integer messageId) {
+        try {
+            return telegramBot.updateMessage(text, chatId, messageId);
+        } catch (TelegramApiException e) {
+            log.warn("Failed to update message: chat id " + chatId, e);
+        }
         return null;
     }
 }
