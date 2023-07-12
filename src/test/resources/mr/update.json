@@ -1,0 +1,152 @@
+{
+  "object_kind": "merge_request",
+  "event_type": "merge_request",
+  "user": {
+    "id": 6651,
+    "name": "Тютин Борис Сергеевич",
+    "username": "btyutin",
+    "avatar_url": "https://gitlab.akb-it.ru/uploads/-/system/user/avatar/6651/avatar.png",
+    "email": "[REDACTED]"
+  },
+  "project": {
+    "id": 4113,
+    "name": "bp-invitation-backend",
+    "description": "Реализация бизнес-процесса \"Приглашения\". Серверная логика",
+    "web_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend",
+    "avatar_url": null,
+    "git_ssh_url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+    "git_http_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+    "namespace": "blank-visa-inv",
+    "visibility_level": 0,
+    "path_with_namespace": "GISMU2.0/blank-visa-inv/bp-invitation-backend",
+    "default_branch": "release",
+    "ci_config_path": null,
+    "homepage": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend",
+    "url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+    "ssh_url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+    "http_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend.git"
+  },
+  "object_attributes": {
+    "assignee_id": null,
+    "author_id": 6651,
+    "created_at": "2023-07-12 08:54:21 UTC",
+    "description": "Убрал данные выгрузки из архива доступного для скачивания пользователю.\n\nТеперь туда добавляется только файл с логами.",
+    "head_pipeline_id": 1585403,
+    "id": 390865,
+    "iid": 761,
+    "last_edited_at": null,
+    "last_edited_by_id": null,
+    "merge_commit_sha": null,
+    "merge_error": null,
+    "merge_params": {
+      "force_remove_source_branch": "1"
+    },
+    "merge_status": "can_be_merged",
+    "merge_user_id": null,
+    "merge_when_pipeline_succeeds": false,
+    "milestone_id": null,
+    "source_branch": "feature/GISMUITSMA-9858",
+    "source_project_id": 4113,
+    "state_id": 1,
+    "target_branch": "release",
+    "target_project_id": 4113,
+    "time_estimate": 0,
+    "title": "GISMUITSMA-9858 Убраны данные выгрузки из архива. Фоновая задача ФСБ (УФОД)",
+    "updated_at": "2023-07-12 08:55:12 UTC",
+    "updated_by_id": 6651,
+    "url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend/-/merge_requests/761",
+    "source": {
+      "id": 4113,
+      "name": "bp-invitation-backend",
+      "description": "Реализация бизнес-процесса \"Приглашения\". Серверная логика",
+      "web_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend",
+      "avatar_url": null,
+      "git_ssh_url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+      "git_http_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+      "namespace": "blank-visa-inv",
+      "visibility_level": 0,
+      "path_with_namespace": "GISMU2.0/blank-visa-inv/bp-invitation-backend",
+      "default_branch": "release",
+      "ci_config_path": null,
+      "homepage": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend",
+      "url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+      "ssh_url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+      "http_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend.git"
+    },
+    "target": {
+      "id": 4113,
+      "name": "bp-invitation-backend",
+      "description": "Реализация бизнес-процесса \"Приглашения\". Серверная логика",
+      "web_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend",
+      "avatar_url": null,
+      "git_ssh_url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+      "git_http_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+      "namespace": "blank-visa-inv",
+      "visibility_level": 0,
+      "path_with_namespace": "GISMU2.0/blank-visa-inv/bp-invitation-backend",
+      "default_branch": "release",
+      "ci_config_path": null,
+      "homepage": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend",
+      "url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+      "ssh_url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+      "http_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend.git"
+    },
+    "last_commit": {
+      "id": "37aa72710a838a9b5f184ac486bfeb06d54e2a4f",
+      "message": "GISMUITSMA-9858 Убраны данные выгрузки из архива. Фоновая задача ФСБ(УФОД)\n",
+      "title": "GISMUITSMA-9858 Убраны данные выгрузки из архива. Фоновая задача ФСБ(УФОД)",
+      "timestamp": "2023-07-12T11:52:08+03:00",
+      "url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend/-/commit/37aa72710a838a9b5f184ac486bfeb06d54e2a4f",
+      "author": {
+        "name": "Тютин Борис Сергеевич",
+        "email": "btyutin@phoenixit.ru"
+      }
+    },
+    "work_in_progress": false,
+    "total_time_spent": 0,
+    "time_change": 0,
+    "human_total_time_spent": null,
+    "human_time_change": null,
+    "human_time_estimate": null,
+    "assignee_ids": [],
+    "reviewer_ids": [
+      6200
+    ],
+    "labels": [],
+    "state": "opened",
+    "blocking_discussions_resolved": true,
+    "first_contribution": false,
+    "detailed_merge_status": "ci_still_running",
+    "action": "update"
+  },
+  "labels": [],
+  "changes": {
+    "title": {
+      "previous": "GISMUITSMA-9858 Убраны данные выгрузки из архива. Фоновая задача ФСБ(УФОД)",
+      "current": "GISMUITSMA-9858 Убраны данные выгрузки из архива. Фоновая задача ФСБ (УФОД)"
+    },
+    "updated_at": {
+      "previous": "2023-07-12 08:54:21 UTC",
+      "current": "2023-07-12 08:55:12 UTC"
+    },
+    "updated_by_id": {
+      "previous": null,
+      "current": 6651
+    }
+  },
+  "repository": {
+    "name": "bp-invitation-backend",
+    "url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+    "description": "Реализация бизнес-процесса \"Приглашения\". Серверная логика",
+    "homepage": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend"
+  },
+  "reviewers": [
+    {
+      "id": 6200,
+      "name": "Пшеничников Константин Иванович",
+      "username": "kpshenichnikov",
+      "avatar_url": "https://gitlab.akb-it.ru/uploads/-/system/user/avatar/6200/avatar.png",
+      "email": "[REDACTED]"
+    }
+  ]
+}
