@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class MergeRequest {
+public class MergeRequestEvent {
     @JsonProperty("object_kind")
     String objectKind;
     @JsonProperty("event_type")

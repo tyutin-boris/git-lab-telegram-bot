@@ -20,10 +20,10 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public void saveUser(User user) {
+    public void saveUserIfNotExist(User user) {
         Optional.ofNullable(user)
                 .ifPresent(u -> {
-                    if (!userRepository.existsByUsernameAndEmail(u.getUsername(), u.getEmail())) {
+                    if (!userRepository.existsByGitIdAndUsernameAndEmail(u.getId(), u.getUsername(), u.getEmail())) {
                         UserEntity userEntity = userMapper.toEntity(user);
                         userRepository.save(userEntity);
                     }

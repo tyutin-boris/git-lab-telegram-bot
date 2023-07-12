@@ -1,11 +1,11 @@
 package ru.git.lab.bot.services.handlers.mr;
 
 import ru.git.lab.bot.api.mr.Action;
-import ru.git.lab.bot.api.mr.MergeRequest;
+import ru.git.lab.bot.api.mr.MergeRequestEvent;
 
-public interface MrActionHandler {
+public interface MrEventHandler {
 
-    void handleAction(MergeRequest request);
+    void handleEvent(MergeRequestEvent request);
 
     default Action getAction() {
         return Action.INDEFINITELY;

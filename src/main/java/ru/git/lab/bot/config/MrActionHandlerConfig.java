@@ -2,7 +2,7 @@ package ru.git.lab.bot.config;
 
 import lombok.RequiredArgsConstructor;
 import ru.git.lab.bot.api.mr.Action;
-import ru.git.lab.bot.services.handlers.mr.MrActionHandler;
+import ru.git.lab.bot.services.handlers.mr.MrEventHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MrActionHandlerConfig {
 
-    private final List<MrActionHandler> actionHandlers;
+    private final List<MrEventHandler> actionHandlers;
 
     @Bean
-    public Map<Action, MrActionHandler> actionHandlers() {
+    public Map<Action, MrEventHandler> actionHandlers() {
         return actionHandlers.stream()
-                .collect(Collectors.toMap(MrActionHandler::getAction, Function.identity()));
+                .collect(Collectors.toMap(MrEventHandler::getAction, Function.identity()));
     }
 }

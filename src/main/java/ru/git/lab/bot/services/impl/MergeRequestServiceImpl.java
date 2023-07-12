@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.git.lab.bot.api.mr.Action;
-import ru.git.lab.bot.api.mr.MergeRequest;
+import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
 import ru.git.lab.bot.services.MergeRequestService;
 import ru.git.lab.bot.services.UserService;
-import ru.git.lab.bot.services.handlers.mr.MrActionHandler;
+import ru.git.lab.bot.services.handlers.mr.MrEventHandler;
 
 import java.util.Map;
 
@@ -20,15 +20,15 @@ import static ru.git.lab.bot.utils.ObjectAttributesUtils.getObjectAttributes;
 @RequiredArgsConstructor
 public class MergeRequestServiceImpl implements MergeRequestService {
 
-    private final Map<Action, MrActionHandler> actionHandlers;
     private final UserService userService;
+    private final Map<Action, MrEventHandler> eventHandlers;
 
     @Override
-    public void sendMergeRequestMessage(MergeRequest request) {
-        ObjectAttributes objectAttributes = getObjectAttributes(request);
+    public void handleEvent(MergeRequestEvent event) {
+        ObjectAttributes objectAttributes = getObjectAttributes(event);
         Action action = getAction(objectAttributes);
 
-        userService.saveUser(request.getUser());
-        actionHandlers.get(action).handleAction(request);
+        userService.saveUserIfNotExist(event.getUser());
+        eventHandlers.get(action).handleEvent(event);
     }
 }

@@ -3,7 +3,7 @@ package ru.git.lab.bot.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ru.git.lab.bot.api.mr.MergeRequest;
+import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.services.MergeRequestService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +25,7 @@ public class MergeRequestController {
     public void mergeRequestEvent(@RequestBody String request) throws IOException {
         log.debug(request);
 
-        MergeRequest mergeRequest = objectMapper.readValue(request, MergeRequest.class);
-        mergeRequestService.sendMergeRequestMessage(mergeRequest);
+        MergeRequestEvent mergeRequestEvent = objectMapper.readValue(request, MergeRequestEvent.class);
+        mergeRequestService.handleEvent(mergeRequestEvent);
     }
 }

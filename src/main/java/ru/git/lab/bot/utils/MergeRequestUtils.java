@@ -1,6 +1,6 @@
 package ru.git.lab.bot.utils;
 
-import ru.git.lab.bot.api.mr.MergeRequest;
+import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
 import ru.git.lab.bot.api.mr.Project;
 import ru.git.lab.bot.api.mr.Reviewer;
@@ -18,7 +18,7 @@ public class MergeRequestUtils {
             = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
 
-    public static String createMergeRequestMessage(MergeRequest request) {
+    public static String createMergeRequestMessage(MergeRequestEvent request) {
         String projectName = Optional.ofNullable(request.getProject())
                 .map(Project::getName)
                 .orElse(DEFAULT_PREFIX + "название проекта.");

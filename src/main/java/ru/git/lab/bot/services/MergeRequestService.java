@@ -1,8 +1,8 @@
 package ru.git.lab.bot.services;
 
-import ru.git.lab.bot.api.mr.MergeRequest;
+import ru.git.lab.bot.api.mr.MergeRequestEvent;
 
 public interface MergeRequestService {
 
-    void sendMergeRequestMessage(MergeRequest request);
+    void handleEvent(MergeRequestEvent request);
 }
