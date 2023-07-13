@@ -6,9 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.git.lab.bot.api.mr.Action;
 import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
-import ru.git.lab.bot.dto.MessageToDelete;
-import ru.git.lab.bot.services.EventOfCloseMrService;
-import ru.git.lab.bot.services.MessageService;
+import ru.git.lab.bot.services.events.EventOfCloseMrService;
 import ru.git.lab.bot.services.handlers.mr.MrEventHandler;
 
 import static ru.git.lab.bot.api.mr.Action.CLOSE;

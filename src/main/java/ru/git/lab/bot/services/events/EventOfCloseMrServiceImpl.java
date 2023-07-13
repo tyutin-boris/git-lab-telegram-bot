@@ -1,10 +1,9 @@
-package ru.git.lab.bot.services.impl.events;
+package ru.git.lab.bot.services.events;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.git.lab.bot.dto.MessageToDelete;
-import ru.git.lab.bot.services.EventOfCloseMrService;
 import ru.git.lab.bot.services.MessageService;
 
 import java.util.List;

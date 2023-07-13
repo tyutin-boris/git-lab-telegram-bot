@@ -1,4 +1,4 @@
-package ru.git.lab.bot.services.impl.events;
+package ru.git.lab.bot.services.events;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +8,6 @@ import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
 import ru.git.lab.bot.model.entities.MessageEntity;
 import ru.git.lab.bot.services.ChatService;
-import ru.git.lab.bot.services.EventOfCreateMrService;
 import ru.git.lab.bot.services.MessageService;
 import ru.git.lab.bot.services.senders.MessageSender;
 
