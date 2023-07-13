@@ -9,12 +9,12 @@ import ru.git.lab.bot.api.mr.ObjectAttributes;
 import ru.git.lab.bot.model.entities.MessageEntity;
 import ru.git.lab.bot.services.ChatService;
 import ru.git.lab.bot.services.MessageService;
+import ru.git.lab.bot.services.MrTextMessageService;
 import ru.git.lab.bot.services.senders.MessageSender;
 
 import java.util.List;
 import java.util.Optional;
 
-import static ru.git.lab.bot.utils.MergeRequestUtils.createMergeRequestMessage;
 import static ru.git.lab.bot.utils.ObjectAttributesUtils.getObjectAttributes;
 
 @Slf4j
@@ -25,14 +25,16 @@ public class EventOfCreateMrServiceImpl implements EventOfCreateMrService {
     private final MessageSender sender;
     private final ChatService chatService;
     private final MessageService messageService;
+    private final MrTextMessageService mrTextMessageService;
 
     @Override
     public void sendAndSaveMessage(MergeRequestEvent event) {
         ObjectAttributes objectAttributes = getObjectAttributes(event);
-        String text = createMergeRequestMessage(event);
         Long mrId = objectAttributes.getId();
         Long authorId = objectAttributes.getAuthorId();
+
         List<Long> chatsId = chatService.getAllChatId();
+        String text = mrTextMessageService.createMergeRequestTextMessage(event);
 
         for (Long id : chatsId) {
             Optional<MessageEntity> messageEntity = messageService.findByMrIdAndAuthorId(mrId, authorId);

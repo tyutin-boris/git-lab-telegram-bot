@@ -1,11 +1,15 @@
-package ru.git.lab.bot.utils;
+package ru.git.lab.bot.services.impl;
 
 import com.vdurmont.emoji.EmojiParser;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
 import ru.git.lab.bot.api.mr.Project;
 import ru.git.lab.bot.api.mr.Reviewer;
 import ru.git.lab.bot.model.entities.ApproveEntity;
+import ru.git.lab.bot.services.MrTextMessageService;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -13,13 +17,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class MergeRequestUtils {
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class MrTextMessageServiceImpl implements MrTextMessageService {
 
     private static final String likeEmoji = EmojiParser.parseToUnicode(":thumbsup:");
     private static final String DEFAULT_PREFIX = "Тут могло быть ";
     private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
-    public static String createMergeRequestMessage(MergeRequestEvent event) {
+    @Override
+    public String createMergeRequestTextMessage(MergeRequestEvent event) {
         String projectName = Optional.ofNullable(event.getProject())
                 .map(Project::getName)
                 .orElse(DEFAULT_PREFIX + "название проекта.");
@@ -65,9 +73,9 @@ public class MergeRequestUtils {
                 "<a href='" + mrUrl + "'><b><u>MR Hyperlink</u></b></a>";
     }
 
-    public static String createMergeRequestMessageWithApprove(MergeRequestEvent event, List<ApproveEntity> approves) {
-        StringBuilder stringBuilder = new StringBuilder(createMergeRequestMessage(event));
-
+    @Override
+    public String createMergeRequestTextMessageWithApprove(MergeRequestEvent event, List<ApproveEntity> approves) {
+        StringBuilder stringBuilder = new StringBuilder(createMergeRequestTextMessage(event));
         approves.forEach(a -> {
             String approveMessage = "\n\n" + likeEmoji + " " + "<b>" + a.getAuthorName() + " approved </b>";
             stringBuilder.append(approveMessage);

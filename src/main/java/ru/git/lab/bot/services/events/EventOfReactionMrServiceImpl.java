@@ -9,11 +9,11 @@ import ru.git.lab.bot.model.entities.ApproveEntity;
 import ru.git.lab.bot.model.entities.MessageEntity;
 import ru.git.lab.bot.services.ApproveService;
 import ru.git.lab.bot.services.MessageService;
+import ru.git.lab.bot.services.MrTextMessageService;
 import ru.git.lab.bot.services.senders.MessageSender;
 
 import java.util.List;
 
-import static ru.git.lab.bot.utils.MergeRequestUtils.createMergeRequestMessageWithApprove;
 import static ru.git.lab.bot.utils.ObjectAttributesUtils.getObjectAttributes;
 
 @Slf4j
@@ -24,6 +24,7 @@ public class EventOfReactionMrServiceImpl implements EventOfReactionMrService {
     private final MessageSender sender;
     private final MessageService messageService;
     private final ApproveService approveService;
+    private final MrTextMessageService mrTextMessageService;
 
     @Override
     public void addReactionToMessage(MergeRequestEvent event) {
@@ -32,7 +33,7 @@ public class EventOfReactionMrServiceImpl implements EventOfReactionMrService {
         Long authorId = objectAttributes.getAuthorId();
 
         List<ApproveEntity> approvalsForMr = approveService.findAllByMrId(mrId);
-        String text = createMergeRequestMessageWithApprove(event, approvalsForMr);
+        String text = mrTextMessageService.createMergeRequestTextMessageWithApprove(event, approvalsForMr);
 
         MessageEntity messageEntity = messageService.getMessageByMrIdAndAuthorId(mrId, authorId);
         sender.updateMessage(text, messageEntity.getChatId(), messageEntity.getMessageId());

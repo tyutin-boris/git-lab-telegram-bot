@@ -8,11 +8,11 @@ import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
 import ru.git.lab.bot.model.entities.MessageEntity;
 import ru.git.lab.bot.services.MessageService;
+import ru.git.lab.bot.services.MrTextMessageService;
 import ru.git.lab.bot.services.handlers.mr.MrEventHandler;
 import ru.git.lab.bot.services.senders.MessageSender;
 
 import static ru.git.lab.bot.api.mr.Action.UPDATE;
-import static ru.git.lab.bot.utils.MergeRequestUtils.createMergeRequestMessage;
 import static ru.git.lab.bot.utils.ObjectAttributesUtils.getObjectAttributes;
 
 @Slf4j
@@ -22,6 +22,7 @@ public class MrUpdateEventHandler implements MrEventHandler {
 
     private final MessageService messageService;
     private final MessageSender messageSender;
+    private final MrTextMessageService mrTextMessageService;
 
     @Override
     public void handleEvent(MergeRequestEvent event) {
@@ -31,7 +32,7 @@ public class MrUpdateEventHandler implements MrEventHandler {
 
         log.debug("Merge request action " + getAction() + ". MR id: " + mrId);
 
-        String text = createMergeRequestMessage(event);
+        String text = mrTextMessageService.createMergeRequestTextMessage(event);
         MessageEntity message = messageService.getMessageByMrIdAndAuthorId(mrId, authorId);
 
         messageSender.updateMessage(text, message.getChatId(), message.getMessageId());
