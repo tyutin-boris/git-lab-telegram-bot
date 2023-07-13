@@ -7,18 +7,11 @@ import ru.git.lab.bot.api.mr.Action;
 import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
 import ru.git.lab.bot.api.mr.User;
-import ru.git.lab.bot.model.entities.ApproveEntity;
-import ru.git.lab.bot.model.entities.MessageEntity;
 import ru.git.lab.bot.services.ApproveService;
-import ru.git.lab.bot.services.MessageService;
 import ru.git.lab.bot.services.events.EventOfReactionMrService;
 import ru.git.lab.bot.services.handlers.mr.MrEventHandler;
-import ru.git.lab.bot.services.senders.MessageSender;
-
-import java.util.List;
 
 import static ru.git.lab.bot.api.mr.Action.APPROVED;
-import static ru.git.lab.bot.utils.MergeRequestUtils.createMergeRequestMessageWithApprove;
 import static ru.git.lab.bot.utils.ObjectAttributesUtils.getObjectAttributes;
 import static ru.git.lab.bot.utils.UserUtils.getUser;
 
