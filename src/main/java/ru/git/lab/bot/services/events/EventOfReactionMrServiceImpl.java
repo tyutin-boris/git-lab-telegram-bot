@@ -1,49 +1,40 @@
-package ru.git.lab.bot.services.handlers.mr.impl;
+package ru.git.lab.bot.services.events;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.git.lab.bot.api.mr.Action;
 import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
-import ru.git.lab.bot.api.mr.User;
 import ru.git.lab.bot.model.entities.ApproveEntity;
 import ru.git.lab.bot.model.entities.MessageEntity;
 import ru.git.lab.bot.services.ApproveService;
 import ru.git.lab.bot.services.MessageService;
-import ru.git.lab.bot.services.events.EventOfReactionMrService;
-import ru.git.lab.bot.services.handlers.mr.MrEventHandler;
 import ru.git.lab.bot.services.senders.MessageSender;
 
 import java.util.List;
 
-import static ru.git.lab.bot.api.mr.Action.APPROVED;
 import static ru.git.lab.bot.utils.MergeRequestUtils.createMergeRequestMessageWithApprove;
 import static ru.git.lab.bot.utils.ObjectAttributesUtils.getObjectAttributes;
-import static ru.git.lab.bot.utils.UserUtils.getUser;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MrApprovedEventHandler implements MrEventHandler {
+public class EventOfReactionMrServiceImpl implements EventOfReactionMrService {
 
+    private final MessageSender sender;
+    private final MessageService messageService;
     private final ApproveService approveService;
-    private final EventOfReactionMrService eventOfReactionMrService;
 
     @Override
-    public void handleEvent(MergeRequestEvent event) {
+    public void addReactionToMessage(MergeRequestEvent event) {
         ObjectAttributes objectAttributes = getObjectAttributes(event);
         Long mrId = objectAttributes.getId();
-        User user = getUser(event);
+        Long authorId = objectAttributes.getAuthorId();
 
-        approveService.save(mrId, user);
-        eventOfReactionMrService.addReactionToMessage(event);
+        List<ApproveEntity> approvalsForMr = approveService.findAllByMrId(mrId);
+        String text = createMergeRequestMessageWithApprove(event, approvalsForMr);
 
-        log.debug("Merge request action " + getAction() + ". MR id: " + mrId);
-    }
-
-    @Override
-    public Action getAction() {
-        return APPROVED;
+        MessageEntity messageEntity = messageService.getMessageByMrIdAndAuthorId(mrId, authorId);
+        sender.updateMessage(text, messageEntity.getChatId(), messageEntity.getMessageId());
     }
 }
