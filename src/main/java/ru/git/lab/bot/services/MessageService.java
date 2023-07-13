@@ -6,6 +6,7 @@ import ru.git.lab.bot.dto.MessageToDelete;
 import ru.git.lab.bot.model.entities.MessageEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MessageService {
 
@@ -16,4 +17,6 @@ public interface MessageService {
     void deleteMessages(List<MessageToDelete> messages);
 
     MessageEntity getMessageByMrIdAndAuthorId(Long mrId, Long authorId);
+
+    Optional<MessageEntity> findByMrIdAndAuthorId(Long mrId, Long authorId);
 }

@@ -14,6 +14,7 @@ import ru.git.lab.bot.services.senders.MessageSender;
 import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -57,6 +58,11 @@ public class MessageServiceImpl implements MessageService {
         return messageRepository.findByMrIdAndAuthorId(mrId, authorId)
                 .orElseThrow(() -> new RuntimeException(
                         "Message not found. mrId: " + mrId + ", " + "authorId: " + authorId));
+    }
+
+    @Override
+    public Optional<MessageEntity> findByMrIdAndAuthorId(Long mrId, Long authorId) {
+        return messageRepository.findByMrIdAndAuthorId(mrId, authorId);
     }
 
     private MessageEntity createMessage(Message message, ObjectAttributes attributes) {

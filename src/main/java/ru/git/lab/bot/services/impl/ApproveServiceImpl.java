@@ -28,12 +28,22 @@ public class ApproveServiceImpl implements ApproveService {
         approveRepository.save(approveEntity);
     }
 
+    @Override
+    public List<ApproveEntity> findAllByMrIdAndAuthorId(Long mrId, Long authorId) {
+        return approveRepository.findAllByMrIdAndAuthorId(mrId, authorId);
+    }
+
+    @Override
+    public void deleteAll(List<ApproveEntity> approvals) {
+        approveRepository.deleteAll(approvals);
+    }
+
     private ApproveEntity createApproveEntity(Long mrId, User user) {
         ApproveEntity approveEntity = new ApproveEntity();
 
         approveEntity.setMrId(mrId);
         approveEntity.setAuthorId(user.getId());
-        approveEntity.setAuthorName(user.getUsername());
+        approveEntity.setAuthorName(user.getName());
         return approveEntity;
     }
 }

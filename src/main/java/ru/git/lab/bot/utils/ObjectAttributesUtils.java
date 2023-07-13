@@ -8,10 +8,10 @@ import java.util.Optional;
 
 public class ObjectAttributesUtils {
 
-    public static ObjectAttributes getObjectAttributes(MergeRequestEvent request) {
-        return Optional.of(request)
+    public static ObjectAttributes getObjectAttributes(MergeRequestEvent event) {
+        return Optional.of(event)
                 .map(MergeRequestEvent::getObjectAttributes)
-                .orElseThrow(() -> new RuntimeException("Merge request without object attributes"));
+                .orElseThrow(() -> new RuntimeException("Merge event without object attributes"));
     }
 
     public static Action getAction(ObjectAttributes objectAttributes) {

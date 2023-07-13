@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface ApproveRepository extends JpaRepository<ApproveEntity, UUID> {
 
     List<ApproveEntity> findAllByMrId(Long mrId);
+
+    List<ApproveEntity> findAllByMrIdAndAuthorId(Long mrId, Long authorId);
 }

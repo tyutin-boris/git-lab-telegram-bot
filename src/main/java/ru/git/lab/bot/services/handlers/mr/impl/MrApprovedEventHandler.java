@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.git.lab.bot.api.mr.Action;
 import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
+import ru.git.lab.bot.api.mr.User;
 import ru.git.lab.bot.model.entities.ApproveEntity;
 import ru.git.lab.bot.model.entities.MessageEntity;
 import ru.git.lab.bot.services.ApproveService;
@@ -18,6 +19,7 @@ import java.util.List;
 import static ru.git.lab.bot.api.mr.Action.APPROVED;
 import static ru.git.lab.bot.utils.MergeRequestUtils.createMergeRequestMessageWithApprove;
 import static ru.git.lab.bot.utils.ObjectAttributesUtils.getObjectAttributes;
+import static ru.git.lab.bot.utils.UserUtils.getUser;
 
 @Slf4j
 @Service
@@ -33,8 +35,9 @@ public class MrApprovedEventHandler implements MrEventHandler {
         ObjectAttributes objectAttributes = getObjectAttributes(event);
         Long mrId = objectAttributes.getId();
         Long authorId = objectAttributes.getAuthorId();
+        User user = getUser(event);
 
-        approveService.save(mrId, event.getUser());
+        approveService.save(mrId, user);
 
         List<ApproveEntity> approvalsForMr = approveService.findAllByMrId(mrId);
         String text = createMergeRequestMessageWithApprove(event, approvalsForMr);

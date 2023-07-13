@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
+import ru.git.lab.bot.model.entities.MessageEntity;
 import ru.git.lab.bot.services.ChatService;
 import ru.git.lab.bot.services.EventOfCreateMrService;
 import ru.git.lab.bot.services.MessageService;
@@ -30,13 +31,22 @@ public class EventOfCreateMrServiceImpl implements EventOfCreateMrService {
     public void sendAndSaveMessage(MergeRequestEvent event) {
         ObjectAttributes objectAttributes = getObjectAttributes(event);
         String text = createMergeRequestMessage(event);
-
+        Long mrId = objectAttributes.getId();
+        Long authorId = objectAttributes.getAuthorId();
         List<Long> chatsId = chatService.getAllChatId();
 
         for (Long id : chatsId) {
-            Message message = sender.sendMessage(text, id);
-            Optional.ofNullable(message)
-                    .ifPresent(m -> messageService.saveMessage(m, objectAttributes));
+            Optional<MessageEntity> messageEntity = messageService.findByMrIdAndAuthorId(mrId, authorId);
+
+            messageEntity.ifPresent(e -> {
+                log.debug("Message for mr with id " + mrId + " and authorId " + authorId + " already sent");
+            });
+
+            if (messageEntity.isEmpty()) {
+                Message message = sender.sendMessage(text, id);
+                Optional.ofNullable(message)
+                        .ifPresent(m -> messageService.saveMessage(m, objectAttributes));
+            }
         }
     }
 }

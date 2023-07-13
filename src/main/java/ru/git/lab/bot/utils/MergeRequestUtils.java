@@ -15,30 +15,26 @@ import java.util.Optional;
 
 public class MergeRequestUtils {
 
-    private static final String likeEmoji = EmojiParser.parseToUnicode(":like");
+    private static final String likeEmoji = EmojiParser.parseToUnicode(":thumbsup:");
     private static final String DEFAULT_PREFIX = "Тут могло быть ";
-    private final static DateTimeFormatter DATE_TIME_FORMATTER
-            = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-
+    private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     public static String createMergeRequestMessage(MergeRequestEvent event) {
         String projectName = Optional.ofNullable(event.getProject())
                 .map(Project::getName)
                 .orElse(DEFAULT_PREFIX + "название проекта.");
         Optional<ObjectAttributes> objectAttributes = Optional.ofNullable(event.getObjectAttributes());
-        String title = objectAttributes
-                .map(ObjectAttributes::getTitle)
+        String title = objectAttributes.map(ObjectAttributes::getTitle)
                 .orElse(DEFAULT_PREFIX + "название МРа.");
-        String description = objectAttributes
-                .map(ObjectAttributes::getDescription)
+        String description = objectAttributes.map(ObjectAttributes::getDescription)
                 .orElse(DEFAULT_PREFIX + "описание МРа");
         //TODO Fix date deserializer
 //        OffsetDateTime createdAt = objectAttributes
 //                .map(ObjectAttributes::getCreatedAt)
 //                .orElse(OffsetDateTime.now());
-        String createdAt = OffsetDateTime.now().format(DATE_TIME_FORMATTER);
-        String mrUrl = objectAttributes
-                .map(ObjectAttributes::getUrl)
+        String createdAt = OffsetDateTime.now()
+                .format(DATE_TIME_FORMATTER);
+        String mrUrl = objectAttributes.map(ObjectAttributes::getUrl)
                 .orElse("");
         String sourceBranch = event.getObjectAttributes()
                 .getSourceBranch();
@@ -72,9 +68,9 @@ public class MergeRequestUtils {
         StringBuilder stringBuilder = new StringBuilder(createMergeRequestMessage(event));
 
         approves.forEach(a -> {
-            String approveMessage = "\n\n" + a.getAuthorName() + " approved " + likeEmoji;
+            String approveMessage = "\n\n" + likeEmoji + " " + "<b>" + a.getAuthorName() + " approved </b>";
             stringBuilder.append(approveMessage);
         });
-        return  stringBuilder.toString();
+        return stringBuilder.toString();
     }
 }
