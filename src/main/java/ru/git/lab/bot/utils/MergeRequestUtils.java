@@ -41,6 +41,7 @@ public class MergeRequestUtils {
         String targetBranch = event.getObjectAttributes()
                 .getTargetBranch();
 
+        //TODO fix to user from db by authorId from objectAttributes
         String name = event.getUser()
                 .getName();
 
