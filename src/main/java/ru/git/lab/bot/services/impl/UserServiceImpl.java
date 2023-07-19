@@ -29,4 +29,9 @@ public class UserServiceImpl implements UserService {
                     }
                 });
     }
+
+    @Override
+    public UserEntity getByAuthorId(Long id) {
+        return userRepository.findByGitId(id).orElseThrow(() -> new RuntimeException("User not found id: " + id));
+    }
 }

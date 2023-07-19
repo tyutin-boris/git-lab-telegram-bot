@@ -9,7 +9,9 @@ import ru.git.lab.bot.api.mr.ObjectAttributes;
 import ru.git.lab.bot.api.mr.Project;
 import ru.git.lab.bot.api.mr.Reviewer;
 import ru.git.lab.bot.model.entities.ApproveEntity;
+import ru.git.lab.bot.model.entities.UserEntity;
 import ru.git.lab.bot.services.MrTextMessageService;
+import ru.git.lab.bot.services.UserService;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -25,6 +27,8 @@ public class MrTextMessageServiceImpl implements MrTextMessageService {
     private static final String likeEmoji = EmojiParser.parseToUnicode(":thumbsup:");
     private static final String DEFAULT_PREFIX = "Тут могло быть ";
     private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+
+    private final UserService userService;
 
     @Override
     public String createMergeRequestTextMessage(MergeRequestEvent event) {
@@ -50,8 +54,10 @@ public class MrTextMessageServiceImpl implements MrTextMessageService {
                 .getTargetBranch();
 
         //TODO fix to user from db by authorId from objectAttributes
-        String name = event.getUser()
-                .getName();
+        Long authorId = objectAttributes.map(ObjectAttributes::getAuthorId).orElseThrow(() -> new RuntimeException("Author in not present"));
+
+        UserEntity userEntity = userService.getByAuthorId(authorId);
+        String name = userEntity.getName();
 
         List<Reviewer> reviewers = Optional.ofNullable(event.getReviewers())
                 .orElse(Collections.emptyList());
