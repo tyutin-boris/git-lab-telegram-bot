@@ -32,51 +32,18 @@ public class MrTextMessageServiceImpl implements MrTextMessageService {
 
     @Override
     public String createMergeRequestTextMessage(MergeRequestEvent event) {
-        String projectName = Optional.ofNullable(event.getProject())
-                .map(Project::getName)
-                .orElse(DEFAULT_PREFIX + "название проекта.");
         Optional<ObjectAttributes> objectAttributes = Optional.ofNullable(event.getObjectAttributes());
-        String title = objectAttributes.map(ObjectAttributes::getTitle)
-                .orElse(DEFAULT_PREFIX + "название МРа.");
-        String description = objectAttributes.map(ObjectAttributes::getDescription)
-                .orElse(DEFAULT_PREFIX + "описание МРа");
-        //TODO Fix date deserializer
-//        OffsetDateTime createdAt = objectAttributes
-//                .map(ObjectAttributes::getCreatedAt)
-//                .orElse(OffsetDateTime.now());
-        String createdAt = OffsetDateTime.now()
-                .format(DATE_TIME_FORMATTER);
-        String mrUrl = objectAttributes.map(ObjectAttributes::getUrl)
-                .orElse("");
-        String sourceBranch = event.getObjectAttributes()
-                .getSourceBranch();
-        String targetBranch = event.getObjectAttributes()
-                .getTargetBranch();
 
-        //TODO fix to user from db by authorId from objectAttributes
-        Long authorId = objectAttributes.map(ObjectAttributes::getAuthorId).orElseThrow(() -> new RuntimeException("Author in not present"));
+        String projectText = getProjectText(event.getProject());
+        String title = getTitleText(objectAttributes);
+        String description = getDescriptionText(objectAttributes);
+        String author = getAuthorText(objectAttributes);
+        String reviewer = getReviewerText(event.getReviewers());
+        String branch = getBranchText(objectAttributes);
+        String createdAt = getCreatedAtText();
+        String mrUrl = getMrUrlText(objectAttributes);
 
-        UserEntity userEntity = userService.getByAuthorId(authorId);
-        String name = userEntity.getName();
-
-        List<Reviewer> reviewers = Optional.ofNullable(event.getReviewers())
-                .orElse(Collections.emptyList());
-        Reviewer reviewer = reviewers.stream()
-                .findFirst()
-                .orElse(null);
-        String reviewerName = Optional.ofNullable(reviewer)
-                .map(Reviewer::getName)
-                .orElse("");
-
-        return "<b>Project:</b> " + projectName + "\n\n" +
-                "<b>Title:</b> " + title + "\n" +
-                "<b>Description:</b> " + description + "\n\n" +
-                "<b>Author:</b> " + name + "\n" +
-                "<b>Reviewer:</b> " + reviewerName + "\n\n" +
-                "<b>Source:</b> " + sourceBranch + " ==> " +
-                "<b>Target:</b> " + targetBranch + "\n\n" +
-                "<b>Create date:</b> " + createdAt + "\n\n" +
-                "<a href='" + mrUrl + "'><b><u>MR Hyperlink</u></b></a>";
+        return projectText + title + description + author + reviewer + branch + createdAt + mrUrl;
     }
 
     @Override
@@ -87,5 +54,75 @@ public class MrTextMessageServiceImpl implements MrTextMessageService {
             stringBuilder.append(approveMessage);
         });
         return stringBuilder.toString();
+    }
+
+    private String getProjectText(Project project) {
+        String projectName = Optional.ofNullable(project)
+                .map(Project::getName)
+                .orElse(DEFAULT_PREFIX + "название проекта.");
+
+        return "<b>Project:</b> " + projectName + "\n\n";
+    }
+
+    private String getTitleText(Optional<ObjectAttributes> objectAttributes) {
+        String title = objectAttributes.map(ObjectAttributes::getTitle)
+                .orElse(DEFAULT_PREFIX + "название МРа.");
+
+        return "<b>Title:</b> " + title + "\n";
+    }
+
+    private String getDescriptionText(Optional<ObjectAttributes> objectAttributes) {
+        String description = objectAttributes.map(ObjectAttributes::getDescription)
+                .orElse(DEFAULT_PREFIX + "описание МРа");
+
+        return "<b>Description:</b> " + description + "\n\n";
+    }
+
+    private String getAuthorText(Optional<ObjectAttributes> objectAttributes) {
+        Long authorId = objectAttributes.map(ObjectAttributes::getAuthorId)
+                .orElseThrow(() -> new RuntimeException("Author in not present"));
+
+        UserEntity userEntity = userService.getByAuthorId(authorId);
+        String name = userEntity.getName();
+
+        return "<b>Author:</b> " + name + "\n";
+    }
+
+    private String getReviewerText(List<Reviewer> reviewers) {
+        Reviewer reviewer = reviewers.stream()
+                .findFirst()
+                .orElse(null);
+        String reviewerName = Optional.ofNullable(reviewer)
+                .map(Reviewer::getName)
+                .orElse("");
+
+        return "<b>Reviewer:</b> " + reviewerName + "\n\n";
+    }
+
+    private String getBranchText(Optional<ObjectAttributes> objectAttributes) {
+        String sourceBranch = objectAttributes.map(ObjectAttributes::getSourceBranch)
+                .orElse("Source branch not present");
+        String targetBranch = objectAttributes.map(ObjectAttributes::getTargetBranch)
+                .orElse("Target branch not present");
+
+        return "<b>Source:</b> " + sourceBranch + " ==> <b>Target:</b> " + targetBranch + "\n\n";
+    }
+
+    private String getCreatedAtText() {
+        //TODO Fix date deserializer
+//        OffsetDateTime createdAt = objectAttributes
+//                .map(ObjectAttributes::getCreatedAt)
+//                .orElse(OffsetDateTime.now());
+        String createdAt = OffsetDateTime.now()
+                .format(DATE_TIME_FORMATTER);
+
+        return "<b>Create date:</b> " + createdAt + "\n\n";
+    }
+
+    private String getMrUrlText(Optional<ObjectAttributes> objectAttributes) {
+        String mrUrl = objectAttributes.map(ObjectAttributes::getUrl)
+                .orElse("");
+
+        return "<a href='" + mrUrl + "'><b><u>MR Hyperlink</u></b></a>";
     }
 }

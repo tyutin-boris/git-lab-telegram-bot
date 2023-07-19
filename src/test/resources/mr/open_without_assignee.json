@@ -1,0 +1,133 @@
+{
+  "object_kind": "merge_request",
+  "event_type": "merge_request",
+  "user": {
+    "id": 6157,
+    "name": "Гондурова Дарья Владимировна",
+    "username": "dgondurova",
+    "avatar_url": "https://gitlab.akb-it.ru/uploads/-/system/user/avatar/6157/avatar.png",
+    "email": "[REDACTED]"
+  },
+  "project": {
+    "id": 4109,
+    "name": "bp-visa-backend",
+    "description": "Реализация бизнес-процесса \"Виза\". Серверная логика",
+    "web_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-visa-backend",
+    "avatar_url": null,
+    "git_ssh_url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-visa-backend.git",
+    "git_http_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-visa-backend.git",
+    "namespace": "blank-visa-inv",
+    "visibility_level": 0,
+    "path_with_namespace": "GISMU2.0/blank-visa-inv/bp-visa-backend",
+    "default_branch": "release",
+    "ci_config_path": null,
+    "homepage": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-visa-backend",
+    "url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-visa-backend.git",
+    "ssh_url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-visa-backend.git",
+    "http_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-visa-backend.git"
+  },
+  "object_attributes": {
+    "assignee_id": null,
+    "author_id": 6157,
+    "created_at": "2023-07-19 14:09:22 UTC",
+    "description": "Closes GISMUITSMA-9787",
+    "head_pipeline_id": null,
+    "id": 393959,
+    "iid": 858,
+    "last_edited_at": null,
+    "last_edited_by_id": null,
+    "merge_commit_sha": null,
+    "merge_error": null,
+    "merge_params": {
+      "force_remove_source_branch": "1"
+    },
+    "merge_status": "preparing",
+    "merge_user_id": null,
+    "merge_when_pipeline_succeeds": false,
+    "milestone_id": null,
+    "source_branch": "fix/GISMUITSMA-9787",
+    "source_project_id": 4109,
+    "state_id": 1,
+    "target_branch": "release",
+    "target_project_id": 4109,
+    "time_estimate": 0,
+    "title": "GISMUITSMA-9787 актуализированы локальные конфиги",
+    "updated_at": "2023-07-19 14:09:22 UTC",
+    "updated_by_id": null,
+    "url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-visa-backend/-/merge_requests/858",
+    "source": {
+      "id": 4109,
+      "name": "bp-visa-backend",
+      "description": "Реализация бизнес-процесса \"Виза\". Серверная логика",
+      "web_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-visa-backend",
+      "avatar_url": null,
+      "git_ssh_url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-visa-backend.git",
+      "git_http_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-visa-backend.git",
+      "namespace": "blank-visa-inv",
+      "visibility_level": 0,
+      "path_with_namespace": "GISMU2.0/blank-visa-inv/bp-visa-backend",
+      "default_branch": "release",
+      "ci_config_path": null,
+      "homepage": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-visa-backend",
+      "url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-visa-backend.git",
+      "ssh_url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-visa-backend.git",
+      "http_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-visa-backend.git"
+    },
+    "target": {
+      "id": 4109,
+      "name": "bp-visa-backend",
+      "description": "Реализация бизнес-процесса \"Виза\". Серверная логика",
+      "web_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-visa-backend",
+      "avatar_url": null,
+      "git_ssh_url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-visa-backend.git",
+      "git_http_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-visa-backend.git",
+      "namespace": "blank-visa-inv",
+      "visibility_level": 0,
+      "path_with_namespace": "GISMU2.0/blank-visa-inv/bp-visa-backend",
+      "default_branch": "release",
+      "ci_config_path": null,
+      "homepage": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-visa-backend",
+      "url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-visa-backend.git",
+      "ssh_url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-visa-backend.git",
+      "http_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-visa-backend.git"
+    },
+    "last_commit": {
+      "id": "9c729b82bb1c3ffd040e1ef4078cfc740d5c18af",
+      "message": "GISMUITSMA-9787 актуализированы локальные конфиги\n",
+      "title": "GISMUITSMA-9787 актуализированы локальные конфиги",
+      "timestamp": "2023-07-19T17:08:48+03:00",
+      "url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-visa-backend/-/commit/9c729b82bb1c3ffd040e1ef4078cfc740d5c18af",
+      "author": {
+        "name": "dgondurova",
+        "email": "dgondurova@phoenixit.ru"
+      }
+    },
+    "work_in_progress": false,
+    "total_time_spent": 0,
+    "time_change": 0,
+    "human_total_time_spent": null,
+    "human_time_change": null,
+    "human_time_estimate": null,
+    "assignee_ids": [],
+    "reviewer_ids": [],
+    "labels": [],
+    "state": "opened",
+    "blocking_discussions_resolved": true,
+    "first_contribution": false,
+    "detailed_merge_status": "checking",
+    "action": "open"
+  },
+  "labels": [],
+  "changes": {
+    "merge_status": {
+      "previous": "unchecked",
+      "current": "preparing"
+    }
+  },
+  "repository": {
+    "name": "bp-visa-backend",
+    "url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-visa-backend.git",
+    "description": "Реализация бизнес-процесса \"Виза\". Серверная логика",
+    "homepage": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-visa-backend"
+  }
+}
