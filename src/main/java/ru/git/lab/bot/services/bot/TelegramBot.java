@@ -1,28 +1,42 @@
 package ru.git.lab.bot.services.bot;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
+import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.git.lab.bot.config.BotConfig;
 import ru.git.lab.bot.services.handlers.member.UpdateHandler;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Slf4j
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TelegramBot extends TelegramLongPollingBot {
 
     private final BotConfig botConfig;
     private final List<UpdateHandler> handlers;
+    private final List<BotCommand> botCommands;
+
+    @PostConstruct
+    private void setUp() {
+        try {
+            execute(new SetMyCommands(botCommands, new BotCommandScopeDefault(), null));
+        } catch (TelegramApiException e) {
+            log.error("failed to add bot command", e);
+        }
+    }
 
     @Override
     public void onUpdateReceived(Update update) {

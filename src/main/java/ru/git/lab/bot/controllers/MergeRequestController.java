@@ -24,7 +24,6 @@ public class MergeRequestController {
     @PostMapping
     public void mergeRequestEvent(@RequestBody String request) throws IOException {
         log.debug(request);
-
         MergeRequestEvent mergeRequestEvent = objectMapper.readValue(request, MergeRequestEvent.class);
         mergeRequestService.handleEvent(mergeRequestEvent);
     }
