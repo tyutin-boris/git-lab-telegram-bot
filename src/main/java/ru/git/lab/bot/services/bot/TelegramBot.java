@@ -19,6 +19,7 @@ import ru.git.lab.bot.services.handlers.member.UpdateHandler;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -40,14 +41,17 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        log.info("Start handling update event");
 
         if (CollectionUtils.isEmpty(handlers)) {
             log.warn("Update handlers not found");
-            return;
         }
 
-        log.info("Start handling update event");
-        handlers.forEach(handler -> handler.handle(update));
+        Optional.ofNullable(update.getMyChatMember()).ifPresent(chatMember -> {
+            handlers.forEach(handler -> handler.handle(chatMember));
+        });
+
+        Optional.ofNullable(update.getMessage()).ifPresent(this::handle);
 
 //        chatId.add(update.getMyChatMember()
 //                           .getChat()
@@ -67,6 +71,16 @@ public class TelegramBot extends TelegramLongPollingBot {
 //            case "/love":
 ////                sendMessage("Я счастлив, что бог дал мне глаза, и я смог разглядеть тебя в толпе. И благодарен ему за возможность называть тебя своей половинкой.");
 //        }
+    }
+
+//TODO https://habr.com/ru/articles/481354/
+    private void handle(Message message) {
+        switch (message.getText()) {
+            case "/add_user":
+                break;
+            default:
+//                "Sorry, command was not recognized"
+        }
     }
 
     @Override
