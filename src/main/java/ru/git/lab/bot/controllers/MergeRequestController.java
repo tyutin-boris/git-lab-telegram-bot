@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.git.lab.bot.api.mr.MergeRequestEvent;
-import ru.git.lab.bot.services.MergeRequestService;
+import ru.git.lab.bot.services.api.MergeRequestService;
 
 import java.io.IOException;
 

@@ -2,7 +2,7 @@ package ru.git.lab.bot.config;
 
 import lombok.RequiredArgsConstructor;
 import ru.git.lab.bot.api.mr.Action;
-import ru.git.lab.bot.services.handlers.mr.MrEventHandler;
+import ru.git.lab.bot.services.mr.handlers.api.MrEventHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

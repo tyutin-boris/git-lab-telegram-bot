@@ -1,7 +1,0 @@
-package ru.git.lab.bot.services.events;
-
-import ru.git.lab.bot.api.mr.MergeRequestEvent;
-
-public interface EventOfCreateMrService {
-    void sendAndSaveMessage(MergeRequestEvent request);
-}

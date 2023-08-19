@@ -3,6 +3,7 @@ package ru.git.lab.bot.model.entities;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.git.lab.bot.dto.ChatType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +22,7 @@ public class ChatEntity {
     private Long id;
 
     @Column(name = "type")
-    private String type;
+    private ChatType type;
 
     @Column(name = "title")
     private String title;

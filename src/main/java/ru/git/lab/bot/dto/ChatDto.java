@@ -7,7 +7,7 @@ import java.time.OffsetDateTime;
 @Data
 public class ChatDto {
     private Long id;
-    private String type;
+    private ChatType type;
     private String title;
     private OffsetDateTime createDate;
 }
