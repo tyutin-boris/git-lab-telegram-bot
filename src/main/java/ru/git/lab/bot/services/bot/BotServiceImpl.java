@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Chat;
+import org.telegram.telegrambots.meta.api.objects.ChatMemberUpdated;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.git.lab.bot.dto.ChatType;
 import ru.git.lab.bot.services.bot.api.BotService;
-import ru.git.lab.bot.services.chat.member.api.UpdateHandler;
+import ru.git.lab.bot.services.chat.api.ChannelService;
 
-import java.util.List;
 import java.util.Optional;
 
 import static ru.git.lab.bot.dto.ChatType.stringToChatType;
@@ -20,19 +20,43 @@ import static ru.git.lab.bot.dto.ChatType.stringToChatType;
 @RequiredArgsConstructor
 public class BotServiceImpl implements BotService {
 
-    private final List<UpdateHandler> handlers;
+    private final ChannelService channelService;
 
     @Override
-    public void handleReceivedUpdate(Update update) {
-        Chat chat = Optional.ofNullable(update.getMessage())
-                .map(Message::getChat).orElseThrow(
-                        () -> new RuntimeException("Chat is null. update id " + update.getUpdateId()));
+    public int handleReceivedUpdate(Update update) {
+        log.debug("Update id: " + update.getUpdateId());
 
+        Chat chat = getChat(update);
         ChatType chatType = stringToChatType(chat.getType());
 
-        Optional.ofNullable(update.getMyChatMember()).ifPresent(chatMember -> {
-            handlers.forEach(handler -> handler.handle(chatMember));
-        });
+        switch (chatType) {
+            case PRIVATE:
+            case GROUP:
+            case CHANNEL:
+                Optional.ofNullable(update.getMyChatMember()).ifPresent(channelService::handle);
+            case SUPERGROUP:
+        }
 
+        return update.getUpdateId();
+    }
+
+    private Chat getChat(Update update) {
+        Optional<Chat> chatFormMessage = Optional.ofNullable(update.getMessage())
+                .map(Message::getChat);
+
+        if (chatFormMessage.isPresent()) {
+            log.debug("Get chat from message");
+            return chatFormMessage.get();
+        }
+
+        Optional<Chat> chatFormMember = Optional.ofNullable(update.getMyChatMember())
+                .map(ChatMemberUpdated::getChat);
+
+        if (chatFormMember.isPresent()) {
+            log.debug("Get chat from my member");
+            return chatFormMember.get();
+        } else {
+            throw new RuntimeException("Chat not found. Update id " + update.getUpdateId());
+        }
     }
 }

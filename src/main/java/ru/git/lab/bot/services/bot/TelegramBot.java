@@ -41,13 +41,13 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update recivedUpdate) {
-        log.info("Start handling update event");
+        log.debug("Start handling update event");
 
-        Optional.ofNullable(recivedUpdate)
+        int updateId = Optional.ofNullable(recivedUpdate)
                 .map(botService::handleReceivedUpdate)
                 .orElseThrow(() -> new RuntimeException("Update is null"));
 
-        log.info("End handling update with id " + recivedUpdate.getUpdateId());
+        log.debug("End handling update with id " + updateId);
     }
 
     @Override

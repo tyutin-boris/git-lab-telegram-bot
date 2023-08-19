@@ -9,7 +9,6 @@ public enum ChatType {
     SUPERGROUP;
 
     public static ChatType stringToChatType(String chatType) {
-
         String type = Optional.ofNullable(chatType).orElseThrow(
                 () -> new RuntimeException("Type of chat is null, casting failed"));
 
