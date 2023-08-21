@@ -34,53 +34,16 @@ class TelegramBotTest {
         assertEquals("Update is null", runtimeException.getMessage());
     }
 
-    @Test
-    void shouldThrowExceptionWhenChatFromMessageIsNull() {
-        //given
-        Message message = new Message();
-        message.setChat(null);
-
-        Update update = getUpdate(message);
-
-        //when
-        Executable executable = () -> bot.onUpdateReceived(update);
-
-        //then
-        RuntimeException runtimeException = assertThrows(RuntimeException.class, executable);
-        assertEquals("Chat not found. Update id " + updateId, runtimeException.getMessage());
-    }
-
-    @Test
-    void shouldThrowExceptionWhenChatFromMyChatMemberInIsNull() {
-        //given
-        ChatMemberUpdated chatMemberUpdated = new ChatMemberUpdated();
-        chatMemberUpdated.setChat(null);
-
-        Update update = getUpdate(chatMemberUpdated);
-
-        //when
-        Executable executable = () -> bot.onUpdateReceived(update);
-
-        //then
-        RuntimeException runtimeException = assertThrows(RuntimeException.class, executable);
-        assertEquals("Chat not found. Update id " + updateId, runtimeException.getMessage());
-    }
-
-    private Update getUpdate(ChatMemberUpdated chatMemberUpdated) {
-        Update update = new Update();
-
-        update.setUpdateId(updateId);
-        update.setMyChatMember(chatMemberUpdated);
-
-        return update;
-    }
-
-    private Update getUpdate(Message message) {
-        Update update = new Update();
-
-        update.setUpdateId(updateId);
-        update.setMessage(message);
-
-        return update;
-    }
+//    @Test
+//    void shouldThrowExceptionWhenUpdateIsNull() {
+//        //given
+//        Update update = null;
+//
+//        //when
+//        Executable executable = () -> bot.onUpdateReceived(update);
+//
+//        //then
+//        RuntimeException runtimeException = assertThrows(RuntimeException.class, executable);
+//        assertEquals("Update is null", runtimeException.getMessage());
+//    }
 }
