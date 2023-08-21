@@ -1,6 +1,6 @@
 package ru.git.lab.bot.services.bot;
 
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.MockedStatic;
@@ -56,7 +56,7 @@ class TelegramBotTest {
     }
 
     @Test
-    @Ignore
+    @Disabled("fix static mock")
     void shouldSaveChatWhenChatTypeIsChannelAndMemberStatusIsAdministrator() {
         //given
         long catId = 1L;
