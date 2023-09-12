@@ -3,6 +3,7 @@ package ru.git.lab.bot.services.mr;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.git.lab.bot.api.mr.DetailedMergeStatus;
 import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
 import ru.git.lab.bot.model.entities.MessageEntity;
@@ -23,8 +24,11 @@ import static ru.git.lab.bot.utils.ObjectAttributesUtils.getObjectAttributes;
 public class CreateMrServiceImpl implements CreateMrService {
 
     private final MessageSender sender;
+
     private final ChatService chatService;
+
     private final MessageService messageService;
+
     private final MrTextMessageService mrTextMessageService;
 
     @Override
@@ -32,6 +36,7 @@ public class CreateMrServiceImpl implements CreateMrService {
         ObjectAttributes objectAttributes = getObjectAttributes(event);
         Long mrId = objectAttributes.getId();
         Long authorId = objectAttributes.getAuthorId();
+        DetailedMergeStatus detailedMergeStatus = DetailedMergeStatus.getStatus(objectAttributes.getDetailedMergeStatus());
 
         List<Long> chatsId = chatService.getAllChatId();
         String text = mrTextMessageService.createMergeRequestTextMessage(event);
@@ -43,8 +48,9 @@ public class CreateMrServiceImpl implements CreateMrService {
                 log.debug("Message for mr with id " + mrId + " and authorId " + authorId + " already sent");
             });
 
-            if (messageEntity.isEmpty()) {
-                sender.sendMessage(text, id).ifPresent(m -> messageService.saveMessage(m, objectAttributes));
+            if (messageEntity.isEmpty() && !DetailedMergeStatus.DRAFT_STATUS.equals(detailedMergeStatus)) {
+                sender.sendMessage(text, id)
+                        .ifPresent(m -> messageService.saveMessage(m, objectAttributes));
             }
         }
     }
