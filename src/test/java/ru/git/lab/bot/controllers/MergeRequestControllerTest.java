@@ -25,6 +25,7 @@ import java.time.OffsetDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ActiveProfiles("test")
@@ -61,11 +62,34 @@ public class MergeRequestControllerTest {
         mergeRequestController.mergeRequestEvent(message);
 
         //then
-        checkUserSave();
-        checkMessageSave();
-
         verify(mrOpenEventHandler).handleEvent(any());
         verify(messageSender).sendMessage(any(), eq(chatId));
+
+        checkUserSave();
+        checkMessageSave();
+    }
+
+    @Test
+    public void shouldNotSendMessageToTgWhenCreteNewMRWithDraftStatus() {
+        //given
+        String message = getMessage("mr/open_draft.json");
+        createChat();
+
+        //when
+        mergeRequestController.mergeRequestEvent(message);
+
+        //then
+        verify(mrOpenEventHandler).handleEvent(any());
+        verify(messageSender, never()).sendMessage(any(), eq(chatId));
+
+        checkUserSave();
+        Long mrId = 414770L;
+        Long authorId = 14826841L;
+
+        MessageEntity messageEntity = messageRepository.findByMrIdAndAuthorId(mrId, authorId)
+                .orElse(null);
+
+        assertThat(messageEntity).isNull();
     }
 
     private void checkMessageSave() {
