@@ -28,8 +28,8 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
-@ActiveProfiles("test")
 @SpringBootTest
+@ActiveProfiles("test")
 public class MergeRequestControllerTest {
 
     private final long chatId = -1001833741964L;
@@ -133,3 +133,4 @@ public class MergeRequestControllerTest {
         }
     }
 }
+
