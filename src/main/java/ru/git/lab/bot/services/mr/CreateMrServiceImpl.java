@@ -53,5 +53,13 @@ public class CreateMrServiceImpl implements CreateMrService {
                         .ifPresent(m -> messageService.saveMessage(m, objectAttributes));
             }
         }
+
+        chatLog(chatsId);
+    }
+
+    private void chatLog(List<Long> chatsId) {
+        if(chatsId.isEmpty()) {
+            log.debug("Chat list is empty. Messages not send");
+        }
     }
 }

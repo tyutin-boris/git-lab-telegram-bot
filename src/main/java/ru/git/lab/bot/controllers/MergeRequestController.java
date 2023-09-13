@@ -22,9 +22,17 @@ public class MergeRequestController {
     private final ObjectMapper objectMapper;
 
     @PostMapping
-    public void mergeRequestEvent(@RequestBody String request) throws IOException {
+    public void mergeRequestEvent(@RequestBody String request) {
         log.debug(request);
-        MergeRequestEvent mergeRequestEvent = objectMapper.readValue(request, MergeRequestEvent.class);
+        MergeRequestEvent mergeRequestEvent = getMergeRequestEvent(request);
         mergeRequestService.handleEvent(mergeRequestEvent);
+    }
+
+    private MergeRequestEvent getMergeRequestEvent(String request) {
+        try {
+            return objectMapper.readValue(request, MergeRequestEvent.class);
+        } catch (IOException e) {
+            throw new RuntimeException("Merge request parsing failed: " + request, e);
+        }
     }
 }
