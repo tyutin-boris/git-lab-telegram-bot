@@ -9,8 +9,8 @@ spring:
   datasource:
     driverClassName: org.h2.Driver
     username: bot
-    password:
-    url: jdbc:h2:file:C:\\Users\\boris\\bot\\data\\bot-db
+    password: bot
+    url: jdbc:h2:mem:testdb
   h2:
     console:
       enabled: true
@@ -19,15 +19,16 @@ spring:
         web-allow-others: true
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     generate-ddl: true
     show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
-flyway:
-  user: bot
-  password:
-  schema: bot-schema
-  locations: filesystem:db/migration
-  url: jdbc:h2:file:C:\\Users\\btyutin\\bot\\data\\bot-db
+  flyway:
+    user: bot
+    password: bot
+    schema: bot
+    locations: classpath:db/migration
+    url: jdbc:h2:mem:testdb
+    baseline-on-migrate: true

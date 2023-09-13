@@ -1,0 +1,159 @@
+{
+  "object_kind": "merge_request",
+  "event_type": "merge_request",
+  "user": {
+    "id": 14826841,
+    "name": "Ivan Ivanov",
+    "username": "ivan",
+    "avatar_url": "https://gitlab.akb-it.ru/uploads/-/system/user/avatar/6651/avatar.png",
+    "email": "ivan@mail.ru"
+  },
+  "project": {
+    "id": 4113,
+    "name": "bp-invitation-backend",
+    "description": "Реализация бизнес-процесса \"Приглашения\". Серверная логика",
+    "web_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend",
+    "avatar_url": null,
+    "git_ssh_url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+    "git_http_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+    "namespace": "blank-visa-inv",
+    "visibility_level": 0,
+    "path_with_namespace": "GISMU2.0/blank-visa-inv/bp-invitation-backend",
+    "default_branch": "NUAT",
+    "ci_config_path": null,
+    "homepage": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend",
+    "url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+    "ssh_url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+    "http_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend.git"
+  },
+  "object_attributes": {
+    "assignee_id": 6651,
+    "author_id": 14826841,
+    "created_at": "2023-09-12 14:48:42 UTC",
+    "description": "",
+    "head_pipeline_id": 1740246,
+    "id": 414770,
+    "iid": 834,
+    "last_edited_at": null,
+    "last_edited_by_id": null,
+    "merge_commit_sha": null,
+    "merge_error": null,
+    "merge_params": {
+      "force_remove_source_branch": "1"
+    },
+    "merge_status": "can_be_merged",
+    "merge_user_id": null,
+    "merge_when_pipeline_succeeds": false,
+    "milestone_id": null,
+    "source_branch": "feature/GISMUITSMA-7483",
+    "source_project_id": 4113,
+    "state_id": 1,
+    "target_branch": "NUAT",
+    "target_project_id": 4113,
+    "time_estimate": 0,
+    "title": "Draft: GISMUITSMA-7483 Добавлены переменные для МКСОУ",
+    "updated_at": "2023-09-12 15:19:49 UTC",
+    "updated_by_id": null,
+    "url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend/-/merge_requests/834",
+    "source": {
+      "id": 4113,
+      "name": "bp-invitation-backend",
+      "description": "Реализация бизнес-процесса \"Приглашения\". Серверная логика",
+      "web_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend",
+      "avatar_url": null,
+      "git_ssh_url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+      "git_http_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+      "namespace": "blank-visa-inv",
+      "visibility_level": 0,
+      "path_with_namespace": "GISMU2.0/blank-visa-inv/bp-invitation-backend",
+      "default_branch": "NUAT",
+      "ci_config_path": null,
+      "homepage": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend",
+      "url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+      "ssh_url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+      "http_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend.git"
+    },
+    "target": {
+      "id": 4113,
+      "name": "bp-invitation-backend",
+      "description": "Реализация бизнес-процесса \"Приглашения\". Серверная логика",
+      "web_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend",
+      "avatar_url": null,
+      "git_ssh_url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+      "git_http_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+      "namespace": "blank-visa-inv",
+      "visibility_level": 0,
+      "path_with_namespace": "GISMU2.0/blank-visa-inv/bp-invitation-backend",
+      "default_branch": "NUAT",
+      "ci_config_path": null,
+      "homepage": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend",
+      "url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+      "ssh_url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+      "http_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend.git"
+    },
+    "last_commit": {
+      "id": "48c7040dee550c644feee62872768dc654778aba",
+      "message": "add caseReceptionElectronicDoc\n",
+      "title": "add caseReceptionElectronicDoc",
+      "timestamp": "2023-09-12T17:47:06+03:00",
+      "url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend/-/commit/48c7040dee550c644feee62872768dc654778aba",
+      "author": {
+        "name": "Тютин Борис Сергеевич",
+        "email": "btyutin@phoenixit.ru"
+      }
+    },
+    "work_in_progress": true,
+    "total_time_spent": 0,
+    "time_change": 0,
+    "human_total_time_spent": null,
+    "human_time_change": null,
+    "human_time_estimate": null,
+    "assignee_ids": [
+      6651
+    ],
+    "reviewer_ids": [
+      6147
+    ],
+    "labels": [],
+    "state": "opened",
+    "blocking_discussions_resolved": true,
+    "first_contribution": false,
+    "detailed_merge_status": "draft_status",
+    "action": "open"
+  },
+  "labels": [],
+  "changes": {
+    "state_id": {
+      "previous": 2,
+      "current": 1
+    },
+    "updated_at": {
+      "previous": "2023-09-12 15:19:42 UTC",
+      "current": "2023-09-12 15:19:49 UTC"
+    }
+  },
+  "repository": {
+    "name": "bp-invitation-backend",
+    "url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-invitation-backend.git",
+    "description": "Реализация бизнес-процесса \"Приглашения\". Серверная логика",
+    "homepage": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-invitation-backend"
+  },
+  "assignees": [
+    {
+      "id": 6651,
+      "name": "Тютин Борис Сергеевич",
+      "username": "btyutin",
+      "avatar_url": "https://gitlab.akb-it.ru/uploads/-/system/user/avatar/6651/avatar.png",
+      "email": "[REDACTED]"
+    }
+  ],
+  "reviewers": [
+    {
+      "id": 6147,
+      "name": "Ахматов Ильяс Ильясович",
+      "username": "iakhmatov",
+      "avatar_url": "https://gitlab.akb-it.ru/uploads/-/system/user/avatar/6147/avatar.png",
+      "email": "[REDACTED]"
+    }
+  ]
+}

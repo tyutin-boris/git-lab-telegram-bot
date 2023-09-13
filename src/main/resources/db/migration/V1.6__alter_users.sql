@@ -1,1 +1,0 @@
-ALTER TABLE IF EXISTS users RENAME TO git_users;
