@@ -11,20 +11,20 @@ import java.util.List;
 
 @Data
 public class ObjectAttributes {
-    Long id;
-    Long iid;
+    long id;
+    long iid;
     @JsonProperty("target_branch")
     String targetBranch;
     @JsonProperty("source_branch")
     String sourceBranch;
     @JsonProperty("source_project_id")
-    Long sourceProjectId;
+    long sourceProjectId;
     @JsonProperty("author_id")
-    Long authorId;
+    long authorId;
     @JsonProperty("assignee_ids")
     List<Integer> assigneeIds;
     @JsonProperty("assignee_id")
-    Long assigneeId;
+    long assigneeId;
     @JsonProperty("reviewer_ids")
     List<Integer> reviewerIds;
     String title;
@@ -38,11 +38,11 @@ public class ObjectAttributes {
     @JsonDeserialize(using = OffsetDateTimeDeserializer.class)
     OffsetDateTime lastEditedAt;
     @JsonProperty("last_edited_by_id")
-    Long lastEditedById;
+    long lastEditedById;
     @JsonProperty("milestone_id")
-    Long milestoneId;
+    long milestoneId;
     @JsonProperty("state_id")
-    Long stateId;
+    long stateId;
     String state;
     @JsonProperty("blocking_discussions_resolved")
     Boolean blockingDiscussionsResolved;
@@ -53,12 +53,12 @@ public class ObjectAttributes {
     @JsonProperty("merge_status")
     String mergeStatus;
     @JsonProperty("target_project_id")
-    Long targetProjectId;
+    long targetProjectId;
     String description;
     @JsonProperty("total_time_spent")
-    Long totalTimeSpent;
+    long totalTimeSpent;
     @JsonProperty("time_change")
-    Long timeChange;
+    long timeChange;
     @JsonProperty("human_total_time_spent")
     String humanTotalTimeSpent;
     @JsonProperty("human_time_change")
