@@ -17,6 +17,7 @@ import ru.git.lab.bot.model.repository.MessageRepository;
 import ru.git.lab.bot.model.repository.UserRepository;
 import ru.git.lab.bot.services.mr.handlers.MrApprovedEventHandler;
 import ru.git.lab.bot.services.mr.handlers.MrOpenEventHandler;
+import ru.git.lab.bot.services.mr.handlers.MrUnapprovedEventHandler;
 import ru.git.lab.bot.services.senders.api.MessageSender;
 
 import java.io.IOException;
@@ -31,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest
@@ -63,6 +65,9 @@ public class MergeRequestControllerTest {
 
     @SpyBean
     private MrApprovedEventHandler mrApprovedEventHandler;
+
+    @SpyBean
+    private MrUnapprovedEventHandler mrUnapprovedEventHandler;
 
     @SpyBean
     private MessageSender messageSender;
@@ -126,6 +131,32 @@ public class MergeRequestControllerTest {
         verify(messageSender).updateMessage(any(), eq(chatId), any());
 
         checkApproveSave();
+    }
+
+    @Test
+    public void shouldSendUnapprovedToMessage() {
+        //given
+        String openMessage = getMessage("mr/open.json");
+        sut.mergeRequestEvent(openMessage);
+
+        String approvedMessage = getMessage("mr/approved.json");
+        sut.mergeRequestEvent(approvedMessage);
+
+        String unapprovedMessage = getMessage("mr/unapproved.json");
+
+        //when
+        sut.mergeRequestEvent(unapprovedMessage);
+
+        //then
+        verify(mrUnapprovedEventHandler).handleEvent(any());
+        verify(messageSender, times(2)).updateMessage(any(), eq(chatId), any());
+
+        checkApproveDelete();
+    }
+
+    private void checkApproveDelete() {
+        List<ApproveEntity> approves = approveRepository.findAllByMrIdAndAuthorId(mrId, authorId);
+        assertThat(approves).isEmpty();
     }
 
     private void checkApproveSave() {

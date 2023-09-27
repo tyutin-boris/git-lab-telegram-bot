@@ -2,11 +2,11 @@
   "object_kind": "merge_request",
   "event_type": "merge_request",
   "user": {
-    "id": 6651,
-    "name": "Тютин Борис Сергеевич",
-    "username": "btyutin",
-    "avatar_url": "https://gitlab.akb-it.ru/uploads/-/system/user/avatar/6651/avatar.png",
-    "email": "[REDACTED]"
+    "id": 14826841,
+    "name": "Ivan Ivanov",
+    "username": "ivan",
+    "avatar_url": "https://secure.gravatar.com/avatar/5828ce2cfc161d1ab0e98b40e12f2c70?s=80&d=identicon",
+    "email": "ivan@mail.ru"
   },
   "project": {
     "id": 4113,
@@ -28,11 +28,11 @@
   },
   "object_attributes": {
     "assignee_id": 6651,
-    "author_id": 6651,
+    "author_id": 14826841,
     "created_at": "2023-07-10 14:30:35 UTC",
     "description": "Добавлена печатная форма запроса в МВД(ИБД-Ф) для: \n1. Гражданина РФ\n2. Гражданина иностранного государства.\n\nФорма одна, разница только в заполнении \"Запрашиваемые сведения\"\n\n1. о судимости физического лица\n2. о лицах находящихся в федеральном розыске",
     "head_pipeline_id": 1580907,
-    "id": 390146,
+    "id": 235411851,
     "iid": 756,
     "last_edited_at": null,
     "last_edited_by_id": null,
