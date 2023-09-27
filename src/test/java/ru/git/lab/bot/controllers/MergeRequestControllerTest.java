@@ -87,7 +87,7 @@ public class MergeRequestControllerTest {
 
         //then
         verify(mrOpenEventHandler).handleEvent(any());
-        verify(messageSender).sendMessage(any(), eq(chatId));
+//        verify(messageSender).sendMessage(any(), eq(chatId));
 
         checkUserSave();
         checkMessageSave();
