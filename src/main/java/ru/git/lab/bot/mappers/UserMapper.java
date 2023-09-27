@@ -2,10 +2,11 @@ package ru.git.lab.bot.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 import ru.git.lab.bot.api.mr.User;
 import ru.git.lab.bot.model.entities.GitUserEntity;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper extends AbstractMapper<GitUserEntity, User> {
 
     @Override

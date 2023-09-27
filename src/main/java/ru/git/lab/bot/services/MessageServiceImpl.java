@@ -1,5 +1,6 @@
 package ru.git.lab.bot.services;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,6 @@ import ru.git.lab.bot.model.repository.MessageRepository;
 import ru.git.lab.bot.services.api.MessageService;
 import ru.git.lab.bot.services.senders.api.MessageSender;
 
-import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
