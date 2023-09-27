@@ -1,5 +1,6 @@
 package ru.git.lab.bot.controllers;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +13,7 @@ import ru.git.lab.bot.model.entities.MessageEntity;
 import ru.git.lab.bot.model.repository.ChatRepository;
 import ru.git.lab.bot.model.repository.MessageRepository;
 import ru.git.lab.bot.model.repository.UserRepository;
+import ru.git.lab.bot.services.mr.handlers.MrApprovedEventHandler;
 import ru.git.lab.bot.services.mr.handlers.MrOpenEventHandler;
 import ru.git.lab.bot.services.senders.api.MessageSender;
 
@@ -50,13 +52,20 @@ public class MergeRequestControllerTest {
     private MrOpenEventHandler mrOpenEventHandler;
 
     @SpyBean
+    private MrApprovedEventHandler mrApprovedEventHandler;
+
+    @SpyBean
     private MessageSender messageSender;
+
+    @BeforeEach
+    public void setUp() {
+        createChat();
+    }
 
     @Test
     public void shouldSendMessageToTgWhenCreteNewMR() {
         //given
         String message = getMessage("mr/open.json");
-        createChat();
 
         //when
         mergeRequestController.mergeRequestEvent(message);
@@ -73,7 +82,6 @@ public class MergeRequestControllerTest {
     public void shouldNotSendMessageToTgWhenCreteNewMRWithDraftStatus() {
         //given
         String message = getMessage("mr/open_draft.json");
-        createChat();
 
         //when
         mergeRequestController.mergeRequestEvent(message);
@@ -90,6 +98,25 @@ public class MergeRequestControllerTest {
                 .orElse(null);
 
         assertThat(messageEntity).isNull();
+    }
+
+    @Test
+    public void shouldSendApproveToMessage() {
+        //given
+        String openMessage = getMessage("mr/open.json");
+        mergeRequestController.mergeRequestEvent(openMessage);
+
+        String approvedMessage = getMessage("mr/approved.json");
+
+        //when
+        mergeRequestController.mergeRequestEvent(approvedMessage);
+
+        //then
+        verify(mrApprovedEventHandler).handleEvent(any());
+        verify(messageSender).sendMessage(any(), eq(chatId));
+
+        checkUserSave();
+        checkMessageSave();
     }
 
     private void checkMessageSave() {
