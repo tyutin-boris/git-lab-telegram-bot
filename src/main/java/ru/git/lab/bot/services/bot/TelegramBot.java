@@ -1,5 +1,6 @@
 package ru.git.lab.bot.services.bot;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.git.lab.bot.config.BotConfig;
 import ru.git.lab.bot.services.bot.api.BotService;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Optional;
 
