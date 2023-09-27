@@ -47,7 +47,8 @@ public class MrTextMessageServiceImpl implements MrTextMessageService {
 
     @Override
     public String createMergeRequestTextMessageWithApprove(MergeRequestEvent event, List<ApproveEntity> approves) {
-        StringBuilder stringBuilder = new StringBuilder(createMergeRequestTextMessage(event));
+        String mergeRequestTextMessage = createMergeRequestTextMessage(event);
+        StringBuilder stringBuilder = new StringBuilder(mergeRequestTextMessage);
         approves.forEach(a -> {
             String approveMessage = "\n\n" + likeEmoji + " " + "<b>" + a.getAuthorName() + " approved </b>";
             stringBuilder.append(approveMessage);
