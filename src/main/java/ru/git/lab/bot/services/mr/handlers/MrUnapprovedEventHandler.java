@@ -28,8 +28,8 @@ public class MrUnapprovedEventHandler implements MrEventHandler {
     @Override
     public void handleEvent(MergeRequestEvent event) {
         ObjectAttributes objectAttributes = getObjectAttributes(event);
-        Long mrId = objectAttributes.getId();
-        Long userId = getUser(event).getId();
+        long mrId = objectAttributes.getId();
+        long userId = getUser(event).getId();
 
         List<ApproveEntity> approvalsForMrByAuthorId = approveService.findAllByMrIdAndAuthorId(mrId, userId);
         approveService.deleteAll(approvalsForMrByAuthorId);

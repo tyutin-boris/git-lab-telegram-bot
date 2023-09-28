@@ -17,6 +17,7 @@ import ru.git.lab.bot.model.repository.MessageRepository;
 import ru.git.lab.bot.model.repository.UserRepository;
 import ru.git.lab.bot.services.mr.handlers.MrApprovedEventHandler;
 import ru.git.lab.bot.services.mr.handlers.MrCloseEventHandler;
+import ru.git.lab.bot.services.mr.handlers.MrMergeEventHandler;
 import ru.git.lab.bot.services.mr.handlers.MrOpenEventHandler;
 import ru.git.lab.bot.services.mr.handlers.MrUnapprovedEventHandler;
 import ru.git.lab.bot.services.senders.api.MessageSender;
@@ -69,6 +70,9 @@ public class MergeRequestControllerTest {
     private MrCloseEventHandler mrCloseEventHandler;
 
     @SpyBean
+    private MrMergeEventHandler mrMergeEventHandler;
+
+    @SpyBean
     private MrApprovedEventHandler mrApprovedEventHandler;
 
     @SpyBean
@@ -111,6 +115,25 @@ public class MergeRequestControllerTest {
 
         //then
         verify(mrCloseEventHandler).handleEvent(any());
+        verify(messageSender).deleteMessage(eq(chatId), any());
+
+        Optional<MessageEntity> actualMessage = messageRepository.findByMrIdAndAuthorId(mrId, authorId);
+        assertThat(actualMessage.isEmpty()).isTrue();
+    }
+
+    @Test
+    public void shouldDeleteMessageToTgWhenMRIsMerge() {
+        //given
+        String openMessage = getMessage("mr/open.json");
+        sut.mergeRequestEvent(openMessage);
+
+        String closeMessage = getMessage("mr/merge.json");
+
+        //when
+        sut.mergeRequestEvent(closeMessage);
+
+        //then
+        verify(mrMergeEventHandler).handleEvent(any());
         verify(messageSender).deleteMessage(eq(chatId), any());
 
         Optional<MessageEntity> actualMessage = messageRepository.findByMrIdAndAuthorId(mrId, authorId);
