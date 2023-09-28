@@ -16,6 +16,7 @@ import ru.git.lab.bot.model.repository.ChatRepository;
 import ru.git.lab.bot.model.repository.MessageRepository;
 import ru.git.lab.bot.model.repository.UserRepository;
 import ru.git.lab.bot.services.mr.handlers.MrApprovedEventHandler;
+import ru.git.lab.bot.services.mr.handlers.MrCloseEventHandler;
 import ru.git.lab.bot.services.mr.handlers.MrOpenEventHandler;
 import ru.git.lab.bot.services.mr.handlers.MrUnapprovedEventHandler;
 import ru.git.lab.bot.services.senders.api.MessageSender;
@@ -27,6 +28,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -64,6 +66,9 @@ public class MergeRequestControllerTest {
     private MrOpenEventHandler mrOpenEventHandler;
 
     @SpyBean
+    private MrCloseEventHandler mrCloseEventHandler;
+
+    @SpyBean
     private MrApprovedEventHandler mrApprovedEventHandler;
 
     @SpyBean
@@ -91,6 +96,25 @@ public class MergeRequestControllerTest {
 
         checkUserSave();
         checkMessageSave();
+    }
+
+    @Test
+    public void shouldDeleteMessageToTgWhenMRIsClose() {
+        //given
+        String openMessage = getMessage("mr/open.json");
+        sut.mergeRequestEvent(openMessage);
+
+        String closeMessage = getMessage("mr/close.json");
+
+        //when
+        sut.mergeRequestEvent(closeMessage);
+
+        //then
+        verify(mrCloseEventHandler).handleEvent(any());
+        verify(messageSender).deleteMessage(eq(chatId), any());
+
+        Optional<MessageEntity> actualMessage = messageRepository.findByMrIdAndAuthorId(mrId, authorId);
+        assertThat(actualMessage.isEmpty()).isTrue();
     }
 
     @Test
@@ -207,4 +231,3 @@ public class MergeRequestControllerTest {
         }
     }
 }
-

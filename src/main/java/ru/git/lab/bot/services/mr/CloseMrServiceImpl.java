@@ -17,7 +17,7 @@ public class CloseMrServiceImpl implements CloseMrService {
     private final MessageService messageService;
 
     @Override
-    public void deleteMessage(Long mrId, Long authorId) {
+    public void deleteMessage(long mrId, long authorId) {
         List<MessageToDelete> messages = messageService.getMessageToDelete(mrId, authorId);
         messageService.deleteMessages(messages);
     }

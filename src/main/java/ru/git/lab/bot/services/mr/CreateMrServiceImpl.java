@@ -16,6 +16,8 @@ import ru.git.lab.bot.services.senders.api.MessageSender;
 import java.util.List;
 import java.util.Optional;
 
+import static ru.git.lab.bot.api.mr.DetailedMergeStatus.DRAFT_STATUS;
+import static ru.git.lab.bot.api.mr.DetailedMergeStatus.getStatus;
 import static ru.git.lab.bot.utils.ObjectAttributesUtils.getObjectAttributes;
 
 @Slf4j
@@ -36,30 +38,34 @@ public class CreateMrServiceImpl implements CreateMrService {
         ObjectAttributes objectAttributes = getObjectAttributes(event);
         Long mrId = objectAttributes.getId();
         Long authorId = objectAttributes.getAuthorId();
-        DetailedMergeStatus detailedMergeStatus = DetailedMergeStatus.getStatus(objectAttributes.getDetailedMergeStatus());
+        DetailedMergeStatus detailedMergeStatus = getStatus(objectAttributes.getDetailedMergeStatus());
+
+        String mrIdAndAuthorId = "Mr with id " + mrId + " and authorId " + authorId;
+
+        if (DRAFT_STATUS.equals(detailedMergeStatus)) {
+            log.info("Message not sent because has draft status. " + mrIdAndAuthorId);
+            return;
+        }
+
+        Optional<MessageEntity> messageEntity = messageService.findByMrIdAndAuthorId(mrId, authorId);
+
+        if (messageEntity.isPresent()) {
+            log.debug("Message already sent. " + mrIdAndAuthorId);
+            return;
+        }
 
         List<Long> chatsId = chatService.getAllChatId();
+
+        if (chatsId.isEmpty()) {
+            log.debug("Chat list is empty, message not sant. " + mrIdAndAuthorId);
+            return;
+        }
+
         String text = mrTextMessageService.createMergeRequestTextMessage(event);
 
         for (Long id : chatsId) {
-            Optional<MessageEntity> messageEntity = messageService.findByMrIdAndAuthorId(mrId, authorId);
-
-            messageEntity.ifPresent(e -> {
-                log.debug("Message for mr with id " + mrId + " and authorId " + authorId + " already sent");
-            });
-
-            if (messageEntity.isEmpty() && !DetailedMergeStatus.DRAFT_STATUS.equals(detailedMergeStatus)) {
-                sender.sendMessage(text, id)
-                        .ifPresent(m -> messageService.saveMessage(m, objectAttributes));
-            }
-        }
-
-        chatLog(chatsId);
-    }
-
-    private void chatLog(List<Long> chatsId) {
-        if(chatsId.isEmpty()) {
-            log.debug("Chat list is empty. Messages not send");
+            sender.sendMessage(text, id)
+                    .ifPresent(m -> messageService.saveMessage(m, objectAttributes));
         }
     }
 }
