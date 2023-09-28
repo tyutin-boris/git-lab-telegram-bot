@@ -21,7 +21,7 @@ public class GitUserEntity {
     private UUID id = UUID.randomUUID();
 
     @Column(name = "git_id")
-    private Long gitId;
+    private long gitId;
 
     @Column(name = "name")
     private String name;

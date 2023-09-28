@@ -14,8 +14,9 @@ public class ObjectAttributesUtils {
                 .orElseThrow(() -> new RuntimeException("Merge event without object attributes"));
     }
 
-    public static Action getAction(ObjectAttributes objectAttributes) {
-        return Optional.ofNullable(objectAttributes.getAction())
+    public static Action getAction(MergeRequestEvent event) {
+        return Optional.ofNullable(getObjectAttributes(event))
+                .map(ObjectAttributes::getAction)
                 .orElse(Action.INDEFINITELY);
     }
 }

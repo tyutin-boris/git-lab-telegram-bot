@@ -6,6 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
+import ru.git.lab.bot.api.mr.Action;
+import ru.git.lab.bot.api.mr.DetailedMergeStatus;
+import ru.git.lab.bot.api.mr.MergeRequestEvent;
+import ru.git.lab.bot.api.mr.ObjectAttributes;
+import ru.git.lab.bot.api.mr.Project;
+import ru.git.lab.bot.api.mr.Reviewer;
+import ru.git.lab.bot.api.mr.User;
+import ru.git.lab.bot.builders.MergeRequestEventTestBuilder;
 import ru.git.lab.bot.dto.ChatType;
 import ru.git.lab.bot.model.entities.ApproveEntity;
 import ru.git.lab.bot.model.entities.ChatEntity;
@@ -97,58 +105,60 @@ public class MergeRequestControllerTest {
     @Test
     public void shouldSendMessageWhenOpenMr() {
         //given
-        String message = getMessage("mr/open.json");
+        User expectedUser = createExpectedUser();
+        MergeRequestEvent open = createOpenMergeRequestEvent(expectedUser);
 
         //when
-        sut.mergeRequestEvent(message);
+        sut.mergeRequestEvent(open);
 
         //then
         verify(mrOpenEventHandler).handleEvent(any());
-//        verify(messageSender).sendMessage(any(), eq(chatId));
+        verify(messageSender).sendMessage(any(), eq(chatId));
 
-        checkUserSave();
-        checkMessageSave();
-    }
-
-    @Test
-    public void shouldSendMessageWhenReopenMr() {
-        //given
-        String openMessage = getMessage("mr/open.json");
-        sut.mergeRequestEvent(openMessage);
-
-        String closeMessage = getMessage("mr/close.json");
-        sut.mergeRequestEvent(closeMessage);
-
-        String reopenMessage = getMessage("mr/reopen.json");
-
-        //when
-        sut.mergeRequestEvent(reopenMessage);
-
-        //then
-        verify(mrReopenEventHandler).handleEvent(any());
-//        verify(messageSender, times(2)).sendMessage(any(), eq(chatId));
-
-        checkUserSave();
-        checkMessageSave();
+        checkUserSave(expectedUser);
+        checkMessageSave(mrId, expectedUser.getId());
     }
 
     @Test
     public void shouldDeleteMessageWhenCloseMr() {
         //given
-        String openMessage = getMessage("mr/open.json");
-        sut.mergeRequestEvent(openMessage);
+        User expectedUser = createExpectedUser();
 
-        String closeMessage = getMessage("mr/close.json");
+        MergeRequestEvent open = createOpenMergeRequestEvent(expectedUser);
+        sut.mergeRequestEvent(open);
+
+        MergeRequestEvent close = createCloseMergeRequestEvent(expectedUser);
 
         //when
-        sut.mergeRequestEvent(closeMessage);
+        sut.mergeRequestEvent(close);
 
         //then
         verify(mrCloseEventHandler).handleEvent(any());
         verify(messageSender).deleteMessage(eq(chatId), any());
 
-        Optional<MessageEntity> actualMessage = messageRepository.findByMrIdAndAuthorId(mrId, authorId);
+        Optional<MessageEntity> actualMessage = messageRepository.findByMrIdAndAuthorId(mrId, expectedUser.getId());
         assertThat(actualMessage.isEmpty()).isTrue();
+    }
+
+    @Test
+    public void shouldSendMessageWhenReopenMr() {
+        //given
+        User expectedUser = createExpectedUser();
+
+        MergeRequestEvent open = createOpenMergeRequestEvent(expectedUser);
+        sut.mergeRequestEvent(open);
+
+        MergeRequestEvent reopen = createReopenMergeRequestEvent(expectedUser);
+
+        //when
+        sut.mergeRequestEvent(reopen);
+
+        //then
+        verify(mrReopenEventHandler).handleEvent(any());
+//        verify(messageSender, times(2)).sendMessage(any(), eq(chatId));
+
+        checkUserSave(expectedUser);
+        checkMessageSave(mrId, authorId);
     }
 
     @Test
@@ -173,6 +183,7 @@ public class MergeRequestControllerTest {
     @Test
     public void shouldNotSendMessageWhenMrHasDraftStatus() {
         //given
+        User expectedUser = createExpectedUser();
         String message = getMessage("mr/open_draft.json");
 
         //when
@@ -182,7 +193,7 @@ public class MergeRequestControllerTest {
         verify(mrOpenEventHandler).handleEvent(any());
         verify(messageSender, never()).sendMessage(any(), eq(chatId));
 
-        checkUserSave();
+        checkUserSave(expectedUser);
         Long mrId = 414770L;
         Long authorId = 14826841L;
 
@@ -261,7 +272,7 @@ public class MergeRequestControllerTest {
         assertThat(actualApprove.getAuthorName()).isEqualTo("Ivan Ivanov");
     }
 
-    private void checkMessageSave() {
+    private void checkMessageSave(long mrId, long authorId) {
         MessageEntity messageEntity = messageRepository.findByMrIdAndAuthorId(mrId, authorId)
                 .orElse(null);
 
@@ -270,14 +281,14 @@ public class MergeRequestControllerTest {
 
     }
 
-    private void checkUserSave() {
-        GitUserEntity userEntity = userRepository.findByGitId(14826841L)
+    private void checkUserSave(User expected) {
+        GitUserEntity actual = userRepository.findByGitId(expected.getId())
                 .orElse(null);
 
-        assertThat(userEntity).isNotNull();
-        assertThat(userEntity.getName()).isEqualTo("Ivan Ivanov");
-        assertThat(userEntity.getUsername()).isEqualTo("ivan");
-        assertThat(userEntity.getEmail()).isEqualTo("ivan@mail.ru");
+        assertThat(actual).isNotNull();
+        assertThat(actual.getName()).isEqualTo(expected.getName());
+        assertThat(actual.getUsername()).isEqualTo(expected.getUsername());
+        assertThat(actual.getEmail()).isEqualTo(expected.getEmail());
     }
 
     private void createChat() {
@@ -298,5 +309,61 @@ public class MergeRequestControllerTest {
         } catch (URISyntaxException | IOException e) {
             throw new RuntimeException("Failed to read file " + filePath, e);
         }
+    }
+
+    private User createExpectedUser() {
+        User user = new User();
+        user.setId(1L);
+        user.setName("Ivan");
+        user.setUsername("ivanFirst");
+        user.setEmail("ivan@mail.ru");
+        return user;
+    }
+
+    private MergeRequestEvent createOpenMergeRequestEvent(User user) {
+        long userId = user.getId();
+
+        ObjectAttributes objectAttributes = new ObjectAttributes();
+        objectAttributes.setAction(Action.OPEN);
+        objectAttributes.setId(mrId);
+        objectAttributes.setAuthorId(userId);
+        objectAttributes.setDetailedMergeStatus(DetailedMergeStatus.MERGEABLE.getName());
+
+        objectAttributes.setTitle("Title");
+        objectAttributes.setDescription("Description");
+        objectAttributes.setAuthorId(userId);
+        objectAttributes.setSourceBranch("dev");
+        objectAttributes.setTargetBranch("master");
+        objectAttributes.setUrl("url");
+
+        Project project = new Project();
+        project.setName("First project");
+
+        Reviewer reviewer = new Reviewer();
+        reviewer.setName("ReviewerName");
+
+        return new MergeRequestEventTestBuilder().objectAttributes(objectAttributes)
+                .user(user)
+                .project(project)
+                .reviewers(List.of(reviewer))
+                .build();
+    }
+
+    private MergeRequestEvent createCloseMergeRequestEvent(User user) {
+        MergeRequestEvent open = createOpenMergeRequestEvent(user);
+
+        ObjectAttributes openMrAttributes = open.getObjectAttributes();
+        openMrAttributes.setAction(Action.CLOSE);
+
+        return open;
+    }
+
+    private MergeRequestEvent createReopenMergeRequestEvent(User user) {
+        MergeRequestEvent open = createOpenMergeRequestEvent(user);
+
+        ObjectAttributes openMrAttributes = open.getObjectAttributes();
+        openMrAttributes.setAction(Action.REOPEN);
+
+        return open;
     }
 }

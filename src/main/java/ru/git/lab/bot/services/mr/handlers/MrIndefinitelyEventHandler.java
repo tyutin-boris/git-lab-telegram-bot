@@ -21,7 +21,7 @@ public class MrIndefinitelyEventHandler implements MrEventHandler {
     public void handleEvent(MergeRequestEvent event) {
         ObjectAttributes objectAttributes = getObjectAttributes(event);
         long mrId = objectAttributes.getId();
-        Action action = ObjectAttributesUtils.getAction(objectAttributes);
+        Action action = ObjectAttributesUtils.getAction(event);
 
         log.debug("Mr handler for this action " + action + " not found. MR id: " + mrId);
     }

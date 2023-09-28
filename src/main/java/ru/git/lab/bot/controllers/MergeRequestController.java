@@ -18,14 +18,22 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class MergeRequestController {
 
-    private final MergeRequestService mergeRequestService;
     private final ObjectMapper objectMapper;
+    private final MergeRequestService mergeRequestService;
+    //    private final RequestMessageService requestMessageService;
 
     @PostMapping
     public void mergeRequestEvent(@RequestBody String request) {
         log.debug(request);
         MergeRequestEvent mergeRequestEvent = getMergeRequestEvent(request);
         mergeRequestService.handleEvent(mergeRequestEvent);
+    }
+
+    @PostMapping("/new")
+    public void mergeRequestEvent(@RequestBody MergeRequestEvent request) {
+        //        requestMessageService.saveReceivedMessage(request);
+
+        mergeRequestService.handleEvent(request);
     }
 
     private MergeRequestEvent getMergeRequestEvent(String request) {

@@ -25,8 +25,7 @@ public class MergeRequestServiceImpl implements MergeRequestService {
 
     @Override
     public void handleEvent(MergeRequestEvent event) {
-        ObjectAttributes objectAttributes = getObjectAttributes(event);
-        Action action = getAction(objectAttributes);
+        Action action = getAction(event);
 
         userService.saveUserIfNotExist(event.getUser());
         eventHandlers.get(action).handleEvent(event);

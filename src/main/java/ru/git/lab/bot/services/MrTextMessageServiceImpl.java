@@ -3,6 +3,7 @@ package ru.git.lab.bot.services;
 import com.vdurmont.emoji.EmojiParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
@@ -79,7 +80,7 @@ public class MrTextMessageServiceImpl implements MrTextMessageService {
     }
 
     private String getAuthorText(Optional<ObjectAttributes> objectAttributes) {
-        Long authorId = objectAttributes.map(ObjectAttributes::getAuthorId)
+        long authorId = objectAttributes.map(ObjectAttributes::getAuthorId)
                 .orElseThrow(() -> new RuntimeException("Author in not present"));
 
         GitUserEntity gitUserEntity = userService.getByAuthorId(authorId);
@@ -89,12 +90,10 @@ public class MrTextMessageServiceImpl implements MrTextMessageService {
     }
 
     private String getReviewerText(List<Reviewer> reviewers) {
-        Reviewer reviewer = reviewers.stream()
+        String reviewerName = reviewers.stream()
                 .findFirst()
-                .orElse(null);
-        String reviewerName = Optional.ofNullable(reviewer)
                 .map(Reviewer::getName)
-                .orElse("");
+                .orElse("No reviewers available");
 
         return "<b>Reviewer:</b> " + reviewerName + "\n\n";
     }
@@ -121,7 +120,7 @@ public class MrTextMessageServiceImpl implements MrTextMessageService {
 
     private String getMrUrlText(Optional<ObjectAttributes> objectAttributes) {
         String mrUrl = objectAttributes.map(ObjectAttributes::getUrl)
-                .orElse("");
+                .orElse(StringUtils.EMPTY);
 
         return "<a href='" + mrUrl + "'><b><u>MR Hyperlink</u></b></a>";
     }
