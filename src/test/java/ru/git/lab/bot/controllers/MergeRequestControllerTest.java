@@ -19,7 +19,9 @@ import ru.git.lab.bot.services.mr.handlers.MrApprovedEventHandler;
 import ru.git.lab.bot.services.mr.handlers.MrCloseEventHandler;
 import ru.git.lab.bot.services.mr.handlers.MrMergeEventHandler;
 import ru.git.lab.bot.services.mr.handlers.MrOpenEventHandler;
+import ru.git.lab.bot.services.mr.handlers.MrReopenEventHandler;
 import ru.git.lab.bot.services.mr.handlers.MrUnapprovedEventHandler;
+import ru.git.lab.bot.services.mr.handlers.MrUpdateEventHandler;
 import ru.git.lab.bot.services.senders.api.MessageSender;
 
 import java.io.IOException;
@@ -67,6 +69,9 @@ public class MergeRequestControllerTest {
     private MrOpenEventHandler mrOpenEventHandler;
 
     @SpyBean
+    private MrReopenEventHandler mrReopenEventHandler;
+
+    @SpyBean
     private MrCloseEventHandler mrCloseEventHandler;
 
     @SpyBean
@@ -79,6 +84,9 @@ public class MergeRequestControllerTest {
     private MrUnapprovedEventHandler mrUnapprovedEventHandler;
 
     @SpyBean
+    private MrUpdateEventHandler mrUpdateEventHandler;
+
+    @SpyBean
     private MessageSender messageSender;
 
     @BeforeEach
@@ -87,7 +95,7 @@ public class MergeRequestControllerTest {
     }
 
     @Test
-    public void shouldSendMessageToTgWhenCreteNewMR() {
+    public void shouldSendMessageWhenOpenMr() {
         //given
         String message = getMessage("mr/open.json");
 
@@ -103,7 +111,29 @@ public class MergeRequestControllerTest {
     }
 
     @Test
-    public void shouldDeleteMessageToTgWhenMRIsClose() {
+    public void shouldSendMessageWhenReopenMr() {
+        //given
+        String openMessage = getMessage("mr/open.json");
+        sut.mergeRequestEvent(openMessage);
+
+        String closeMessage = getMessage("mr/close.json");
+        sut.mergeRequestEvent(closeMessage);
+
+        String reopenMessage = getMessage("mr/reopen.json");
+
+        //when
+        sut.mergeRequestEvent(reopenMessage);
+
+        //then
+        verify(mrReopenEventHandler).handleEvent(any());
+//        verify(messageSender, times(2)).sendMessage(any(), eq(chatId));
+
+        checkUserSave();
+        checkMessageSave();
+    }
+
+    @Test
+    public void shouldDeleteMessageWhenCloseMr() {
         //given
         String openMessage = getMessage("mr/open.json");
         sut.mergeRequestEvent(openMessage);
@@ -122,7 +152,7 @@ public class MergeRequestControllerTest {
     }
 
     @Test
-    public void shouldDeleteMessageToTgWhenMRIsMerge() {
+    public void shouldDeleteMessageWhenMergeMr() {
         //given
         String openMessage = getMessage("mr/open.json");
         sut.mergeRequestEvent(openMessage);
@@ -141,7 +171,7 @@ public class MergeRequestControllerTest {
     }
 
     @Test
-    public void shouldNotSendMessageToTgWhenCreteNewMRWithDraftStatus() {
+    public void shouldNotSendMessageWhenMrHasDraftStatus() {
         //given
         String message = getMessage("mr/open_draft.json");
 
@@ -163,7 +193,7 @@ public class MergeRequestControllerTest {
     }
 
     @Test
-    public void shouldSendApproveToMessage() {
+    public void shouldSendApproveWhenApprovedMr() {
         //given
         String openMessage = getMessage("mr/open.json");
         sut.mergeRequestEvent(openMessage);
@@ -181,7 +211,7 @@ public class MergeRequestControllerTest {
     }
 
     @Test
-    public void shouldSendUnapprovedToMessage() {
+    public void shouldSendUnapprovedWhenUnapprovedMr() {
         //given
         String openMessage = getMessage("mr/open.json");
         sut.mergeRequestEvent(openMessage);
@@ -199,6 +229,22 @@ public class MergeRequestControllerTest {
         verify(messageSender, times(2)).updateMessage(any(), eq(chatId), any());
 
         checkApproveDelete();
+    }
+
+    @Test
+    public void shouldSendApproveWhenUpdateMr() {
+        //given
+        String openMessage = getMessage("mr/open.json");
+        sut.mergeRequestEvent(openMessage);
+
+        String approvedMessage = getMessage("mr/update.json");
+
+        //when
+        sut.mergeRequestEvent(approvedMessage);
+
+        //then
+        verify(mrUpdateEventHandler).handleEvent(any());
+        verify(messageSender).updateMessage(any(), eq(chatId), any());
     }
 
     private void checkApproveDelete() {
