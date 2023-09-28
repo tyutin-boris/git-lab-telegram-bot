@@ -22,8 +22,8 @@ public class MrMergeEventHandler implements MrEventHandler {
     @Override
     public void handleEvent(MergeRequestEvent event) {
         ObjectAttributes objectAttributes = getObjectAttributes(event);
-        Long mrId = objectAttributes.getId();
-        Long authorId = objectAttributes.getAuthorId();
+        long mrId = objectAttributes.getId();
+        long authorId = objectAttributes.getAuthorId();
 
         log.debug("Merge event action " + getAction() + ". MR id: " + mrId);
 

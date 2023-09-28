@@ -3,10 +3,10 @@
   "event_type": "merge_request",
   "user": {
     "id": 14826841,
-    "name": "Борис Тютин",
-    "username": "boris919323",
+    "name": "Ivan Ivanov",
+    "username": "ivan",
     "avatar_url": "https://secure.gravatar.com/avatar/5828ce2cfc161d1ab0e98b40e12f2c70?s=80&d=identicon",
-    "email": "[REDACTED]"
+    "email": "ivan@mail.ru"
   },
   "project": {
     "id": 46771870,
@@ -32,7 +32,7 @@
     "created_at": "2023-07-08 20:11:45 UTC",
     "description": "",
     "head_pipeline_id": null,
-    "id": 235412075,
+    "id": 235411851,
     "iid": 9,
     "last_edited_at": null,
     "last_edited_by_id": null,

@@ -22,7 +22,7 @@ public class MrReopenEventHandler implements MrEventHandler {
     @Override
     public void handleEvent(MergeRequestEvent event) {
         ObjectAttributes objectAttributes = getObjectAttributes(event);
-        Long mrId = objectAttributes.getId();
+        long mrId = objectAttributes.getId();
 
         log.debug("Merge event action " + getAction() + ". MR id: " + mrId);
 
