@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.git.lab.bot.api.mr.DetailedMergeStatus;
 import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
+import ru.git.lab.bot.dto.MergeRequestDto;
 import ru.git.lab.bot.model.entities.MessageEntity;
 import ru.git.lab.bot.services.api.ChatService;
 import ru.git.lab.bot.services.api.MessageService;
@@ -34,38 +35,37 @@ public class CreateMrServiceImpl implements CreateMrService {
     private final MrTextMessageService mrTextMessageService;
 
     @Override
-    public void sendAndSaveMessage(MergeRequestEvent event) {
-        ObjectAttributes objectAttributes = getObjectAttributes(event);
-        Long mrId = objectAttributes.getId();
-        Long authorId = objectAttributes.getAuthorId();
-        DetailedMergeStatus detailedMergeStatus = getStatus(objectAttributes.getDetailedMergeStatus());
+    public void sendAndSaveMessage(MergeRequestDto mergeRequest) {
+        Long mrId = mergeRequest.getMrId();
+        Long authorId = mergeRequest.getAuthor().getId();
+        DetailedMergeStatus detailedMergeStatus = mergeRequest.getDetailedMergeStatus();
 
-        String mrIdAndAuthorId = "Mr with id " + mrId + " and authorId " + authorId;
+        String mrIdAndAuthorIdLog = "Mr with id " + mrId + " and authorId " + authorId;
 
         if (DRAFT_STATUS.equals(detailedMergeStatus)) {
-            log.info("Message not sent because has draft status. " + mrIdAndAuthorId);
+            log.info("Message not sent because has draft status. " + mrIdAndAuthorIdLog);
             return;
         }
 
         Optional<MessageEntity> messageEntity = messageService.findByMrIdAndAuthorId(mrId, authorId);
 
         if (messageEntity.isPresent()) {
-            log.debug("Message already sent. " + mrIdAndAuthorId);
+            log.debug("Message already sent. " + mrIdAndAuthorIdLog);
             return;
         }
 
         List<Long> chatsId = chatService.getAllChatId();
 
         if (chatsId.isEmpty()) {
-            log.debug("Chat list is empty, message not sant. " + mrIdAndAuthorId);
+            log.debug("Chat list is empty, message not sant. " + mrIdAndAuthorIdLog);
             return;
         }
 
-        String text = mrTextMessageService.createMergeRequestTextMessage(event);
+        String text = mrTextMessageService.createMergeRequestTextMessage(mergeRequest);
 
         for (Long id : chatsId) {
             sender.sendMessage(text, id)
-                    .ifPresent(m -> messageService.saveMessage(m, objectAttributes));
+                    .ifPresent(message -> messageService.saveMessage(message, mergeRequest));
         }
     }
 }

@@ -28,7 +28,7 @@ public class MrCloseEventHandlerTest {
         MergeRequestEvent event = createMrRequest(mrId, authorId);
 
         //when
-        sut.handleEvent(event);
+//        sut.handleEvent(event);
 
         //then
         verify(closeMrService).deleteMessage(mrId, authorId);

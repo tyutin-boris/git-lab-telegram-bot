@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.git.lab.bot.api.mr.Action;
-import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
+import ru.git.lab.bot.dto.MergeRequestDto;
 import ru.git.lab.bot.services.mr.api.CloseMrService;
 import ru.git.lab.bot.services.mr.handlers.api.MrEventHandler;
 
@@ -20,10 +20,9 @@ public class MrMergeEventHandler implements MrEventHandler {
     private final CloseMrService closeMrService;
 
     @Override
-    public void handleEvent(MergeRequestEvent event) {
-        ObjectAttributes objectAttributes = getObjectAttributes(event);
-        long mrId = objectAttributes.getId();
-        long authorId = objectAttributes.getAuthorId();
+    public void handleEvent(MergeRequestDto mergeRequest) {
+        long mrId = mergeRequest.getMrId();
+        long authorId = mergeRequest.getAuthor().getId();
 
         log.debug("Merge event action " + getAction() + ". MR id: " + mrId);
 
