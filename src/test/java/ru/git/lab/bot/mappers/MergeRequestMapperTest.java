@@ -62,7 +62,6 @@ class MergeRequestMapperTest {
 
         AuthorDto author = new AuthorDto();
         author.setId(1L);
-        author.setName("name");
 
         MergeRequestDto dto = new MergeRequestDto();
         dto.setMrId(1L);

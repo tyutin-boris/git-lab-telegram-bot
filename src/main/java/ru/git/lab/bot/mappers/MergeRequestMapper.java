@@ -4,22 +4,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import org.springframework.beans.factory.annotation.Autowired;
 import ru.git.lab.bot.api.mr.DetailedMergeStatus;
 import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.Reviewer;
-import ru.git.lab.bot.dto.AuthorDto;
 import ru.git.lab.bot.dto.MergeRequestDto;
-import ru.git.lab.bot.model.entities.GitUserEntity;
-import ru.git.lab.bot.services.api.UserService;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = UserService.class)
+@Mapper(componentModel = "spring")
 public abstract class MergeRequestMapper implements ToDtoMapper<MergeRequestEvent, MergeRequestDto> {
-
-    @Autowired
-    private UserService userService;
 
     @Override
     @Mapping(source = "objectAttributes.id", target = "mrId")
@@ -30,7 +23,7 @@ public abstract class MergeRequestMapper implements ToDtoMapper<MergeRequestEven
     @Mapping(source = "objectAttributes.url", target = "mrUrl")
     @Mapping(source = "objectAttributes.action", target = "action")
     @Mapping(source = "objectAttributes.detailedMergeStatus", target = "detailedMergeStatus", qualifiedByName = "getDetailedMergeStatus")
-    @Mapping(source = "objectAttributes.authorId", target = "author", qualifiedByName = "getAuthor")
+    @Mapping(source = "objectAttributes.authorId", target = "author.id")
     @Mapping(source = "project.name", target = "projectName")
     @Mapping(source = "reviewers", target = "reviewerName", qualifiedByName = "getReviewerName")
     public abstract MergeRequestDto toDto(MergeRequestEvent event);
@@ -46,16 +39,5 @@ public abstract class MergeRequestMapper implements ToDtoMapper<MergeRequestEven
                 .findFirst()
                 .map(Reviewer::getName)
                 .orElse(StringUtils.EMPTY);
-    }
-
-    @Named("getAuthor")
-    public AuthorDto getAuthor(long authorId) {
-        GitUserEntity user = userService.getByAuthorId(authorId);
-
-        AuthorDto dto = new AuthorDto();
-        dto.setId(authorId);
-        dto.setName(user.getName());
-
-        return dto;
     }
 }

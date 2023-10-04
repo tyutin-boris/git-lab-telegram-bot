@@ -6,6 +6,4 @@ import lombok.Data;
 public class AuthorDto {
 
     long id;
-
-    String name;
 }

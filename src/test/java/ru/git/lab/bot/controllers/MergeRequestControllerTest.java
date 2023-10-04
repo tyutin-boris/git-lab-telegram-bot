@@ -158,7 +158,7 @@ public class MergeRequestControllerTest {
 //        verify(messageSender, times(2)).sendMessage(any(), eq(chatId));
 
         checkUserSave(expectedUser);
-        checkMessageSave(mrId, authorId);
+        checkMessageSave(mrId, expectedUser.getId());
     }
 
     @Test
@@ -194,9 +194,6 @@ public class MergeRequestControllerTest {
         verify(messageSender, never()).sendMessage(any(), eq(chatId));
 
         checkUserSave(expectedUser);
-        Long mrId = 414770L;
-        Long authorId = 14826841L;
-
         MessageEntity messageEntity = messageRepository.findByMrIdAndAuthorId(mrId, authorId)
                 .orElse(null);
 
