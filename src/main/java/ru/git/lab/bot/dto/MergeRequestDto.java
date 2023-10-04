@@ -29,7 +29,5 @@ public class MergeRequestDto {
 
     String targetBranch;
 
-    String createdDate;
-
     String mrUrl;
 }

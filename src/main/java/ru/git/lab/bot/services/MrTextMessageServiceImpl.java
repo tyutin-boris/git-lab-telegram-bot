@@ -3,11 +3,7 @@ package ru.git.lab.bot.services;
 import com.vdurmont.emoji.EmojiParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import ru.git.lab.bot.api.mr.ObjectAttributes;
-import ru.git.lab.bot.api.mr.Project;
-import ru.git.lab.bot.api.mr.Reviewer;
 import ru.git.lab.bot.dto.AuthorDto;
 import ru.git.lab.bot.dto.MergeRequestDto;
 import ru.git.lab.bot.model.entities.ApproveEntity;
@@ -18,7 +14,6 @@ import ru.git.lab.bot.services.api.UserService;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -26,7 +21,7 @@ import java.util.Optional;
 public class MrTextMessageServiceImpl implements MrTextMessageService {
 
     private static final String likeEmoji = EmojiParser.parseToUnicode(":thumbsup:");
-    private static final String DEFAULT_PREFIX = "Тут могло быть ";
+
     private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     private final UserService userService;
@@ -85,9 +80,9 @@ public class MrTextMessageServiceImpl implements MrTextMessageService {
 
     private String getCreatedAtText() {
         //TODO Fix date deserializer
-//        OffsetDateTime createdAt = objectAttributes
-//                .map(ObjectAttributes::getCreatedAt)
-//                .orElse(OffsetDateTime.now());
+        //        OffsetDateTime createdAt = objectAttributes
+        //                .map(ObjectAttributes::getCreatedAt)
+        //                .orElse(OffsetDateTime.now());
         String createdAt = OffsetDateTime.now()
                 .format(DATE_TIME_FORMATTER);
 

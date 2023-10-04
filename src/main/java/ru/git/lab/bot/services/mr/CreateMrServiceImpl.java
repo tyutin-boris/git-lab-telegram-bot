@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.git.lab.bot.api.mr.DetailedMergeStatus;
-import ru.git.lab.bot.api.mr.MergeRequestEvent;
-import ru.git.lab.bot.api.mr.ObjectAttributes;
 import ru.git.lab.bot.dto.MergeRequestDto;
 import ru.git.lab.bot.model.entities.MessageEntity;
 import ru.git.lab.bot.services.api.ChatService;
@@ -18,8 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static ru.git.lab.bot.api.mr.DetailedMergeStatus.DRAFT_STATUS;
-import static ru.git.lab.bot.api.mr.DetailedMergeStatus.getStatus;
-import static ru.git.lab.bot.utils.ObjectAttributesUtils.getObjectAttributes;
 
 @Slf4j
 @Service
@@ -36,8 +32,9 @@ public class CreateMrServiceImpl implements CreateMrService {
 
     @Override
     public void sendAndSaveMessage(MergeRequestDto mergeRequest) {
-        Long mrId = mergeRequest.getMrId();
-        Long authorId = mergeRequest.getAuthor().getId();
+        long mrId = mergeRequest.getMrId();
+        long authorId = mergeRequest.getAuthor()
+                .getId();
         DetailedMergeStatus detailedMergeStatus = mergeRequest.getDetailedMergeStatus();
 
         String mrIdAndAuthorIdLog = "Mr with id " + mrId + " and authorId " + authorId;
