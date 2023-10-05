@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.ChatMemberUpdated;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 import ru.git.lab.bot.dto.ChatType;
 import ru.git.lab.bot.services.bot.api.BotService;
 import ru.git.lab.bot.services.chat.api.ChannelService;
@@ -28,6 +29,18 @@ public class BotServiceImpl implements BotService {
 
         Chat chat = getChat(update);
         ChatType chatType = stringToChatType(chat.getType());
+
+        Message message = update.getMessage();
+
+        String text = message.getText();
+
+        User user = message.getFrom();
+        Long tgId = user.getId();
+        user.getFirstName();
+        user.getLastName();
+        user.getUserName();
+
+
 
         switch (chatType) {
             case PRIVATE:
