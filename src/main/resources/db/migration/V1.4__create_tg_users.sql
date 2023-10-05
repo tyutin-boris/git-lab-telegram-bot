@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS tg_users (
+    id BIGINT NOT NULL PRIMARY KEY,
+    first_name VARCHAR NOT NULL,
+    last_name VARCHAR NOT NULL,
+    username VARCHAR NOT NULL,
+);
