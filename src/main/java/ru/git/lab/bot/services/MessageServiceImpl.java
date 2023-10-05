@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import ru.git.lab.bot.api.mr.ObjectAttributes;
+import ru.git.lab.bot.dto.MergeRequestDto;
 import ru.git.lab.bot.dto.MessageToDelete;
 import ru.git.lab.bot.model.entities.MessageEntity;
 import ru.git.lab.bot.model.repository.MessageRepository;
@@ -26,8 +26,8 @@ public class MessageServiceImpl implements MessageService {
     private final MessageSender messageSender;
 
     @Override
-    public void saveMessage(Message message, ObjectAttributes attributes) {
-        MessageEntity messageEntity = createMessage(message, attributes);
+    public void saveMessage(Message message, MergeRequestDto mergeRequest) {
+        MessageEntity messageEntity = createMessage(message, mergeRequest);
         messageRepository.save(messageEntity);
         log.debug("Save message with id " + messageEntity.getMessageId() + ", authorId " + messageEntity.getAuthorId());
     }
@@ -65,13 +65,13 @@ public class MessageServiceImpl implements MessageService {
         return messageRepository.findByMrIdAndAuthorId(mrId, authorId);
     }
 
-    private MessageEntity createMessage(Message message, ObjectAttributes attributes) {
+    private MessageEntity createMessage(Message message, MergeRequestDto mergeRequest) {
         MessageEntity messageEntity = new MessageEntity();
 
         messageEntity.setMessageId(message.getMessageId());
         messageEntity.setChatId(message.getChatId());
-        messageEntity.setMrId(attributes.getId());
-        messageEntity.setAuthorId(attributes.getAuthorId());
+        messageEntity.setMrId(mergeRequest.getMrId());
+        messageEntity.setAuthorId(mergeRequest.getAuthor().getId());
         messageEntity.setCreateDateTime(OffsetDateTime.now());
 
         return messageEntity;

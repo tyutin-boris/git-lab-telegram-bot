@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import ru.git.lab.bot.api.mr.Action;
 import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
+import ru.git.lab.bot.dto.MergeRequestDto;
+import ru.git.lab.bot.mappers.MergeRequestMapper;
 import ru.git.lab.bot.services.api.MergeRequestService;
 import ru.git.lab.bot.services.api.UserService;
 import ru.git.lab.bot.services.mr.handlers.api.MrEventHandler;
@@ -21,14 +23,14 @@ import static ru.git.lab.bot.utils.ObjectAttributesUtils.getObjectAttributes;
 public class MergeRequestServiceImpl implements MergeRequestService {
 
     private final UserService userService;
+    private final MergeRequestMapper mergeRequestMapper;
     private final Map<Action, MrEventHandler> eventHandlers;
 
     @Override
     public void handleEvent(MergeRequestEvent event) {
-        ObjectAttributes objectAttributes = getObjectAttributes(event);
-        Action action = getAction(objectAttributes);
+        MergeRequestDto mergeRequest = mergeRequestMapper.toDto(event);
 
-        userService.saveUserIfNotExist(event.getUser());
-        eventHandlers.get(action).handleEvent(event);
+        userService.saveUserIfNotExist(mergeRequest.getUser());
+        eventHandlers.get(mergeRequest.getAction()).handleEvent(mergeRequest);
     }
 }

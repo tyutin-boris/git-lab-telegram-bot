@@ -1,12 +1,12 @@
 package ru.git.lab.bot.services.api;
 
-import ru.git.lab.bot.api.mr.MergeRequestEvent;
+import ru.git.lab.bot.dto.MergeRequestDto;
 import ru.git.lab.bot.model.entities.ApproveEntity;
 
 import java.util.List;
 
 public interface MrTextMessageService {
-    String createMergeRequestTextMessage(MergeRequestEvent event);
+    String createMergeRequestTextMessage(MergeRequestDto mergeRequest);
 
-    String createMergeRequestTextMessageWithApprove(MergeRequestEvent event, List<ApproveEntity> approves);
+    String createMergeRequestTextMessageWithApprove(MergeRequestDto mergeRequest, List<ApproveEntity> approves);
 }

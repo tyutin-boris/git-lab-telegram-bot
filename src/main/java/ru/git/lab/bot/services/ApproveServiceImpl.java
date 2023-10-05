@@ -3,7 +3,7 @@ package ru.git.lab.bot.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.git.lab.bot.api.mr.User;
+import ru.git.lab.bot.dto.UserDto;
 import ru.git.lab.bot.model.entities.ApproveEntity;
 import ru.git.lab.bot.model.repository.ApproveRepository;
 import ru.git.lab.bot.services.api.ApproveService;
@@ -23,7 +23,7 @@ public class ApproveServiceImpl implements ApproveService {
     }
 
     @Override
-    public void save(Long mrId, User user) {
+    public void save(Long mrId, UserDto user) {
         ApproveEntity approveEntity = createApproveEntity(mrId, user);
         approveRepository.save(approveEntity);
     }
@@ -38,7 +38,7 @@ public class ApproveServiceImpl implements ApproveService {
         approveRepository.deleteAll(approvals);
     }
 
-    private ApproveEntity createApproveEntity(Long mrId, User user) {
+    private ApproveEntity createApproveEntity(Long mrId, UserDto user) {
         ApproveEntity approveEntity = new ApproveEntity();
 
         approveEntity.setMrId(mrId);

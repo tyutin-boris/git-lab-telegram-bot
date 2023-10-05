@@ -4,10 +4,8 @@ import com.vdurmont.emoji.EmojiParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.git.lab.bot.api.mr.MergeRequestEvent;
-import ru.git.lab.bot.api.mr.ObjectAttributes;
-import ru.git.lab.bot.api.mr.Project;
-import ru.git.lab.bot.api.mr.Reviewer;
+import ru.git.lab.bot.dto.AuthorDto;
+import ru.git.lab.bot.dto.MergeRequestDto;
 import ru.git.lab.bot.model.entities.ApproveEntity;
 import ru.git.lab.bot.model.entities.GitUserEntity;
 import ru.git.lab.bot.services.api.MrTextMessageService;
@@ -16,7 +14,6 @@ import ru.git.lab.bot.services.api.UserService;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -24,30 +21,28 @@ import java.util.Optional;
 public class MrTextMessageServiceImpl implements MrTextMessageService {
 
     private static final String likeEmoji = EmojiParser.parseToUnicode(":thumbsup:");
-    private static final String DEFAULT_PREFIX = "Тут могло быть ";
+
     private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     private final UserService userService;
 
     @Override
-    public String createMergeRequestTextMessage(MergeRequestEvent event) {
-        Optional<ObjectAttributes> objectAttributes = Optional.ofNullable(event.getObjectAttributes());
-
-        String projectText = getProjectText(event.getProject());
-        String title = getTitleText(objectAttributes);
-        String description = getDescriptionText(objectAttributes);
-        String author = getAuthorText(objectAttributes);
-        String reviewer = getReviewerText(event.getReviewers());
-        String branch = getBranchText(objectAttributes);
+    public String createMergeRequestTextMessage(MergeRequestDto mergeRequest) {
+        String projectText = getProjectText(mergeRequest.getProjectName());
+        String title = getTitleText(mergeRequest.getTitle());
+        String description = getDescriptionText(mergeRequest.getDescription());
+        String author = getAuthorText(mergeRequest.getAuthor());
+        String reviewer = getReviewerText(mergeRequest.getReviewerName());
+        String branch = getBranchText(mergeRequest.getSourceBranch(), mergeRequest.getTargetBranch());
         String createdAt = getCreatedAtText();
-        String mrUrl = getMrUrlText(objectAttributes);
+        String mrUrl = getMrUrlText(mergeRequest.getMrUrl());
 
         return projectText + title + description + author + reviewer + branch + createdAt + mrUrl;
     }
 
     @Override
-    public String createMergeRequestTextMessageWithApprove(MergeRequestEvent event, List<ApproveEntity> approves) {
-        String mergeRequestTextMessage = createMergeRequestTextMessage(event);
+    public String createMergeRequestTextMessageWithApprove(MergeRequestDto mergeRequest, List<ApproveEntity> approves) {
+        String mergeRequestTextMessage = createMergeRequestTextMessage(mergeRequest);
         StringBuilder stringBuilder = new StringBuilder(mergeRequestTextMessage);
         approves.forEach(a -> {
             String approveMessage = "\n\n" + likeEmoji + " " + "<b>" + a.getAuthorName() + " approved </b>";
@@ -56,73 +51,45 @@ public class MrTextMessageServiceImpl implements MrTextMessageService {
         return stringBuilder.toString();
     }
 
-    private String getProjectText(Project project) {
-        String projectName = Optional.ofNullable(project)
-                .map(Project::getName)
-                .orElse(DEFAULT_PREFIX + "название проекта.");
-
-        return "<b>Project:</b> " + projectName + "\n\n";
+    private String getProjectText(String name) {
+        return "<b>Project:</b> " + name + "\n\n";
     }
 
-    private String getTitleText(Optional<ObjectAttributes> objectAttributes) {
-        String title = objectAttributes.map(ObjectAttributes::getTitle)
-                .orElse(DEFAULT_PREFIX + "название МРа.");
-
+    private String getTitleText(String title) {
         return "<b>Title:</b> " + title + "\n";
     }
 
-    private String getDescriptionText(Optional<ObjectAttributes> objectAttributes) {
-        String description = objectAttributes.map(ObjectAttributes::getDescription)
-                .orElse(DEFAULT_PREFIX + "описание МРа");
-
+    private String getDescriptionText(String description) {
         return "<b>Description:</b> " + description + "\n\n";
     }
 
-    private String getAuthorText(Optional<ObjectAttributes> objectAttributes) {
-        Long authorId = objectAttributes.map(ObjectAttributes::getAuthorId)
-                .orElseThrow(() -> new RuntimeException("Author in not present"));
-
-        GitUserEntity gitUserEntity = userService.getByAuthorId(authorId);
+    private String getAuthorText(AuthorDto author) {
+        GitUserEntity gitUserEntity = userService.getByAuthorId(author.getId());
         String name = gitUserEntity.getName();
 
         return "<b>Author:</b> " + name + "\n";
     }
 
-    private String getReviewerText(List<Reviewer> reviewers) {
-        Reviewer reviewer = reviewers.stream()
-                .findFirst()
-                .orElse(null);
-        String reviewerName = Optional.ofNullable(reviewer)
-                .map(Reviewer::getName)
-                .orElse("");
-
+    private String getReviewerText(String reviewerName) {
         return "<b>Reviewer:</b> " + reviewerName + "\n\n";
     }
 
-    private String getBranchText(Optional<ObjectAttributes> objectAttributes) {
-        String sourceBranch = objectAttributes.map(ObjectAttributes::getSourceBranch)
-                .orElse("Source branch not present");
-        String targetBranch = objectAttributes.map(ObjectAttributes::getTargetBranch)
-                .orElse("Target branch not present");
-
+    private String getBranchText(String sourceBranch, String targetBranch) {
         return "<b>Source:</b> " + sourceBranch + " ==> <b>Target:</b> " + targetBranch + "\n\n";
     }
 
     private String getCreatedAtText() {
         //TODO Fix date deserializer
-//        OffsetDateTime createdAt = objectAttributes
-//                .map(ObjectAttributes::getCreatedAt)
-//                .orElse(OffsetDateTime.now());
+        //        OffsetDateTime createdAt = objectAttributes
+        //                .map(ObjectAttributes::getCreatedAt)
+        //                .orElse(OffsetDateTime.now());
         String createdAt = OffsetDateTime.now()
                 .format(DATE_TIME_FORMATTER);
 
         return "<b>Create date:</b> " + createdAt + "\n\n";
     }
 
-    private String getMrUrlText(Optional<ObjectAttributes> objectAttributes) {
-        String mrUrl = objectAttributes.map(ObjectAttributes::getUrl)
-                .orElse("");
-
-        return "<a href='" + mrUrl + "'><b><u>MR Hyperlink</u></b></a>";
+    private String getMrUrlText(String url) {
+        return "<a href='" + url + "'><b><u>MR Hyperlink</u></b></a>";
     }
 }

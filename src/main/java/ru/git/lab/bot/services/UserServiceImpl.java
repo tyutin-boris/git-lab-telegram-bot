@@ -3,7 +3,7 @@ package ru.git.lab.bot.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.git.lab.bot.api.mr.User;
+import ru.git.lab.bot.dto.UserDto;
 import ru.git.lab.bot.mappers.UserMapper;
 import ru.git.lab.bot.model.entities.GitUserEntity;
 import ru.git.lab.bot.model.repository.UserRepository;
@@ -17,10 +17,11 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
+
     private final UserRepository userRepository;
 
     @Override
-    public void saveUserIfNotExist(User user) {
+    public void saveUserIfNotExist(UserDto user) {
         Optional.ofNullable(user)
                 .ifPresent(u -> {
                     if (!userRepository.existsByGitIdAndUsernameAndEmail(u.getId(), u.getUsername(), u.getEmail())) {
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public GitUserEntity getByAuthorId(Long id) {
-        return userRepository.findByGitId(id).orElseThrow(() -> new RuntimeException("User not found id: " + id));
+        return userRepository.findByGitId(id)
+                .orElseThrow(() -> new RuntimeException("User not found id: " + id));
     }
 }
