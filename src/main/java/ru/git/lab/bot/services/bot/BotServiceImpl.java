@@ -41,7 +41,7 @@ public class BotServiceImpl implements BotService {
 
 
         switch (chatType) {
-            case PRIVATE:
+            case PRIVATE:asdfasdf
                 tgUserService.save(message.getFrom());
 
             case GROUP:
