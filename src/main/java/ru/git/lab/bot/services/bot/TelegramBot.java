@@ -6,11 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.git.lab.bot.config.BotConfig;
+import ru.git.lab.bot.dto.ChatResponse;
 import ru.git.lab.bot.services.bot.api.BotService;
 
 import java.util.List;
@@ -43,11 +45,13 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update recivedUpdate) {
         log.debug("Start handling update event");
 
-        Integer updateId = Optional.ofNullable(recivedUpdate)
+        Optional<ChatResponse> response = Optional.ofNullable(recivedUpdate)
                 .map(botService::handleReceivedUpdate)
                 .orElseThrow(() -> new RuntimeException("Update is null"));
 
-        log.debug("End handling update with id " + updateId);
+        response.ifPresent(r -> sendMessage(r.getText(), r.getChatId()));
+
+        log.debug("End handling update with id " + recivedUpdate.getUpdateId());
     }
 
     @Override
@@ -69,5 +73,18 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void onRegister() {
         log.info("Bot was registered");
         super.onRegister();
+    }
+
+    public void sendMessage(String text, Long chatId) {
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText(text);
+        message.enableHtml(true);
+
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException("Send message failed", e);
+        }
     }
 }

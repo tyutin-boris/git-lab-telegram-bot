@@ -7,13 +7,12 @@ import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.ChatMemberUpdated;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.git.lab.bot.dto.ChatResponse;
 import ru.git.lab.bot.dto.ChatType;
 import ru.git.lab.bot.services.bot.api.BotService;
-import ru.git.lab.bot.services.chat.api.ChannelChatService;
-import ru.git.lab.bot.services.chat.api.GroupChatService;
-import ru.git.lab.bot.services.chat.api.PrivateChatService;
-import ru.git.lab.bot.services.chat.api.SupergroupChatService;
+import ru.git.lab.bot.services.chat.api.ChatService;
 
+import java.util.Map;
 import java.util.Optional;
 
 import static ru.git.lab.bot.dto.ChatType.stringToChatType;
@@ -23,27 +22,14 @@ import static ru.git.lab.bot.dto.ChatType.stringToChatType;
 @RequiredArgsConstructor
 public class BotServiceImpl implements BotService {
 
-    private final ChannelChatService channelChatService;
-
-    private final PrivateChatService privateChatService;
-
-    private final GroupChatService groupChatService;
-
-    private final SupergroupChatService supergroupChatService;
+    private final Map<ChatType, ChatService> chatService;
 
     @Override
-    public Integer handleReceivedUpdate(Update update) {
+    public Optional<ChatResponse> handleReceivedUpdate(Update update) {
         log.debug("Update id: " + update.getUpdateId());
-        Chat chat = getChat(update);
-        ChatType chatType = stringToChatType(chat.getType());
+        ChatType chatType = stringToChatType(getChat(update).getType());
 
-        switch (chatType) {
-            case PRIVATE -> privateChatService.handle(update.getMessage());
-            case GROUP -> groupChatService.handle();
-            case CHANNEL -> channelChatService.handle(update.getMyChatMember());
-            case SUPERGROUP -> supergroupChatService.handle();
-        }
-        return update.getUpdateId();
+        return chatService.get(chatType).handle(update);
     }
 
     private Chat getChat(Update update) {

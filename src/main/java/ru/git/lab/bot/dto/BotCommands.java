@@ -10,7 +10,7 @@ import java.util.Optional;
 public enum BotCommands {
 
     START("/start", "first command"),
-    ADD_GIT_PROJECT("/add_me_to_git_lab_project", "add you to git project group");
+    JOIN_TO_DEVELOP_TEAM("/join_me_to_developer_team", "Add you to develop team");
 
     private final String command;
     private final String description;
