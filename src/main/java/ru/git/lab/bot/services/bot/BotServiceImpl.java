@@ -8,9 +8,9 @@ import org.telegram.telegrambots.meta.api.objects.ChatMemberUpdated;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.git.lab.bot.dto.ChatType;
-import ru.git.lab.bot.services.api.TgUserService;
 import ru.git.lab.bot.services.bot.api.BotService;
-import ru.git.lab.bot.services.chat.api.ChannelService;
+import ru.git.lab.bot.services.chat.api.ChannelChatService;
+import ru.git.lab.bot.services.chat.api.PrivateChatService;
 
 import java.util.Optional;
 
@@ -21,28 +21,25 @@ import static ru.git.lab.bot.dto.ChatType.stringToChatType;
 @RequiredArgsConstructor
 public class BotServiceImpl implements BotService {
 
-    private final ChannelService channelService;
+    private final ChannelChatService channelChatService;
 
-    private final TgUserService tgUserService;
+
+    private final PrivateChatService privateChatService;
 
     @Override
     public Integer handleReceivedUpdate(Update update) {
         log.debug("Update id: " + update.getUpdateId());
-
         Chat chat = getChat(update);
         ChatType chatType = stringToChatType(chat.getType());
-        Message message = update.getMessage();
 
         switch (chatType) {
             case PRIVATE:
-                tgUserService.save(message.getFrom());
+                privateChatService.handle(update.getMessage());
             case GROUP:
             case CHANNEL:
-                Optional.ofNullable(update.getMyChatMember())
-                        .ifPresent(channelService::handle);
+                channelChatService.handle(update.getMyChatMember());
             case SUPERGROUP:
         }
-
         return update.getUpdateId();
     }
 

@@ -9,6 +9,8 @@ import ru.git.lab.bot.model.entities.TgUserEntity;
 import ru.git.lab.bot.model.repository.TgUserRepository;
 import ru.git.lab.bot.services.api.TgUserService;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -19,24 +21,30 @@ public class TgUserServiceImpl implements TgUserService {
 
     @Override
     public void save(User user) {
-        saveUser(user);
+        Optional.ofNullable(user).map(this::saveUser)
+                .orElseThrow(() -> new RuntimeException("User no save because is is null"));
     }
 
     @Override
     public void saveUserIfNotExist(User user) {
-        Long userId = user.getId();
-        boolean existsById = tgUserRepository.existsById(userId);
+        boolean existsById = Optional.ofNullable(user)
+                .map(User::getId)
+                .map(tgUserRepository::existsById)
+                .orElseThrow(() -> new RuntimeException("User no save because is is null"));
 
         if (existsById) {
-            log.debug("User with id: " + userId + "exist");
+            log.debug("User with id: " + user.getId() + "exist");
         } else {
             saveUser(user);
         }
     }
 
-    private void saveUser(User user) {
+    private Long saveUser(User user) {
         TgUserEntity tgUserEntity = tgUserMapper.toEntity(user);
         tgUserRepository.save(tgUserEntity);
-        log.debug("Save tg user. id: " + user.getId() + ", username: " + user.getUserName());
+
+        Long userId = user.getId();
+        log.debug("Save tg user. id: " + userId + ", username: " + user.getUserName());
+        return userId;
     }
 }

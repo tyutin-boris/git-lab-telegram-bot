@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.*;
 import ru.git.lab.bot.dto.ChatType;
 import ru.git.lab.bot.services.api.TgUserService;
 import ru.git.lab.bot.services.bot.api.BotService;
-import ru.git.lab.bot.services.chat.api.ChannelService;
+import ru.git.lab.bot.services.chat.api.ChannelChatService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -22,7 +22,7 @@ public class BotServiceImplTest {
     private final int updateId = 1;
 
     @MockBean
-    private ChannelService channelService;
+    private ChannelChatService channelChatService;
 
     @MockBean
     private TgUserService tgUserService;

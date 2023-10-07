@@ -11,6 +11,7 @@ import ru.git.lab.bot.model.repository.TgUserRepository;
 import ru.git.lab.bot.services.api.TgUserService;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
@@ -53,6 +54,34 @@ public class TgUserServiceImplTest {
 
         //then
         verify(tgUserRepository, atLeastOnce()).save(any());
+    }
+
+
+    @Test
+    public void shouldThrowExceptionWhenSaveTgUserIsNull() {
+        //given
+        String expected = "User no save because is is null";
+
+        //when
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> sut.save(null));
+
+        //then
+        String actual = exception.getMessage();
+        assertThat(actual).isEqualTo(expected);
+    }
+
+
+    @Test
+    public void shouldThrowExceptionWhenSaveIfNotExistTgUserIsNull() {
+        //given
+        String expected = "User no save because is is null";
+
+        //when
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> sut.saveUserIfNotExist(null));
+
+        //then
+        String actual = exception.getMessage();
+        assertThat(actual).isEqualTo(expected);
     }
 
     private User getUser() {
