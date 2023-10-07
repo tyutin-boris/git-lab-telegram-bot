@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.git.lab.bot.mappers.TgUserMapper;
 import ru.git.lab.bot.model.entities.TgUserEntity;
+import ru.git.lab.bot.model.repository.TgUserRepository;
 import ru.git.lab.bot.services.api.TgUserService;
 
 @Slf4j
@@ -14,9 +15,12 @@ import ru.git.lab.bot.services.api.TgUserService;
 public class TgUserServiceImpl implements TgUserService {
 
     private final TgUserMapper tgUserMapper;
+    private final TgUserRepository tgUserRepository;
 
     @Override
     public void save(User user) {
         TgUserEntity tgUserEntity = tgUserMapper.toEntity(user);
+        tgUserRepository.save(tgUserEntity);
+        log.debug("Save tg user. id: " + user.getId() + ", username: " + user.getUserName());
     }
 }
