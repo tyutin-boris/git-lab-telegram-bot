@@ -5,4 +5,6 @@ import org.telegram.telegrambots.meta.api.objects.User;
 public interface TgUserService {
 
     void save(User user);
+
+    void saveUserIfNotExist(User user);
 }

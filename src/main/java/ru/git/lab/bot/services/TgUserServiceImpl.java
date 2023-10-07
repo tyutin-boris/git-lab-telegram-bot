@@ -19,6 +19,22 @@ public class TgUserServiceImpl implements TgUserService {
 
     @Override
     public void save(User user) {
+        saveUser(user);
+    }
+
+    @Override
+    public void saveUserIfNotExist(User user) {
+        Long userId = user.getId();
+        boolean existsById = tgUserRepository.existsById(userId);
+
+        if (existsById) {
+            log.debug("User with id: " + userId + "exist");
+        } else {
+            saveUser(user);
+        }
+    }
+
+    private void saveUser(User user) {
         TgUserEntity tgUserEntity = tgUserMapper.toEntity(user);
         tgUserRepository.save(tgUserEntity);
         log.debug("Save tg user. id: " + user.getId() + ", username: " + user.getUserName());
