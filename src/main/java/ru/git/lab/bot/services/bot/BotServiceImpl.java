@@ -7,10 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.ChatMemberUpdated;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
 import ru.git.lab.bot.dto.ChatType;
-import ru.git.lab.bot.mappers.TgUserMapper;
-import ru.git.lab.bot.model.entities.TgUserEntity;
 import ru.git.lab.bot.services.api.TgUserService;
 import ru.git.lab.bot.services.bot.api.BotService;
 import ru.git.lab.bot.services.chat.api.ChannelService;
@@ -29,21 +26,16 @@ public class BotServiceImpl implements BotService {
     private final TgUserService tgUserService;
 
     @Override
-    public int handleReceivedUpdate(Update update) {
+    public Integer handleReceivedUpdate(Update update) {
         log.debug("Update id: " + update.getUpdateId());
 
         Chat chat = getChat(update);
         ChatType chatType = stringToChatType(chat.getType());
-
         Message message = update.getMessage();
 
-        String text = message.getText();
-
-
         switch (chatType) {
-            case PRIVATE:asdfasdf
+            case PRIVATE:
                 tgUserService.save(message.getFrom());
-
             case GROUP:
             case CHANNEL:
                 Optional.ofNullable(update.getMyChatMember())
