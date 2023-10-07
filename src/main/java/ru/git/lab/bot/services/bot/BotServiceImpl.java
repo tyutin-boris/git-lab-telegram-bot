@@ -10,7 +10,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.git.lab.bot.dto.ChatType;
 import ru.git.lab.bot.services.bot.api.BotService;
 import ru.git.lab.bot.services.chat.api.ChannelChatService;
+import ru.git.lab.bot.services.chat.api.GroupChatService;
 import ru.git.lab.bot.services.chat.api.PrivateChatService;
+import ru.git.lab.bot.services.chat.api.SupergroupChatService;
 
 import java.util.Optional;
 
@@ -23,8 +25,11 @@ public class BotServiceImpl implements BotService {
 
     private final ChannelChatService channelChatService;
 
-
     private final PrivateChatService privateChatService;
+
+    private final GroupChatService groupChatService;
+
+    private final SupergroupChatService supergroupChatService;
 
     @Override
     public Integer handleReceivedUpdate(Update update) {
@@ -33,12 +38,10 @@ public class BotServiceImpl implements BotService {
         ChatType chatType = stringToChatType(chat.getType());
 
         switch (chatType) {
-            case PRIVATE:
-                privateChatService.handle(update.getMessage());
-            case GROUP:
-            case CHANNEL:
-                channelChatService.handle(update.getMyChatMember());
-            case SUPERGROUP:
+            case PRIVATE -> privateChatService.handle(update.getMessage());
+            case GROUP -> groupChatService.handle();
+            case CHANNEL -> channelChatService.handle(update.getMyChatMember());
+            case SUPERGROUP -> supergroupChatService.handle();
         }
         return update.getUpdateId();
     }

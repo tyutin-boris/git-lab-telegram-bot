@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import java.util.Arrays;
 import java.util.List;
 
-import static ru.git.lab.bot.dto.BotCommandEnum.ADD_GIT_PROJECT;
+import static ru.git.lab.bot.dto.BotCommands.ADD_GIT_PROJECT;
 
 @Configuration
 public class BotCommandConfig {
