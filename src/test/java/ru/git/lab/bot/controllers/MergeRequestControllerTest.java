@@ -22,7 +22,7 @@ import ru.git.lab.bot.model.entities.MessageEntity;
 import ru.git.lab.bot.model.repository.ApproveRepository;
 import ru.git.lab.bot.model.repository.ChatRepository;
 import ru.git.lab.bot.model.repository.MessageRepository;
-import ru.git.lab.bot.model.repository.UserRepository;
+import ru.git.lab.bot.model.repository.GetUserRepository;
 import ru.git.lab.bot.services.mr.handlers.MrApprovedEventHandler;
 import ru.git.lab.bot.services.mr.handlers.MrCloseEventHandler;
 import ru.git.lab.bot.services.mr.handlers.MrMergeEventHandler;
@@ -44,7 +44,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -65,7 +64,7 @@ public class MergeRequestControllerTest {
     private ChatRepository chatRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private GetUserRepository getUserRepository;
 
     @Autowired
     private MessageRepository messageRepository;
@@ -279,7 +278,7 @@ public class MergeRequestControllerTest {
     }
 
     private void checkUserSave(User expected) {
-        GitUserEntity actual = userRepository.findByGitId(expected.getId())
+        GitUserEntity actual = getUserRepository.findByGitId(expected.getId())
                 .orElse(null);
 
         assertThat(actual).isNotNull();

@@ -15,7 +15,7 @@ import ru.git.lab.bot.dto.AuthorDto;
 import ru.git.lab.bot.dto.MergeRequestDto;
 import ru.git.lab.bot.dto.UserDto;
 import ru.git.lab.bot.model.entities.GitUserEntity;
-import ru.git.lab.bot.services.api.UserService;
+import ru.git.lab.bot.services.api.GitUserService;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ class MergeRequestMapperTest {
     private MergeRequestMapper sut;
 
     @MockBean
-    private UserService userService;
+    private GitUserService gitUserService;
 
     @Test
     public void shouldMapToDto() {
@@ -50,7 +50,7 @@ class MergeRequestMapperTest {
         GitUserEntity user = new GitUserEntity();
         user.setName("name");
 
-        when(userService.getByAuthorId(any())).thenReturn(user);
+        when(gitUserService.getByAuthorId(any())).thenReturn(user);
     }
 
     private MergeRequestDto getMergeRequestDto() {

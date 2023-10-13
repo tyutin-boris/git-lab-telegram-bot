@@ -1,13 +1,11 @@
 package ru.git.lab.bot.model.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -18,10 +16,8 @@ import java.util.UUID;
 public class GitUserEntity {
 
     @Id
-    private UUID id = UUID.randomUUID();
-
     @Column(name = "git_id")
-    private long gitId;
+    private Long gitId;
 
     @Column(name = "name")
     private String name;
@@ -31,4 +27,8 @@ public class GitUserEntity {
 
     @Column(name = "email")
     private String email;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "chats", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "id"))
+    private Set<ChatEntity> chats;
 }
