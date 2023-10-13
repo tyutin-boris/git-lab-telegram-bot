@@ -8,9 +8,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface GetUserRepository extends JpaRepository<GitUserEntity, UUID> {
+public interface GitUserRepository extends JpaRepository<GitUserEntity, UUID> {
 
     boolean existsByGitIdAndUsernameAndEmail(Long gitId, String username, String email);
 
     Optional<GitUserEntity> findByGitId(Long authorId);
+
+    Optional<GitUserEntity> findByUsername(String username);
 }

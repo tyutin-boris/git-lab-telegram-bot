@@ -29,7 +29,7 @@ public class PrivateChatServiceImpl implements ChatService {
     private final Map<BotCommands, BotCommandService> botCommandServices;
 
     private final PrivateChatMessageRepository privateChatMessageRepository;
-    private  final GitUserChatRepository gitUserChatRepository;
+    private final GitUserChatRepository gitUserChatRepository;
 
 
     @Override
@@ -38,34 +38,11 @@ public class PrivateChatServiceImpl implements ChatService {
         checkNotNull(message);
 
         String text = getText(message);
-        BotCommands botCommand = getBotCommands(text);
+        Optional<BotCommands> botCommand = BotCommands.getCommand(text);
 
-        if (text.startsWith("/")) {
-            log.debug("Private service received command: " + botCommand.getCommand());
-            return botCommandServices.get(botCommand).handle(message);
-        }
-
-        Optional<PrivateChatMessageEntity> entity = privateChatMessageRepository.findFirstByChatIdAndTgUserIdByDesc(message.getChatId(), message.getFrom().getId());
-
-        if (entity.isPresent() && BotCommands.JOIN_TO_DEVELOP_TEAM.equals(entity.get().getBotCommand())) {
-            Integer stageStep = entity.get().getStageStep();
-            if (JoinToDeveloperTeamStage.RECEIVE_USERNAME.getStep() == stageStep) {
-                PrivateChatMessageEntity newEntity = new PrivateChatMessageEntity();
-                newEntity.setChatId(message.getChatId());
-                newEntity.setTgUserId(message.getFrom().getId());
-                newEntity.setBotCommand(BotCommands.JOIN_TO_DEVELOP_TEAM);
-                newEntity.setCreateDate(OffsetDateTime.now());
-                newEntity.setStageStep(JoinToDeveloperTeamStage.RECEIVE_USERNAME.getStep());
-                newEntity.setText(message.getText());
-                privateChatMessageRepository.save(newEntity);
-
-                Optional<GitUserEntity> gitUserEntity = gitUserChatRepository.findByUsername(message.getText());
-                if(gitUserEntity.isPresent()) {
-                    GitUserEntity gitUserEntity1 = gitUserEntity.get();
-                    //TODO Изменитьт на добавлление юсер наме.
-//                    gitUserEntity1.
-                }
-            }
+        if (botCommand.isPresent()) {
+            log.debug("Bot receive message: " + text);
+            return botCommandServices.get(botCommand.get()).handle(message);
         }
 
         return Optional.empty();
@@ -81,7 +58,6 @@ public class PrivateChatServiceImpl implements ChatService {
     }
 
     private BotCommands getBotCommands(String text) {
-        return BotCommands.getCommand(text).orElseThrow(() -> new RuntimeException("This command not present: " + text));
     }
 
     private static void checkNotNull(Message message) {

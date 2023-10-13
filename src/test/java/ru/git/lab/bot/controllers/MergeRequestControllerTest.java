@@ -22,7 +22,7 @@ import ru.git.lab.bot.model.entities.MessageEntity;
 import ru.git.lab.bot.model.repository.ApproveRepository;
 import ru.git.lab.bot.model.repository.ChatRepository;
 import ru.git.lab.bot.model.repository.MessageRepository;
-import ru.git.lab.bot.model.repository.GetUserRepository;
+import ru.git.lab.bot.model.repository.GitUserRepository;
 import ru.git.lab.bot.services.mr.handlers.MrApprovedEventHandler;
 import ru.git.lab.bot.services.mr.handlers.MrCloseEventHandler;
 import ru.git.lab.bot.services.mr.handlers.MrMergeEventHandler;
@@ -64,7 +64,7 @@ public class MergeRequestControllerTest {
     private ChatRepository chatRepository;
 
     @Autowired
-    private GetUserRepository getUserRepository;
+    private GitUserRepository gitUserRepository;
 
     @Autowired
     private MessageRepository messageRepository;
@@ -278,7 +278,7 @@ public class MergeRequestControllerTest {
     }
 
     private void checkUserSave(User expected) {
-        GitUserEntity actual = getUserRepository.findByGitId(expected.getId())
+        GitUserEntity actual = gitUserRepository.findByGitId(expected.getId())
                 .orElse(null);
 
         assertThat(actual).isNotNull();

@@ -28,6 +28,9 @@ public class GitUserEntity {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "tg_id")
+    private Long tgId;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "chats", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "id"))
     private Set<ChatEntity> chats;

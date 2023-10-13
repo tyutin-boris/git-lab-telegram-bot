@@ -26,4 +26,7 @@ public class TgUserEntity {
 
     @Column(name = "username")
     private String username;
+
+    @Column(name = "git_username")
+    private String gitUsername;
 }
