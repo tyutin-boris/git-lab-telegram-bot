@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS git_users (
     git_id BIGINT NOT NULL PRIMARY KEY,
     name VARCHAR NOT NULL,
-    username VARCHAR NOT NULL,
-    email VARCHAR NOT NULL
+    username VARCHAR NOT NULL UNIQUE,
+    email VARCHAR NOT NULL UNIQUE
 );

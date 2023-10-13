@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.git.lab.bot.dto.BotCommands;
 
+import java.time.OffsetDateTime;
+
 @Entity
 @Setter
 @Getter
@@ -17,11 +19,21 @@ public class PrivateChatMessageEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "tg_user_id")
+    private Long tgUserId;
 
-    private String test;
+    @Column(name = "chat_id")
+    private Long chatId;
+
+    @Column(name = "text")
+    private String text;
 
     @Enumerated(EnumType.STRING)
-    private BotCommands botCommands;
+    private BotCommands botCommand;
+
+    @Column(name = "stage_stap")
+    private Integer stageStep;
+
+    @Column(name = "create_date")
+    private OffsetDateTime createDate;
 }
