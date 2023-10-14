@@ -11,10 +11,10 @@ import ru.git.lab.bot.model.entities.GitUserEntity;
 public interface UserMapper extends AbstractMapper<GitUserEntity, UserDto> {
 
     @Override
-    @Mapping(source = "gitId", target = "id")
+    @Mapping(source = "id", target = "id")
     UserDto toDto(GitUserEntity gitUserEntity);
 
     @Override
-    @Mapping(source = "id", target = "gitId")
+    @Mapping(source = "id", target = "id")
     GitUserEntity toEntity(UserDto user);
 }

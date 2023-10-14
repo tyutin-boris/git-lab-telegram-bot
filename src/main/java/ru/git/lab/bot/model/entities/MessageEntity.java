@@ -19,7 +19,7 @@ public class MessageEntity {
 
     @Id
     @Column(nullable = false)
-    Long id;
+    Integer id;
 
     @Column(name = "chat_id", nullable = false)
     Long chatId;

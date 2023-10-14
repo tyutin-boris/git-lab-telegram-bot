@@ -56,11 +56,12 @@ public class CreateMrServiceImpl implements CreateMrService {
             return;
         }
 
-        Set<ChatEntity> chats = gitUserRepository.findByGitId(authorId)
-                .map(GitUserEntity::getChats)
-                .orElse(Collections.emptySet());
+//        Set<ChatEntity> chats = gitUserRepository.findByGitId(authorId)
+//                .map(GitUserEntity::getChats)
+//                .orElse(Collections.emptySet());
 
-        List<Long> chatIds = chats.stream().map(ChatEntity::getId).toList();
+//        List<Long> chatIds = chats.stream().map(ChatEntity::getId).toList();
+        List<Long> chatIds = Collections.emptyList();
 
         if (chatIds.isEmpty()) {
             log.debug("Chat list is empty, message not sant. " + mrIdAndAuthorIdLog);

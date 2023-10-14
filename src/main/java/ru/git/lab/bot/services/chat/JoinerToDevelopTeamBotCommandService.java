@@ -88,7 +88,7 @@ public class JoinerToDevelopTeamBotCommandService implements BotCommandService {
                     Optional<GitUserEntity> gitUserEntity = gitUserRepository.findByUsername(message.getText());
                     if (gitUserEntity.isPresent()) {
                         GitUserEntity gitUserEntity1 = gitUserEntity.get();
-                        gitUserEntity1.setTgId(message.getFrom().getId());
+//                        gitUserEntity1.setTgId(message.getFrom().getId());
                         gitUserRepository.save(gitUserEntity1);
                     }
                 }

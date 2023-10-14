@@ -68,7 +68,7 @@ public class MessageServiceImpl implements MessageService {
     private MessageEntity createMessage(Message message, MergeRequestDto mergeRequest) {
         MessageEntity messageEntity = new MessageEntity();
 
-        messageEntity.setId(message.getMessageId().longValue());
+        messageEntity.setId(message.getMessageId());
         messageEntity.setChatId(message.getChatId());
         messageEntity.setMrId(mergeRequest.getMrId());
         messageEntity.setAuthorId(mergeRequest.getAuthor().getId());

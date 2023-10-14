@@ -292,7 +292,6 @@ public class MergeRequestControllerTest {
         chatEntity.setId(chatId);
         chatEntity.setType(ChatType.CHANNEL);
         chatEntity.setTitle("test chat");
-        chatEntity.setCreateDate(OffsetDateTime.now());
 
         chatRepository.save(chatEntity);
     }

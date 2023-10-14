@@ -14,7 +14,6 @@ import ru.git.lab.bot.model.entities.ChatEntity;
 import ru.git.lab.bot.model.repository.ChatRepository;
 import ru.git.lab.bot.services.chat.api.ChatService;
 
-import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import static ru.git.lab.bot.dto.ChatType.stringToChatType;
@@ -66,7 +65,6 @@ public class ChannelChatServiceImpl implements ChatService {
         chatEntity.setId(chat.getId());
         chatEntity.setTitle(chat.getTitle());
         chatEntity.setType(stringToChatType(chat.getType()));
-        chatEntity.setCreateDate(OffsetDateTime.now());
         return chatEntity;
     }
 }
