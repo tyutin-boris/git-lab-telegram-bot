@@ -16,6 +16,5 @@ public interface UserMapper extends AbstractMapper<GitUserEntity, UserDto> {
 
     @Override
     @Mapping(source = "id", target = "gitId")
-    @Mapping(target = "id", ignore = true)
     GitUserEntity toEntity(UserDto user);
 }

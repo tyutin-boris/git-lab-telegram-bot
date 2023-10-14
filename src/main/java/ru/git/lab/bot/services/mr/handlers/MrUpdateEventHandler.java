@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.git.lab.bot.api.mr.Action;
-import ru.git.lab.bot.api.mr.ObjectAttributes;
 import ru.git.lab.bot.dto.MergeRequestDto;
 import ru.git.lab.bot.model.entities.MessageEntity;
 import ru.git.lab.bot.services.api.MessageService;
@@ -13,7 +12,6 @@ import ru.git.lab.bot.services.mr.handlers.api.MrEventHandler;
 import ru.git.lab.bot.services.senders.api.MessageSender;
 
 import static ru.git.lab.bot.api.mr.Action.UPDATE;
-import static ru.git.lab.bot.utils.ObjectAttributesUtils.getObjectAttributes;
 
 @Slf4j
 @Service
@@ -34,7 +32,7 @@ public class MrUpdateEventHandler implements MrEventHandler {
         String text = mrTextMessageService.createMergeRequestTextMessage(mergeRequest);
         MessageEntity message = messageService.getMessageByMrIdAndAuthorId(mrId, authorId);
 
-        messageSender.updateMessage(text, message.getChatId(), message.getMessageId());
+        messageSender.updateMessage(text, message.getChatId(), message.getId());
     }
 
     @Override

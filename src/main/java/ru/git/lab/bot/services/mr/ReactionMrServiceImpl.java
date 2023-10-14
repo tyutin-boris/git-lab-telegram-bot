@@ -33,6 +33,6 @@ public class ReactionMrServiceImpl implements ReactionMrService {
         String text = mrTextMessageService.createMergeRequestTextMessageWithApprove(mergeRequest, approvalsForMr);
 
         MessageEntity messageEntity = messageService.getMessageByMrIdAndAuthorId(mrId, authorId);
-        sender.updateMessage(text, messageEntity.getChatId(), messageEntity.getMessageId());
+        sender.updateMessage(text, messageEntity.getChatId(), messageEntity.getId());
     }
 }

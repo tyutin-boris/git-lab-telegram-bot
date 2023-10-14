@@ -16,6 +16,7 @@ import lombok.Setter;
 public class TgUserEntity {
 
     @Id
+    @Column(nullable = false)
     private Long id;
 
     @Column(name = "first_name")
@@ -24,9 +25,6 @@ public class TgUserEntity {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false)
     private String username;
-
-    @Column(name = "git_username")
-    private String gitUsername;
 }

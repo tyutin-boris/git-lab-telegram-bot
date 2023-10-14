@@ -16,24 +16,26 @@ import java.time.OffsetDateTime;
 public class PrivateChatMessageEntity {
 
     @Id
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "tg_user_id")
+    @Column(name = "tg_user_id", nullable = false)
     private Long tgUserId;
 
-    @Column(name = "chat_id")
+    @Column(name = "chat_id", nullable = false)
     private Long chatId;
 
     @Column(name = "text")
     private String text;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private BotCommands botCommand;
 
-    @Column(name = "stage_stap")
+    @Column(name = "stage_stap",nullable = false)
     private Integer stageStep;
 
-    @Column(name = "create_date")
+    @Column(name = "create_date", nullable = false)
     private OffsetDateTime createDate;
 }

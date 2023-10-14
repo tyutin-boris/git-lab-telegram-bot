@@ -97,6 +97,7 @@ public class JoinerToDevelopTeamBotCommandService implements BotCommandService {
                     .chatId(message.getChatId())
                     .text("Username успешно сохранен")
                     .build();
+
             return Optional.of(value);
         }
 

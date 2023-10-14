@@ -9,15 +9,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.git.lab.bot.dto.BotCommands;
 import ru.git.lab.bot.dto.ChatResponse;
 import ru.git.lab.bot.dto.ChatType;
-import ru.git.lab.bot.dto.JoinToDeveloperTeamStage;
-import ru.git.lab.bot.model.entities.GitUserEntity;
 import ru.git.lab.bot.model.entities.PrivateChatMessageEntity;
-import ru.git.lab.bot.model.repository.GitUserChatRepository;
 import ru.git.lab.bot.model.repository.PrivateChatMessageRepository;
 import ru.git.lab.bot.services.chat.api.BotCommandService;
 import ru.git.lab.bot.services.chat.api.ChatService;
 
-import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.Optional;
 
@@ -27,10 +23,7 @@ import java.util.Optional;
 public class PrivateChatServiceImpl implements ChatService {
 
     private final Map<BotCommands, BotCommandService> botCommandServices;
-
     private final PrivateChatMessageRepository privateChatMessageRepository;
-    private final GitUserChatRepository gitUserChatRepository;
-
 
     @Override
     public Optional<ChatResponse> handle(Update update) {
@@ -38,6 +31,14 @@ public class PrivateChatServiceImpl implements ChatService {
         checkNotNull(message);
 
         String text = getText(message);
+        Optional<PrivateChatMessageEntity> privateChatMessage = privateChatMessageRepository
+                .findFirstByChatIdAndTgUserIdByDesc(message.getChatId(), message.getFrom()
+                        .getId());
+
+        if(privateChatMessage.isPresent()) {
+
+        }
+
         Optional<BotCommands> botCommand = BotCommands.getCommand(text);
 
         if (botCommand.isPresent()) {
@@ -55,9 +56,6 @@ public class PrivateChatServiceImpl implements ChatService {
 
     private String getText(Message message) {
         return Optional.ofNullable(message.getText()).orElse(StringUtils.EMPTY);
-    }
-
-    private BotCommands getBotCommands(String text) {
     }
 
     private static void checkNotNull(Message message) {
