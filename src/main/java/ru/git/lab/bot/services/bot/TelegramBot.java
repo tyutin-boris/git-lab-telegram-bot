@@ -10,11 +10,17 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.git.lab.bot.config.BotConfig;
 import ru.git.lab.bot.dto.ChatResponse;
 import ru.git.lab.bot.services.bot.api.BotService;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -80,6 +86,21 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.setChatId(chatId);
         message.setText(text);
         message.enableHtml(true);
+
+        InlineKeyboardButton inlinekeyboardButton = new InlineKeyboardButton();
+        inlinekeyboardButton.setCallbackData("buttom");
+        inlinekeyboardButton.setText("next joke ");
+
+        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        rowInline.add(inlinekeyboardButton);
+
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        rowsInline.add(rowInline);
+
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        markupInline.setKeyboard(rowsInline);
+
+        message.setReplyMarkup(markupInline);
 
         try {
             execute(message);

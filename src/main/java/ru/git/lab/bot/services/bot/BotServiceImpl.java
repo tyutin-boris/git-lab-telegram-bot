@@ -3,10 +3,7 @@ package ru.git.lab.bot.services.bot;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.Chat;
-import org.telegram.telegrambots.meta.api.objects.ChatMemberUpdated;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.*;
 import ru.git.lab.bot.dto.ChatResponse;
 import ru.git.lab.bot.dto.ChatType;
 import ru.git.lab.bot.services.bot.api.BotService;
@@ -47,8 +44,17 @@ public class BotServiceImpl implements BotService {
         if (chatFormMember.isPresent()) {
             log.debug("Get chat from my member");
             return chatFormMember.get();
-        } else {
-            throw new RuntimeException("Chat not found. Update id " + update.getUpdateId());
         }
+
+        Optional<Chat> chatFomCallback = Optional.ofNullable(update.getCallbackQuery())
+                .map(CallbackQuery::getMessage)
+                .map(Message::getChat);
+
+        if (chatFomCallback.isPresent()) {
+            log.debug("Get chat from callback");
+            return chatFomCallback.get();
+        }
+
+        throw new RuntimeException("Chat not found. Update id " + update.getUpdateId());
     }
 }
