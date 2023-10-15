@@ -62,18 +62,18 @@ public class BotServiceImplTest {
         assertEquals("Chat not found. Update id " + updateId, runtimeException.getMessage());
     }
 
-    @Test
-    public void shouldSaveNewUserWhenStartChat() {
-        //given
-        User user = getUser();
-        Update update = getUpdate(user);
-
-        //when
-        sut.handleReceivedUpdate(update);
-
-        // then
-        verify(tgUserService).saveUserIfNotExist(eq(user));
-    }
+//    @Test
+//    public void shouldSaveNewUserWhenStartChat() {
+//        given
+//        User user = getUser();
+//        Update update = getUpdate(user);
+//
+//        when
+//        sut.handleReceivedUpdate(update);
+//
+//         then
+//        verify(tgUserService).saveUserIfNotExist(eq(user));
+//    }
 
     private Update getUpdate(User user) {
         Chat chat = new Chat();

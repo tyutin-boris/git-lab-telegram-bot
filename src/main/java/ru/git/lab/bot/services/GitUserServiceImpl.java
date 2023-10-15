@@ -24,7 +24,7 @@ public class GitUserServiceImpl implements GitUserService {
     public void saveUserIfNotExist(UserDto user) {
         Optional.ofNullable(user)
                 .ifPresent(u -> {
-                    if (!gitUserRepository.existsByGitIdAndUsernameAndEmail(u.getId(), u.getUsername(), u.getEmail())) {
+                    if (!gitUserRepository.existsByIdAndUsernameAndEmail(u.getId(), u.getUsername(), u.getEmail())) {
                         GitUserEntity gitUserEntity = userMapper.toEntity(user);
                         gitUserRepository.save(gitUserEntity);
                     }
@@ -33,7 +33,7 @@ public class GitUserServiceImpl implements GitUserService {
 
     @Override
     public GitUserEntity getByAuthorId(Long id) {
-        return gitUserRepository.findByGitId(id)
+        return gitUserRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found id: " + id));
     }
 }

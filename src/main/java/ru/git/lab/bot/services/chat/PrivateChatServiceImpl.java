@@ -31,13 +31,13 @@ public class PrivateChatServiceImpl implements ChatService {
         checkNotNull(message);
 
         String text = getText(message);
-        Optional<PrivateChatMessageEntity> privateChatMessage = privateChatMessageRepository
-                .findFirstByChatIdAndTgUserIdByDesc(message.getChatId(), message.getFrom()
-                        .getId());
-
-        if(privateChatMessage.isPresent()) {
-
-        }
+//        Optional<PrivateChatMessageEntity> privateChatMessage = privateChatMessageRepository
+//                .findFirstByChatIdAndTgUserIdByDesc(message.getChatId(), message.getFrom()
+//                        .getId());
+//
+//        if(privateChatMessage.isPresent()) {
+//
+//        }
 
         Optional<BotCommands> botCommand = BotCommands.getCommand(text);
 

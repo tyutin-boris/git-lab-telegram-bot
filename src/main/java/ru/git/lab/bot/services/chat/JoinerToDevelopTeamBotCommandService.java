@@ -36,70 +36,70 @@ public class JoinerToDevelopTeamBotCommandService implements BotCommandService {
     @Override
     @Transactional
     public Optional<ChatResponse> handle(Message message) {
-        if (message == null) {
-            return Optional.empty();
-        }
+//        if (message == null) {
+//            return Optional.empty();
+//        }
+//
+//        String text = getText(message);
+//
+//        if (StringUtils.isBlank(text)) {
+//            return Optional.empty();
+//        }
+//
+//        if (text.startsWith("/")) {
+//            Long userId = Optional.ofNullable(message.getFrom()).map(User::getId)
+//                    .orElseThrow(() -> new RuntimeException("User id not found"));
+//
+//            boolean userExist = userRepository.existsById(userId);
+//
+//            if (userExist) {
+//                ChatResponse response = ChatResponse.builder()
+//                        .chatId(message.getChatId())
+//                        .text("Пожалуйста ввидите свой usarname из gitlab")
+//                        .build();
+//
+//                PrivateChatMessageEntity entity = new PrivateChatMessageEntity();
+//                entity.setChatId(message.getChatId());
+//                entity.setTgUserId(userId);
+//                entity.setBotCommand(getHandlingCommand());
+//                entity.setCreateDate(OffsetDateTime.now());
+//                entity.setStageStep(JoinToDeveloperTeamStage.REQUEST_USERNAME.getStep());
+//                privateChatMessageRepository.save(entity);
+//
+//                return Optional.of(response);
+//            }
+//        } else {
 
-        String text = getText(message);
+//            Optional<PrivateChatMessageEntity> entity = privateChatMessageRepository.findFirstByChatIdAndTgUserIdByDesc(message.getChatId(), message.getFrom().getId());
 
-        if (StringUtils.isBlank(text)) {
-            return Optional.empty();
-        }
-
-        if (text.startsWith("/")) {
-            Long userId = Optional.ofNullable(message.getFrom()).map(User::getId)
-                    .orElseThrow(() -> new RuntimeException("User id not found"));
-
-            boolean userExist = userRepository.existsById(userId);
-
-            if (userExist) {
-                ChatResponse response = ChatResponse.builder()
-                        .chatId(message.getChatId())
-                        .text("Пожалуйста ввидите свой usarname из gitlab")
-                        .build();
-
-                PrivateChatMessageEntity entity = new PrivateChatMessageEntity();
-                entity.setChatId(message.getChatId());
-                entity.setTgUserId(userId);
-                entity.setBotCommand(getHandlingCommand());
-                entity.setCreateDate(OffsetDateTime.now());
-                entity.setStageStep(JoinToDeveloperTeamStage.REQUEST_USERNAME.getStep());
-                privateChatMessageRepository.save(entity);
-
-                return Optional.of(response);
-            }
-        } else {
-
-            Optional<PrivateChatMessageEntity> entity = privateChatMessageRepository.findFirstByChatIdAndTgUserIdByDesc(message.getChatId(), message.getFrom().getId());
-
-            if (entity.isPresent() && BotCommands.JOIN_TO_DEVELOP_TEAM.equals(entity.get().getBotCommand())) {
-                Integer stageStep = entity.get().getStageStep();
-                if (JoinToDeveloperTeamStage.RECEIVE_USERNAME.getStep() == stageStep) {
-
-                    PrivateChatMessageEntity newEntity = new PrivateChatMessageEntity();
-                    newEntity.setChatId(message.getChatId());
-                    newEntity.setTgUserId(message.getFrom().getId());
-                    newEntity.setBotCommand(BotCommands.JOIN_TO_DEVELOP_TEAM);
-                    newEntity.setCreateDate(OffsetDateTime.now());
-                    newEntity.setStageStep(JoinToDeveloperTeamStage.RECEIVE_USERNAME.getStep());
-                    newEntity.setText(message.getText());
-                    privateChatMessageRepository.save(newEntity);
-
-                    Optional<GitUserEntity> gitUserEntity = gitUserRepository.findByUsername(message.getText());
-                    if (gitUserEntity.isPresent()) {
-                        GitUserEntity gitUserEntity1 = gitUserEntity.get();
+//            if (entity.isPresent() && BotCommands.JOIN_TO_DEVELOP_TEAM.equals(entity.get().getBotCommand())) {
+//                Integer stageStep = entity.get().getStageStep();
+//                if (JoinToDeveloperTeamStage.RECEIVE_USERNAME.getStep() == stageStep) {
+//
+//                    PrivateChatMessageEntity newEntity = new PrivateChatMessageEntity();
+//                    newEntity.setChatId(message.getChatId());
+//                    newEntity.setTgUserId(message.getFrom().getId());
+//                    newEntity.setBotCommand(BotCommands.JOIN_TO_DEVELOP_TEAM);
+//                    newEntity.setCreateDate(OffsetDateTime.now());
+//                    newEntity.setStageStep(JoinToDeveloperTeamStage.RECEIVE_USERNAME.getStep());
+//                    newEntity.setText(message.getText());
+//                    privateChatMessageRepository.save(newEntity);
+//
+//                    Optional<GitUserEntity> gitUserEntity = gitUserRepository.findByUsername(message.getText());
+//                    if (gitUserEntity.isPresent()) {
+//                        GitUserEntity gitUserEntity1 = gitUserEntity.get();
 //                        gitUserEntity1.setTgId(message.getFrom().getId());
-                        gitUserRepository.save(gitUserEntity1);
-                    }
-                }
-            }
-            ChatResponse value = ChatResponse.builder()
-                    .chatId(message.getChatId())
-                    .text("Username успешно сохранен")
-                    .build();
+//                        gitUserRepository.save(gitUserEntity1);
+//                    }
+//                }
+//            }
+//            ChatResponse value = ChatResponse.builder()
+//                    .chatId(message.getChatId())
+//                    .text("Username успешно сохранен")
+//                    .build();
 
-            return Optional.of(value);
-        }
+//            return Optional.of(value);
+//        }
 
         return Optional.empty();
     }

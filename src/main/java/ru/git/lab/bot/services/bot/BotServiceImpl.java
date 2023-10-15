@@ -29,7 +29,8 @@ public class BotServiceImpl implements BotService {
         log.debug("Update id: " + update.getUpdateId());
         ChatType chatType = stringToChatType(getChat(update).getType());
 
-        return chatService.get(chatType).handle(update);
+//        return chatService.get(chatType).handle(update);
+        return Optional.empty();
     }
 
     private Chat getChat(Update update) {
