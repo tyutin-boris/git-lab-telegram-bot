@@ -17,7 +17,7 @@ public class PrivateChatMessageEntity {
 
     @Id
     @Column(nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(name = "tg_user_id", nullable = false)
@@ -33,7 +33,7 @@ public class PrivateChatMessageEntity {
     @Column(nullable = false)
     private BotCommands botCommand;
 
-    @Column(name = "stage_stap", nullable = false)
+    @Column(name = "scenarios_task_number", nullable = false)
     private Integer scenariosTaskNumber;
 
     @Column(name = "create_date", nullable = false)

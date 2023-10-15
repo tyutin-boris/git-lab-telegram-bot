@@ -14,7 +14,7 @@ public enum BotCommands {
 
     START("/start", "First command", new HashMap<>()),
     ADD_GIT_USERNAME("/add_git_username", "Add git username", getScenariosForAddGitUsername()),
-    ADD_CHAT_TO_RECEIVE_GITLAB_NOTIFICATIONS("/add_chat_to_receive_gitlab_notifications",
+    ADD_CHAT_TO_RECEIVE_GITLAB_NOTIFICATIONS("/add_chat_name",
             "Add chat to receive notifications from gitlab", getScenariosForAddChat());
 
     private final String command;

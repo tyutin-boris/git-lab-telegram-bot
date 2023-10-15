@@ -52,6 +52,7 @@ public class AddChatToReceiveGitLabNotification implements BotCommunicationScena
             entity.setBotCommand(getHandlingCommand());
             entity.setScenariosTaskNumber(taskNumber);
             entity.setCreateDate(OffsetDateTime.now());
+
             privateChatMessageRepository.save(entity);
 
             return Optional.of(response);
