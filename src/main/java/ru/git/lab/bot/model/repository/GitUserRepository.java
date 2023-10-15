@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface GitUserRepository extends JpaRepository<GitUserEntity, Long> {
 
     boolean existsByIdAndUsernameAndEmail(Long gitId, String username, String email);
+
+    Optional<GitUserEntity> findByUsername(String username);
 }

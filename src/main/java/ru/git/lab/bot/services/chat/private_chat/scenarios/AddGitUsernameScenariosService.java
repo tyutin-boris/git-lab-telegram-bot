@@ -1,6 +1,5 @@
 package ru.git.lab.bot.services.chat.private_chat.scenarios;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -9,14 +8,21 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.git.lab.bot.dto.BotCommands;
 import ru.git.lab.bot.dto.ChatResponse;
+import ru.git.lab.bot.model.entities.GitUserEntity;
 import ru.git.lab.bot.model.entities.PrivateChatMessageEntity;
+import ru.git.lab.bot.model.entities.TgGitUsersEntity;
 import ru.git.lab.bot.model.repository.GitUserRepository;
 import ru.git.lab.bot.model.repository.PrivateChatMessageRepository;
+import ru.git.lab.bot.model.repository.TgGitUsersRepository;
 import ru.git.lab.bot.model.repository.TgUserRepository;
 import ru.git.lab.bot.services.chat.api.BotCommunicationScenariosService;
 
 import java.time.OffsetDateTime;
+import java.util.Objects;
 import java.util.Optional;
+
+import static ru.git.lab.bot.services.chat.private_chat.scenarios.PrivateChatScenariosTask.RECEIVE_USERNAME;
+import static ru.git.lab.bot.services.chat.private_chat.scenarios.PrivateChatScenariosTask.REQUEST_USERNAME;
 
 ;
 
@@ -26,12 +32,11 @@ import java.util.Optional;
 public class AddGitUsernameScenariosService implements BotCommunicationScenariosService {
 
     private final TgUserRepository tgUserRepository;
+    private final GitUserRepository gitUserRepository;
+    private final TgGitUsersRepository tgGitUsersRepository;
     private final PrivateChatMessageRepository privateChatMessageRepository;
 
-    private final GitUserRepository gitUserRepository;
-
     @Override
-    @Transactional
     public Optional<ChatResponse> handleFirstCommand(Message message) {
         if (message == null) {
             return Optional.empty();
@@ -43,62 +48,78 @@ public class AddGitUsernameScenariosService implements BotCommunicationScenarios
             return Optional.empty();
         }
 
-        if (text.startsWith("/")) {
-            Long userId = Optional.ofNullable(message.getFrom()).map(User::getId)
-                    .orElseThrow(() -> new RuntimeException("User id not found"));
+        Long userId = Optional.ofNullable(message.getFrom()).map(User::getId)
+                .orElseThrow(() -> new RuntimeException("User id not found"));
 
-            boolean userExist = tgUserRepository.existsById(userId);
+        boolean userExist = tgUserRepository.existsById(userId);
 
-            if (userExist) {
-                ChatResponse response = ChatResponse.builder()
-                        .chatId(message.getChatId())
-                        .text("Пожалуйста ввидите свой usarname из gitlab")
-                        .build();
+        if (userExist) {
 
-                PrivateChatMessageEntity entity = new PrivateChatMessageEntity();
-                entity.setChatId(message.getChatId());
-                entity.setTgUserId(userId);
-                entity.setBotCommand(getHandlingCommand());
-                entity.setCreateDate(OffsetDateTime.now());
-                entity.setScenariosTaskNumber(PrivateChatScenariosTask.REQUEST_USERNAME.getNumber());
-                privateChatMessageRepository.save(entity);
+            PrivateChatMessageEntity entity = new PrivateChatMessageEntity();
+            entity.setChatId(message.getChatId());
+            entity.setTgUserId(userId);
+            entity.setBotCommand(getHandlingCommand());
+            entity.setCreateDate(OffsetDateTime.now());
+            entity.setScenariosTaskNumber(REQUEST_USERNAME.getNumber());
 
-                return Optional.of(response);
-            }
+            privateChatMessageRepository.save(entity);
+
+            ChatResponse response = ChatResponse.builder()
+                    .chatId(message.getChatId())
+                    .text("Пожалуйста введите свой usarname для gitlab")
+                    .build();
+
+            return Optional.of(response);
         }
+
         return Optional.empty();
     }
-//            Optional<PrivateChatMessageEntity> entity = privateChatMessageRepository.findFirstByChatIdAndTgUserIdByDesc(message.getChatId(), message.getFrom().getId());
 
-//            if (entity.isPresent() && BotCommands.JOIN_TO_DEVELOP_TEAM.equals(entity.get().getBotCommand())) {
-//                Integer stageStep = entity.get().getStageStep();
-//                if (JoinToDeveloperTeamStage.RECEIVE_USERNAME.getStep() == stageStep) {
-//
-//                    PrivateChatMessageEntity newEntity = new PrivateChatMessageEntity();
-//                    newEntity.setChatId(message.getChatId());
-//                    newEntity.setTgUserId(message.getFrom().getId());
-//                    newEntity.setBotCommand(BotCommands.JOIN_TO_DEVELOP_TEAM);
-//                    newEntity.setCreateDate(OffsetDateTime.now());
-//                    newEntity.setStageStep(JoinToDeveloperTeamStage.RECEIVE_USERNAME.getStep());
-//                    newEntity.setText(message.getText());
-//                    privateChatMessageRepository.save(newEntity);
-//
-//                    Optional<GitUserEntity> gitUserEntity = gitUserRepository.findByUsername(message.getText());
-//                    if (gitUserEntity.isPresent()) {
-//                        GitUserEntity gitUserEntity1 = gitUserEntity.get();
-//                        gitUserEntity1.setTgId(message.getFrom().getId());
-//                        gitUserRepository.save(gitUserEntity1);
-//                    }
-//                }
-//            }
-//            ChatResponse value = ChatResponse.builder()
-//                    .chatId(message.getChatId())
-//                    .text("Username успешно сохранен")
-//                    .build();
+    @Override
+    public Optional<ChatResponse> handleResponse(Message message) {
+        Optional<PrivateChatMessageEntity> privateMessage = privateChatMessageRepository
+                .findByTgUserIdAndChatIdOrderByCreateDateDesc(message.getChatId(), message.getFrom().getId())
+                .stream()
+                .findFirst();
 
-//            return Optional.of(value);
-//        }
+        if (privateMessage.isPresent() && BotCommands.ADD_GIT_USERNAME.equals(privateMessage.get().getBotCommand())) {
+            if (Objects.equals(REQUEST_USERNAME.getNumber(), privateMessage.get().getScenariosTaskNumber())) {
+                String text = message.getText();
+                Optional<GitUserEntity> gitUser = gitUserRepository.findByUsername(text);
 
+                if (gitUser.isPresent()) {
+                    TgGitUsersEntity tgGitUsers = new TgGitUsersEntity();
+                    tgGitUsers.setGitId(gitUser.get().getId());
+                    tgGitUsers.setTgId(message.getFrom().getId());
+
+                    tgGitUsersRepository.save(tgGitUsers);
+
+                    PrivateChatMessageEntity newEntity = new PrivateChatMessageEntity();
+
+                    newEntity.setChatId(message.getChatId());
+                    newEntity.setTgUserId(message.getFrom().getId());
+                    newEntity.setBotCommand(BotCommands.ADD_GIT_USERNAME);
+                    newEntity.setCreateDate(OffsetDateTime.now());
+                    newEntity.setScenariosTaskNumber(RECEIVE_USERNAME.getNumber());
+                    newEntity.setText(text);
+
+                    privateChatMessageRepository.save(newEntity);
+                } else {
+                    ChatResponse value = ChatResponse.builder()
+                            .chatId(message.getChatId())
+                            .text("Пользователя с таким username: " + text + " не найден.")
+                            .build();
+
+                    return Optional.of(value);
+                }
+            }
+        }
+        ChatResponse value = ChatResponse.builder()
+                .chatId(message.getChatId())
+                .text("Username успешно сохранен")
+                .build();
+        return Optional.of(value);
+    }
 
     @Override
     public BotCommands getHandlingCommand() {

@@ -21,7 +21,16 @@ public class StartBotCommunicationScenariosService implements BotCommunicationSc
     @Override
     public Optional<ChatResponse> handleFirstCommand(Message message) {
         tgUserService.saveUserIfNotExist(message.getFrom());
-        return Optional.empty();
+
+        ChatResponse chatResponse = new ChatResponse();
+        chatResponse.setChatId(message.getChatId());
+        chatResponse.setText("Вас категорически приветствует GitLab бот. " +
+                "Я умею сообщать о MR. " +
+                "Отправляю сообщения о ваших MR  ах, только в указанные вами чаты. " +
+                "Скоро научусь хранить историю MR ов. " +
+                "И сообщать о статусе запущенного вами pipeline.");
+
+        return Optional.of(chatResponse);
     }
 
     @Override

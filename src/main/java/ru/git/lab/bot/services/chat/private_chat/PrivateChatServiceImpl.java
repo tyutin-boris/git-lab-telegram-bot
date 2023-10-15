@@ -1,5 +1,6 @@
 package ru.git.lab.bot.services.chat.private_chat;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +30,7 @@ public class PrivateChatServiceImpl implements ChatService {
     private final Map<BotCommands, BotCommunicationScenariosService> botCommandServices;
 
     @Override
+    @Transactional
     public Optional<ChatResponse> handle(Update update) {
         Message message = update.getMessage();
         String text = getText(message);
@@ -59,14 +61,15 @@ public class PrivateChatServiceImpl implements ChatService {
             }
         }
 
-//        Long tgUserId = message.getFrom().getId();
-//        Optional<BotCommands> botCommands = privateChatMessageRepository.findLastMessageByTgUserId(tgUserId)
-//                .map(PrivateChatMessageEntity::getBotCommand);
+        Long tgUserId = message.getFrom().getId();
+        Optional<PrivateChatMessageEntity> privateChatMessage = privateChatMessageRepository
+                .findByTgUserIdAndChatIdOrderByCreateDateDesc(tgUserId, message.getChatId())
+                .stream().findFirst();
 
-//        if (botCommand.isPresent()) {
-//            log.debug("Bot receive response: " + text + "for command " + botCommands);
-//            return botCommandServices.get(botCommand.get()).handleResponse(message);
-//        }
+        if (privateChatMessage.isPresent()) {
+            log.debug("Bot receive response: " + text);
+            return botCommandServices.get(privateChatMessage.get().getBotCommand()).handleResponse(message);
+        }
 
         return Optional.empty();
     }

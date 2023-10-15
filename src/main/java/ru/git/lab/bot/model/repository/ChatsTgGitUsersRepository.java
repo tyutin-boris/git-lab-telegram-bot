@@ -11,5 +11,5 @@ import java.util.List;
 public interface ChatsTgGitUsersRepository extends JpaRepository<ChatsTgGitUsersEntity, TgGitUserId> {
     List<ChatsTgGitUsersEntity> findAllByGitId(long gitId);
 
-    List<ChatsTgGitUsersEntity> findAllByTgId(Long tgId);
+    boolean existsByGitIdAndTgIdAndChatId(Long gitId, Long tgId, Long chatId);
 }
