@@ -33,8 +33,8 @@ public class PrivateChatMessageEntity {
     @Column(nullable = false)
     private BotCommands botCommand;
 
-    @Column(name = "stage_stap",nullable = false)
-    private Integer stageStep;
+    @Column(name = "stage_stap", nullable = false)
+    private Integer scenariosTaskNumber;
 
     @Column(name = "create_date", nullable = false)
     private OffsetDateTime createDate;

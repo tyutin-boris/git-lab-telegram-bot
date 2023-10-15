@@ -1,4 +1,4 @@
-package ru.git.lab.bot.services.chat;
+package ru.git.lab.bot.services.chat.channle_chat;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

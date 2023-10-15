@@ -1,4 +1,4 @@
-package ru.git.lab.bot.services.chat;
+package ru.git.lab.bot.services.chat.private_chat;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,7 @@ import ru.git.lab.bot.dto.ChatResponse;
 import ru.git.lab.bot.dto.ChatType;
 import ru.git.lab.bot.model.entities.PrivateChatMessageEntity;
 import ru.git.lab.bot.model.repository.PrivateChatMessageRepository;
-import ru.git.lab.bot.services.chat.api.BotCommandService;
+import ru.git.lab.bot.services.chat.api.BotCommunicationScenariosService;
 import ru.git.lab.bot.services.chat.api.ChatService;
 
 import java.util.Map;
@@ -22,7 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PrivateChatServiceImpl implements ChatService {
 
-    private final Map<BotCommands, BotCommandService> botCommandServices;
+    private final Map<BotCommands, BotCommunicationScenariosService> botCommandServices;
     private final PrivateChatMessageRepository privateChatMessageRepository;
 
     @Override
@@ -31,20 +31,21 @@ public class PrivateChatServiceImpl implements ChatService {
         checkNotNull(message);
 
         String text = getText(message);
-//        Optional<PrivateChatMessageEntity> privateChatMessage = privateChatMessageRepository
-//                .findFirstByChatIdAndTgUserIdByDesc(message.getChatId(), message.getFrom()
-//                        .getId());
-//
-//        if(privateChatMessage.isPresent()) {
-//
-//        }
-
-        Optional<BotCommands> botCommand = BotCommands.getCommand(text);
+        Optional <BotCommands> botCommand = BotCommands.getCommand(text);
 
         if (botCommand.isPresent()) {
             log.debug("Bot receive message: " + text);
-            return botCommandServices.get(botCommand.get()).handle(message);
+            return botCommandServices.get(botCommand.get()).handleFirstCommand(message);
         }
+
+//        Long tgUserId = message.getFrom().getId();
+//        Optional<BotCommands> botCommands = privateChatMessageRepository.findLastMessageByTgUserId(tgUserId)
+//                .map(PrivateChatMessageEntity::getBotCommand);
+
+//        if (botCommand.isPresent()) {
+//            log.debug("Bot receive response: " + text + "for command " + botCommands);
+//            return botCommandServices.get(botCommand.get()).handleResponse(message);
+//        }
 
         return Optional.empty();
     }

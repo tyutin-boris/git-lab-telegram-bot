@@ -6,9 +6,10 @@ import ru.git.lab.bot.dto.ChatResponse;
 
 import java.util.Optional;
 
-public interface BotCommandService {
+public interface BotCommunicationScenariosService {
 
-    Optional<ChatResponse> handle(Message message);
+    Optional<ChatResponse> handleFirstCommand(Message message);
+    Optional<ChatResponse> handleResponse(Message message);
 
     BotCommands getHandlingCommand();
 }

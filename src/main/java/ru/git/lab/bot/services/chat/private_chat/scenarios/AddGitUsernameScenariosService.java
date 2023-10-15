@@ -1,4 +1,4 @@
-package ru.git.lab.bot.services.chat;
+package ru.git.lab.bot.services.chat.private_chat.scenarios;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -6,19 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.User;
 import ru.git.lab.bot.dto.BotCommands;
 import ru.git.lab.bot.dto.ChatResponse;
-import ru.git.lab.bot.dto.JoinToDeveloperTeamStage;
-import ru.git.lab.bot.model.entities.GitUserEntity;
-import ru.git.lab.bot.model.entities.PrivateChatMessageEntity;
 import ru.git.lab.bot.model.repository.GitUserRepository;
 import ru.git.lab.bot.model.repository.PrivateChatMessageRepository;
 import ru.git.lab.bot.model.repository.TgUserRepository;
-import ru.git.lab.bot.services.api.GitUserService;
-import ru.git.lab.bot.services.chat.api.BotCommandService;
+import ru.git.lab.bot.services.chat.api.BotCommunicationScenariosService;
 
-import java.time.OffsetDateTime;
 import java.util.Optional;
 
 ;
@@ -26,16 +20,16 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class JoinerToDevelopTeamBotCommandService implements BotCommandService {
+public class AddGitUsernameScenariosService implements BotCommunicationScenariosService {
 
-    private final TgUserRepository userRepository;
+    private final TgUserRepository tgUserRepository;
     private final PrivateChatMessageRepository privateChatMessageRepository;
 
     private final GitUserRepository gitUserRepository;
 
     @Override
     @Transactional
-    public Optional<ChatResponse> handle(Message message) {
+    public Optional<ChatResponse> handleFirstCommand(Message message) {
 //        if (message == null) {
 //            return Optional.empty();
 //        }
@@ -105,8 +99,13 @@ public class JoinerToDevelopTeamBotCommandService implements BotCommandService {
     }
 
     @Override
+    public Optional<ChatResponse> handleResponse(Message message) {
+        return Optional.empty();
+    }
+
+    @Override
     public BotCommands getHandlingCommand() {
-        return BotCommands.JOIN_TO_DEVELOP_TEAM;
+        return BotCommands.ADD_GIT_USERNAME;
     }
 
     private String getText(Message message) {

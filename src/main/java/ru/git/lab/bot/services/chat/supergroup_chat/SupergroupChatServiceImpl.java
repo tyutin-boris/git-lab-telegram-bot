@@ -1,4 +1,4 @@
-package ru.git.lab.bot.services.chat;
+package ru.git.lab.bot.services.chat.supergroup_chat;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class GroupChatServiceImpl implements ChatService {
+public class SupergroupChatServiceImpl implements ChatService {
 
     @Override
     public Optional<ChatResponse> handle(Update update) {
@@ -22,6 +22,6 @@ public class GroupChatServiceImpl implements ChatService {
 
     @Override
     public ChatType getType() {
-        return ChatType.GROUP;
+        return ChatType.SUPERGROUP;
     }
 }
