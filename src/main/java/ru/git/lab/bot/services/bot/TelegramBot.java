@@ -6,13 +6,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.git.lab.bot.config.BotConfig;
+import ru.git.lab.bot.dto.ChatResponse;
 import ru.git.lab.bot.services.bot.api.BotService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,11 +48,13 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update recivedUpdate) {
         log.debug("Start handling update event");
 
-        int updateId = Optional.ofNullable(recivedUpdate)
+        Optional<ChatResponse> response = Optional.ofNullable(recivedUpdate)
                 .map(botService::handleReceivedUpdate)
                 .orElseThrow(() -> new RuntimeException("Update is null"));
 
-        log.debug("End handling update with id " + updateId);
+        response.ifPresent(this::sendMessage);
+
+        log.debug("End handling update with id " + recivedUpdate.getUpdateId());
     }
 
     @Override
@@ -69,5 +76,39 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void onRegister() {
         log.info("Bot was registered");
         super.onRegister();
+    }
+
+    public void sendMessage(ChatResponse response) {
+        SendMessage message = new SendMessage();
+
+        message.setChatId(response.getChatId());
+        message.setText(response.getText());
+        getInlineKeyboardMarkup(response).ifPresent(message::setReplyMarkup);
+
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException("Send message failed", e);
+        }
+    }
+
+    private Optional<InlineKeyboardMarkup> getInlineKeyboardMarkup(ChatResponse response) {
+        List<InlineKeyboardButton> inlineKeyboardButtons = response.getButtons().stream().map(b -> {
+            InlineKeyboardButton inlinekeyboardButton = new InlineKeyboardButton();
+            inlinekeyboardButton.setCallbackData(b.getCallbackData());
+            inlinekeyboardButton.setText(b.getText());
+            return inlinekeyboardButton;
+        }).toList();
+
+        if (inlineKeyboardButtons.isEmpty()) {
+            return Optional.empty();
+        }
+
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        rowsInline.add(inlineKeyboardButtons);
+
+        InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+        markupInline.setKeyboard(rowsInline);
+        return Optional.of(markupInline);
     }
 }

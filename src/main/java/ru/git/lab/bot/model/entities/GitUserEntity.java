@@ -8,8 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.UUID;
-
 @Entity
 @Setter
 @Getter
@@ -18,17 +16,15 @@ import java.util.UUID;
 public class GitUserEntity {
 
     @Id
-    private UUID id = UUID.randomUUID();
+    @Column(nullable = false)
+    private Long id;
 
-    @Column(name = "git_id")
-    private long gitId;
-
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 }

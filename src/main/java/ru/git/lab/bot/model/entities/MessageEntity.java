@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.OffsetDateTime;
-import java.util.UUID;
 
 @Entity
 @Setter
@@ -19,20 +18,18 @@ import java.util.UUID;
 public class MessageEntity {
 
     @Id
-    UUID id = UUID.randomUUID();
+    @Column(nullable = false)
+    Integer id;
 
-    @Column(name = "message_id")
-    Integer messageId;
-
-    @Column(name = "chat_id")
+    @Column(name = "chat_id", nullable = false)
     Long chatId;
 
-    @Column(name = "mr_id")
+    @Column(name = "mr_id", nullable = false)
     Long mrId;
 
-    @Column(name = "author_id")
+    @Column(name = "author_id", nullable = false)
     Long authorId;
 
-    @Column(name = "create_date_time")
+    @Column(name = "create_date_time", nullable = false)
     OffsetDateTime createDateTime;
 }

@@ -6,34 +6,34 @@ import org.springframework.stereotype.Service;
 import ru.git.lab.bot.dto.UserDto;
 import ru.git.lab.bot.mappers.UserMapper;
 import ru.git.lab.bot.model.entities.GitUserEntity;
-import ru.git.lab.bot.model.repository.UserRepository;
-import ru.git.lab.bot.services.api.UserService;
+import ru.git.lab.bot.model.repository.GitUserRepository;
+import ru.git.lab.bot.services.api.GitUserService;
 
 import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class GitUserServiceImpl implements GitUserService {
 
     private final UserMapper userMapper;
 
-    private final UserRepository userRepository;
+    private final GitUserRepository gitUserRepository;
 
     @Override
     public void saveUserIfNotExist(UserDto user) {
         Optional.ofNullable(user)
                 .ifPresent(u -> {
-                    if (!userRepository.existsByGitIdAndUsernameAndEmail(u.getId(), u.getUsername(), u.getEmail())) {
+                    if (!gitUserRepository.existsByIdAndUsernameAndEmail(u.getId(), u.getUsername(), u.getEmail())) {
                         GitUserEntity gitUserEntity = userMapper.toEntity(user);
-                        userRepository.save(gitUserEntity);
+                        gitUserRepository.save(gitUserEntity);
                     }
                 });
     }
 
     @Override
     public GitUserEntity getByAuthorId(Long id) {
-        return userRepository.findByGitId(id)
+        return gitUserRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found id: " + id));
     }
 }

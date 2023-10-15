@@ -19,16 +19,12 @@ import java.time.OffsetDateTime;
 public class ChatEntity {
 
     @Id
+    @Column(nullable = false)
     private Long id;
 
-    @Column(name = "type")
+    @Column(name = "type", nullable = false)
     private ChatType type;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
-
-    @Column(name = "create_date")
-    private OffsetDateTime createDate;
 }
-
-

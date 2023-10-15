@@ -5,13 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.git.lab.bot.api.mr.DetailedMergeStatus;
 import ru.git.lab.bot.dto.MergeRequestDto;
+import ru.git.lab.bot.model.entities.ChatsTgGitUsersEntity;
 import ru.git.lab.bot.model.entities.MessageEntity;
-import ru.git.lab.bot.services.api.ChatService;
+import ru.git.lab.bot.model.repository.ChatsTgGitUsersRepository;
 import ru.git.lab.bot.services.api.MessageService;
 import ru.git.lab.bot.services.api.MrTextMessageService;
 import ru.git.lab.bot.services.mr.api.CreateMrService;
 import ru.git.lab.bot.services.senders.api.MessageSender;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,9 +26,9 @@ public class CreateMrServiceImpl implements CreateMrService {
 
     private final MessageSender sender;
 
-    private final ChatService chatService;
-
     private final MessageService messageService;
+
+    private final ChatsTgGitUsersRepository chatsTgGitUsersRepository;
 
     private final MrTextMessageService mrTextMessageService;
 
@@ -51,16 +53,19 @@ public class CreateMrServiceImpl implements CreateMrService {
             return;
         }
 
-        List<Long> chatsId = chatService.getAllChatId();
+        List<Long> chatIds = chatsTgGitUsersRepository.findAllByGitId(authorId)
+                .stream()
+                .map(ChatsTgGitUsersEntity::getChatId)
+                .toList();
 
-        if (chatsId.isEmpty()) {
+        if (chatIds.isEmpty()) {
             log.debug("Chat list is empty, message not sant. " + mrIdAndAuthorIdLog);
             return;
         }
 
         String text = mrTextMessageService.createMergeRequestTextMessage(mergeRequest);
 
-        for (Long id : chatsId) {
+        for (Long id : chatIds) {
             sender.sendMessage(text, id)
                     .ifPresent(message -> messageService.saveMessage(message, mergeRequest));
         }

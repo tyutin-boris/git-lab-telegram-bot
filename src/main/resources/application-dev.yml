@@ -1,6 +1,6 @@
 bot:
   name: TestNNLigaGitLabBot
-  token: 6021072225:AAEDrP12sqw2NPjefzlcr4iiPnXk0RUwkoU
+  token: 6525258392:AAHjB2fEs8Fdi7JtSDom4acCHV-VCbbowF8
 logging:
   level:
     ru.git.lab.bot: DEBUG
@@ -32,3 +32,4 @@ spring:
     schema: bot-schema
     locations: classpath:db/migration
     url: jdbc:h2:file:C:\\Users\\btyutin\\bot\\data\\bot-db
+#    url: jdbc:h2:file:C:\\Users\\boris\\bot\\data\\bot-db

@@ -3,14 +3,13 @@ package ru.git.lab.bot.services.bot;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.Chat;
-import org.telegram.telegrambots.meta.api.objects.ChatMemberUpdated;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.*;
+import ru.git.lab.bot.dto.ChatResponse;
 import ru.git.lab.bot.dto.ChatType;
 import ru.git.lab.bot.services.bot.api.BotService;
-import ru.git.lab.bot.services.chat.api.ChannelService;
+import ru.git.lab.bot.services.chat.api.ChatService;
 
+import java.util.Map;
 import java.util.Optional;
 
 import static ru.git.lab.bot.dto.ChatType.stringToChatType;
@@ -20,24 +19,14 @@ import static ru.git.lab.bot.dto.ChatType.stringToChatType;
 @RequiredArgsConstructor
 public class BotServiceImpl implements BotService {
 
-    private final ChannelService channelService;
+    private final Map<ChatType, ChatService> chatService;
 
     @Override
-    public int handleReceivedUpdate(Update update) {
+    public Optional<ChatResponse> handleReceivedUpdate(Update update) {
         log.debug("Update id: " + update.getUpdateId());
+        ChatType chatType = stringToChatType(getChat(update).getType());
 
-        Chat chat = getChat(update);
-        ChatType chatType = stringToChatType(chat.getType());
-
-        switch (chatType) {
-            case PRIVATE:
-            case GROUP:
-            case CHANNEL:
-                Optional.ofNullable(update.getMyChatMember()).ifPresent(channelService::handle);
-            case SUPERGROUP:
-        }
-
-        return update.getUpdateId();
+        return chatService.get(chatType).handle(update);
     }
 
     private Chat getChat(Update update) {
@@ -55,8 +44,17 @@ public class BotServiceImpl implements BotService {
         if (chatFormMember.isPresent()) {
             log.debug("Get chat from my member");
             return chatFormMember.get();
-        } else {
-            throw new RuntimeException("Chat not found. Update id " + update.getUpdateId());
         }
+
+        Optional<Chat> chatFomCallback = Optional.ofNullable(update.getCallbackQuery())
+                .map(CallbackQuery::getMessage)
+                .map(Message::getChat);
+
+        if (chatFomCallback.isPresent()) {
+            log.debug("Get chat from callback");
+            return chatFomCallback.get();
+        }
+
+        throw new RuntimeException("Chat not found. Update id " + update.getUpdateId());
     }
 }

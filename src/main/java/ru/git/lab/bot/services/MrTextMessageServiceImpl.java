@@ -9,7 +9,7 @@ import ru.git.lab.bot.dto.MergeRequestDto;
 import ru.git.lab.bot.model.entities.ApproveEntity;
 import ru.git.lab.bot.model.entities.GitUserEntity;
 import ru.git.lab.bot.services.api.MrTextMessageService;
-import ru.git.lab.bot.services.api.UserService;
+import ru.git.lab.bot.services.api.GitUserService;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,7 +24,7 @@ public class MrTextMessageServiceImpl implements MrTextMessageService {
 
     private final static DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
-    private final UserService userService;
+    private final GitUserService gitUserService;
 
     @Override
     public String createMergeRequestTextMessage(MergeRequestDto mergeRequest) {
@@ -64,7 +64,7 @@ public class MrTextMessageServiceImpl implements MrTextMessageService {
     }
 
     private String getAuthorText(AuthorDto author) {
-        GitUserEntity gitUserEntity = userService.getByAuthorId(author.getId());
+        GitUserEntity gitUserEntity = gitUserService.getByAuthorId(author.getId());
         String name = gitUserEntity.getName();
 
         return "<b>Author:</b> " + name + "\n";

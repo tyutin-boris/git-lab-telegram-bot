@@ -29,7 +29,7 @@ public class MessageServiceImpl implements MessageService {
     public void saveMessage(Message message, MergeRequestDto mergeRequest) {
         MessageEntity messageEntity = createMessage(message, mergeRequest);
         messageRepository.save(messageEntity);
-        log.debug("Save message with id " + messageEntity.getMessageId() + ", authorId " + messageEntity.getAuthorId());
+        log.debug("Save message with id " + messageEntity.getId() + ", authorId " + messageEntity.getAuthorId());
     }
 
     @Override
@@ -68,7 +68,7 @@ public class MessageServiceImpl implements MessageService {
     private MessageEntity createMessage(Message message, MergeRequestDto mergeRequest) {
         MessageEntity messageEntity = new MessageEntity();
 
-        messageEntity.setMessageId(message.getMessageId());
+        messageEntity.setId(message.getMessageId());
         messageEntity.setChatId(message.getChatId());
         messageEntity.setMrId(mergeRequest.getMrId());
         messageEntity.setAuthorId(mergeRequest.getAuthor().getId());

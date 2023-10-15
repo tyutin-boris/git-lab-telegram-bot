@@ -1,11 +1,6 @@
 package ru.git.lab.bot.model.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,15 +13,16 @@ import lombok.Setter;
 public class ApproveEntity {
 
     @Id
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long id;
 
-    @Column(name = "mr_id")
+    @Column(name = "mr_id", nullable = false)
     Long mrId;
 
-    @Column(name = "author_id")
+    @Column(name = "author_id", nullable = false)
     Long authorId;
 
-    @Column(name = "author_name")
+    @Column(name = "author_name", nullable = false)
     String authorName;
 }
