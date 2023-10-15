@@ -41,12 +41,8 @@ public class ChannelChatServiceImpl implements ChatService {
                 .orElseThrow(() -> new RuntimeException("Failed to get member status"));
 
         switch (memberStatus) {
-            case ADMINISTRATOR:
-                chatRepository.save(createChatEntity(channel));
-                log.debug(String.format("Bot was add to channel with name %s and id %s, as admin.", channelTitle, channelId));
-            case KICKED:
-                chatRepository.findById(channelId).ifPresent(chatRepository::delete);
-                log.debug(String.format("Bot was kicked from channel with name %s with id %s.", channelTitle, channelId));
+            case ADMINISTRATOR -> addChat(channel, channelId, channelTitle);
+            case KICKED -> deleteChat(channelId, channelTitle);
         }
         return Optional.empty();
     }
@@ -56,8 +52,18 @@ public class ChannelChatServiceImpl implements ChatService {
         return ChatType.CHANNEL;
     }
 
-    private static void checkNotNull(ChatMemberUpdated chatMemberUpdated) {
+    private void checkNotNull(ChatMemberUpdated chatMemberUpdated) {
         Optional.ofNullable(chatMemberUpdated).orElseThrow(() -> new RuntimeException("ChatMemberUpdate is null"));
+    }
+
+    private void addChat(Chat channel, Long channelId, String channelTitle) {
+        chatRepository.save(createChatEntity(channel));
+        log.debug(String.format("Bot was add to channel with name %s and id %s, as admin.", channelTitle, channelId));
+    }
+
+    private void deleteChat(Long channelId, String channelTitle) {
+        chatRepository.findById(channelId).ifPresent(chatRepository::delete);
+        log.debug(String.format("Bot was kicked from channel with name %s with id %s.", channelTitle, channelId));
     }
 
     private ChatEntity createChatEntity(Chat chat) {

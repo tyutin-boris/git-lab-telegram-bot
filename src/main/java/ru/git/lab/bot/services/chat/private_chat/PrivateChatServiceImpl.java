@@ -42,16 +42,17 @@ public class PrivateChatServiceImpl implements ChatService {
         CallbackQuery callbackQuery = update.getCallbackQuery();
 
         if (Objects.nonNull(callbackQuery)) {
-            Optional<Message> callbackMessage = Optional.ofNullable(callbackQuery.getMessage());
-            Optional<Long> chatId = callbackMessage.map(Message::getChatId);
-            Optional<Long> tgUserId = callbackMessage.map(Message::getFrom).map(User::getId);
+            Optional<Message> callbackQueryMessage = Optional.ofNullable(callbackQuery.getMessage());
+            Optional<Long> chatId = callbackQueryMessage.map(Message::getChatId);
+            Optional<Long> tgUserId = Optional.ofNullable(callbackQuery.getFrom()).map(User::getId);
 
             if (chatId.isEmpty() && tgUserId.isEmpty()) {
                 return Optional.empty();
             }
 
             Optional<PrivateChatMessageEntity> privateChatMessage = privateChatMessageRepository
-                    .findByTgUserIdAndChatIdOrderByCreateDateDesc(tgUserId.get(), chatId.get());
+                    .findByTgUserIdAndChatIdOrderByCreateDateDesc(tgUserId.get(), chatId.get())
+                    .stream().findFirst();
 
             if (privateChatMessage.isPresent()) {
                 return botCommandServices.get(privateChatMessage.get().getBotCommand()).handleCallback(callbackQuery);

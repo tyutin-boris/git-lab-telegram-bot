@@ -11,6 +11,7 @@ import ru.git.lab.bot.dto.ChatResponse;
 import ru.git.lab.bot.dto.ChatType;
 import ru.git.lab.bot.dto.KeyboardButton;
 import ru.git.lab.bot.model.entities.ChatEntity;
+import ru.git.lab.bot.model.entities.ChatsTgGitUsersEntity;
 import ru.git.lab.bot.model.entities.PrivateChatMessageEntity;
 import ru.git.lab.bot.model.repository.ChatRepository;
 import ru.git.lab.bot.model.repository.ChatsTgGitUsersRepository;
@@ -70,6 +71,15 @@ public class AddChatToReceiveGitLabNotification implements BotCommunicationScena
                 return keyboardButton;
             }).toList();
 
+            if (buttons.isEmpty()) {
+                ChatResponse response = ChatResponse.builder()
+                        .chatId(message.getChatId())
+                        .text("Нет чатов доступных для добавления")
+                        .build();
+
+                return Optional.of(response);
+            }
+
             ChatResponse response = ChatResponse.builder()
                     .chatId(message.getChatId())
                     .text("Пожалуйста ввидите название чата для которого вы хотите получать уведомления от GitLab")
@@ -85,10 +95,10 @@ public class AddChatToReceiveGitLabNotification implements BotCommunicationScena
     public Optional<ChatResponse> handleCallback(CallbackQuery query) {
         Message message = query.getMessage();
         Long chatId = message.getChatId();
-        Long tgUserId = message.getFrom().getId();
+        Long tgUserId = query.getFrom().getId();
 
         Optional<PrivateChatMessageEntity> privateChatMessageOpt = privateChatMessageRepository
-                .findByTgUserIdAndChatIdOrderByCreateDateDesc(tgUserId, chatId);
+                .findByTgUserIdAndChatIdOrderByCreateDateDesc(tgUserId, chatId).stream().findFirst();
 
         if (privateChatMessageOpt.isEmpty()) {
             return Optional.empty();
@@ -106,9 +116,14 @@ public class AddChatToReceiveGitLabNotification implements BotCommunicationScena
 
             privateChatMessageRepository.save(entity);
 
-//            Optional<ChatEntity> chatForNotification = chatRepository.findByName("name");
+            Optional<ChatEntity> chatForNotification = chatRepository.findById(Long.parseLong(query.getData()));
 
-//            chatsTgGitUsersRepository.findAllByTgId()
+            ChatsTgGitUsersEntity chatsTgGitUsersEntity = new ChatsTgGitUsersEntity();
+//            chatsTgGitUsersEntity.setGitId();
+            chatsTgGitUsersEntity.setTgId(tgUserId);
+            chatsTgGitUsersEntity.setChatId(Long.parseLong(query.getData()));
+
+            chatsTgGitUsersRepository.save(chatsTgGitUsersEntity);
         }
 
         return BotCommunicationScenariosService.super.handleCallback(query);
