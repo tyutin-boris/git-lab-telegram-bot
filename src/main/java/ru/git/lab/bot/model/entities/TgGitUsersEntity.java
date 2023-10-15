@@ -8,10 +8,10 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-@Table(name = "chats_tg_git_users")
+@Table(name = "tg_git_user")
 @NoArgsConstructor
 @IdClass(TgGitUserId.class)
-public class ChatsTgGitUsersEntity {
+public class TgGitUsersEntity {
 
     @Id
     @Column(nullable = false)
@@ -20,7 +20,4 @@ public class ChatsTgGitUsersEntity {
     @Id
     @Column(nullable = false)
     private Long gitId;
-
-    @Column(name = "chat_id")
-    private Long chatId;
 }

@@ -6,13 +6,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.User;
 import ru.git.lab.bot.dto.BotCommands;
 import ru.git.lab.bot.dto.ChatResponse;
+import ru.git.lab.bot.model.entities.PrivateChatMessageEntity;
 import ru.git.lab.bot.model.repository.GitUserRepository;
 import ru.git.lab.bot.model.repository.PrivateChatMessageRepository;
 import ru.git.lab.bot.model.repository.TgUserRepository;
 import ru.git.lab.bot.services.chat.api.BotCommunicationScenariosService;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 ;
@@ -30,40 +33,41 @@ public class AddGitUsernameScenariosService implements BotCommunicationScenarios
     @Override
     @Transactional
     public Optional<ChatResponse> handleFirstCommand(Message message) {
-//        if (message == null) {
-//            return Optional.empty();
-//        }
-//
-//        String text = getText(message);
-//
-//        if (StringUtils.isBlank(text)) {
-//            return Optional.empty();
-//        }
-//
-//        if (text.startsWith("/")) {
-//            Long userId = Optional.ofNullable(message.getFrom()).map(User::getId)
-//                    .orElseThrow(() -> new RuntimeException("User id not found"));
-//
-//            boolean userExist = userRepository.existsById(userId);
-//
-//            if (userExist) {
-//                ChatResponse response = ChatResponse.builder()
-//                        .chatId(message.getChatId())
-//                        .text("Пожалуйста ввидите свой usarname из gitlab")
-//                        .build();
-//
-//                PrivateChatMessageEntity entity = new PrivateChatMessageEntity();
-//                entity.setChatId(message.getChatId());
-//                entity.setTgUserId(userId);
-//                entity.setBotCommand(getHandlingCommand());
-//                entity.setCreateDate(OffsetDateTime.now());
-//                entity.setStageStep(JoinToDeveloperTeamStage.REQUEST_USERNAME.getStep());
-//                privateChatMessageRepository.save(entity);
-//
-//                return Optional.of(response);
-//            }
-//        } else {
+        if (message == null) {
+            return Optional.empty();
+        }
 
+        String text = getText(message);
+
+        if (StringUtils.isBlank(text)) {
+            return Optional.empty();
+        }
+
+        if (text.startsWith("/")) {
+            Long userId = Optional.ofNullable(message.getFrom()).map(User::getId)
+                    .orElseThrow(() -> new RuntimeException("User id not found"));
+
+            boolean userExist = tgUserRepository.existsById(userId);
+
+            if (userExist) {
+                ChatResponse response = ChatResponse.builder()
+                        .chatId(message.getChatId())
+                        .text("Пожалуйста ввидите свой usarname из gitlab")
+                        .build();
+
+                PrivateChatMessageEntity entity = new PrivateChatMessageEntity();
+                entity.setChatId(message.getChatId());
+                entity.setTgUserId(userId);
+                entity.setBotCommand(getHandlingCommand());
+                entity.setCreateDate(OffsetDateTime.now());
+                entity.setScenariosTaskNumber(PrivateChatScenariosTask.REQUEST_USERNAME.getNumber());
+                privateChatMessageRepository.save(entity);
+
+                return Optional.of(response);
+            }
+        }
+        return Optional.empty();
+    }
 //            Optional<PrivateChatMessageEntity> entity = privateChatMessageRepository.findFirstByChatIdAndTgUserIdByDesc(message.getChatId(), message.getFrom().getId());
 
 //            if (entity.isPresent() && BotCommands.JOIN_TO_DEVELOP_TEAM.equals(entity.get().getBotCommand())) {
@@ -95,8 +99,6 @@ public class AddGitUsernameScenariosService implements BotCommunicationScenarios
 //            return Optional.of(value);
 //        }
 
-        return Optional.empty();
-    }
 
     @Override
     public BotCommands getHandlingCommand() {

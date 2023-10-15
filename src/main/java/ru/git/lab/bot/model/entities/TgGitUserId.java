@@ -13,6 +13,4 @@ public class TgGitUserId implements Serializable {
     private Long tgId;
 
     private Long gitId;
-
-    private Long chatId;
 }

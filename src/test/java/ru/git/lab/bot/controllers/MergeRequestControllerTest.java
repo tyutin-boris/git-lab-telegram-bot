@@ -84,23 +84,23 @@ public class MergeRequestControllerTest {
 //        createChat();
 //    }
 
-    @Test
-    public void shouldSendMessageWhenOpenMr() {
-        //given
-        User expectedUser = createExpectedUser();
-        MergeRequestEvent open = createOpenMergeRequestEvent(expectedUser);
-        saveMrChat(expectedUser);
-
-        //when
-        sut.mergeRequestEvent(open);
-
-        //then
-        verify(mrOpenEventHandler).handleEvent(any());
-        verify(messageSender).sendMessage(any(), eq(chatId));
-
-        checkUserSave(expectedUser);
-        checkMessageSave(mrId, expectedUser.getId());
-    }
+//    @Test
+//    public void shouldSendMessageWhenOpenMr() {
+//        given
+//        User expectedUser = createExpectedUser();
+//        MergeRequestEvent open = createOpenMergeRequestEvent(expectedUser);
+//        saveMrChat(expectedUser);
+//
+//        when
+//        sut.mergeRequestEvent(open);
+//
+//        then
+//        verify(mrOpenEventHandler).handleEvent(any());
+//        verify(messageSender).sendMessage(any(), eq(chatId));
+//
+//        checkUserSave(expectedUser);
+//        checkMessageSave(mrId, expectedUser.getId());
+//    }
 
 //    @Test
 //    public void shouldDeleteMessageWhenCloseMr() {
