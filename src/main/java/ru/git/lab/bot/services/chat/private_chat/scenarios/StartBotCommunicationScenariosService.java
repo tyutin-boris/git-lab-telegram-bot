@@ -25,11 +25,6 @@ public class StartBotCommunicationScenariosService implements BotCommunicationSc
     }
 
     @Override
-    public Optional<ChatResponse> handleResponse(Message message) {
-        return Optional.empty();
-    }
-
-    @Override
     public BotCommands getHandlingCommand() {
         return BotCommands.START;
     }

@@ -99,11 +99,6 @@ public class AddGitUsernameScenariosService implements BotCommunicationScenarios
     }
 
     @Override
-    public Optional<ChatResponse> handleResponse(Message message) {
-        return Optional.empty();
-    }
-
-    @Override
     public BotCommands getHandlingCommand() {
         return BotCommands.ADD_GIT_USERNAME;
     }
