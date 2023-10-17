@@ -15,6 +15,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class StartBotCommunicationScenariosService implements BotCommunicationScenariosService {
+    private static final String HELLO_TEXT = "Вас категорически приветствует GitLab бот.";
 
     private final TgUserService tgUserService;
 
@@ -24,11 +25,7 @@ public class StartBotCommunicationScenariosService implements BotCommunicationSc
 
         ChatResponse chatResponse = new ChatResponse();
         chatResponse.setChatId(message.getChatId());
-        chatResponse.setText("Вас категорически приветствует GitLab бот. " +
-                "Я умею сообщать о MR. " +
-                "Отправляю сообщения о ваших MR  ах, только в указанные вами чаты. " +
-                "Скоро научусь хранить историю MR ов. " +
-                "И сообщать о статусе запущенного вами pipeline.");
+        chatResponse.setText(HELLO_TEXT);
 
         return Optional.of(chatResponse);
     }

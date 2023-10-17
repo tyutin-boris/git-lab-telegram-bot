@@ -14,7 +14,11 @@ import ru.git.lab.bot.model.entities.ChatEntity;
 import ru.git.lab.bot.model.entities.ChatsTgGitUsersEntity;
 import ru.git.lab.bot.model.entities.PrivateChatMessageEntity;
 import ru.git.lab.bot.model.entities.TgGitUsersEntity;
-import ru.git.lab.bot.model.repository.*;
+import ru.git.lab.bot.model.repository.ChatRepository;
+import ru.git.lab.bot.model.repository.ChatsTgGitUsersRepository;
+import ru.git.lab.bot.model.repository.PrivateChatMessageRepository;
+import ru.git.lab.bot.model.repository.TgGitUsersRepository;
+import ru.git.lab.bot.model.repository.TgUserRepository;
 import ru.git.lab.bot.services.chat.api.BotCommunicationScenariosService;
 
 import java.time.OffsetDateTime;
@@ -102,6 +106,12 @@ public class AddChatToReceiveGitLabNotification implements BotCommunicationScena
             return Optional.empty();
         }
 
+        ChatResponse chatResponse = new ChatResponse();
+        chatResponse.setChatId(chatId);
+        chatResponse.setText("Чат добавлен");
+
+        Optional<ChatResponse> successfulResponse = Optional.of(chatResponse);
+
         PrivateChatMessageEntity previousMessage = privateChatMessageOpt.get();
         if (Objects.equals(previousMessage.getScenariosTaskNumber(), REQUEST_CHAT_NAME.getNumber())) {
 
@@ -114,29 +124,33 @@ public class AddChatToReceiveGitLabNotification implements BotCommunicationScena
 
             privateChatMessageRepository.save(entity);
 
-            List<TgGitUsersEntity> tgGitUsersEntities = tgGitUsersRepository.findByTgId(tgUserId);
-            tgGitUsersEntities.forEach(e -> {
+            Optional<Long> gitUserId = tgGitUsersRepository.findById(tgUserId).map(TgGitUsersEntity::getGitId);
+            long chatIdFormResponse = Long.parseLong(query.getData());
+            Optional<ChatsTgGitUsersEntity> chatsTgGitUsers = chatsTgGitUsersRepository.findById(tgUserId);
 
-                Long gitId = e.getGitId();
-                long chatIdFormResponse = Long.parseLong(query.getData());
+            if (chatsTgGitUsers.isEmpty()) {
+                ChatsTgGitUsersEntity chatsTgGitUsersEntity = new ChatsTgGitUsersEntity();
+                chatsTgGitUsersEntity.setTgId(tgUserId);
+                chatsTgGitUsersEntity.setChatId(chatIdFormResponse);
+                gitUserId.ifPresent(chatsTgGitUsersEntity::setGitId);
 
-                boolean exists = chatsTgGitUsersRepository
-                        .existsByGitIdAndTgIdAndChatId(gitId, tgUserId, chatIdFormResponse);
-                if (!exists) {
-                    ChatsTgGitUsersEntity chatsTgGitUsersEntity = new ChatsTgGitUsersEntity();
-                    chatsTgGitUsersEntity.setGitId(gitId);
-                    chatsTgGitUsersEntity.setTgId(tgUserId);
-                    chatsTgGitUsersEntity.setChatId(chatIdFormResponse);
+                chatsTgGitUsersRepository.save(chatsTgGitUsersEntity);
+                return successfulResponse;
+            }
 
-                    chatsTgGitUsersRepository.save(chatsTgGitUsersEntity);
-                }
-            });
+            ChatsTgGitUsersEntity chatsTgGitUsersEntity = chatsTgGitUsers.get();
+
+            if (Objects.isNull(chatsTgGitUsersEntity.getGitId())) {
+                gitUserId.ifPresent(chatsTgGitUsersEntity::setGitId);
+            }
+
+            if (Objects.isNull(chatsTgGitUsersEntity.getChatId())) {
+                chatsTgGitUsersEntity.setChatId(chatId);
+            }
+
+            chatsTgGitUsersRepository.save(chatsTgGitUsersEntity);
         }
-        ChatResponse chatResponse = new ChatResponse();
-        chatResponse.setChatId(chatId);
-        chatResponse.setText("Чат добавлен");
-
-        return Optional.of(chatResponse);
+        return successfulResponse;
     }
 
     @Override

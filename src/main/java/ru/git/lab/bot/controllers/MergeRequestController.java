@@ -19,21 +19,21 @@ import java.io.IOException;
 public class MergeRequestController {
 
     private final ObjectMapper objectMapper;
-    private final MergeRequestService mergeRequestService;
+    private final MergeRequestService saveGitUserDecorator;
     //    private final RequestMessageService requestMessageService;
 
     @PostMapping
     public void mergeRequestEvent(@RequestBody String request) {
         log.debug(request);
         MergeRequestEvent mergeRequestEvent = getMergeRequestEvent(request);
-        mergeRequestService.handleEvent(mergeRequestEvent);
+        saveGitUserDecorator.handleEvent(mergeRequestEvent);
     }
 
     @PostMapping("/new")
     public void mergeRequestEvent(@RequestBody MergeRequestEvent request) {
         //        requestMessageService.saveReceivedMessage(request);
 
-        mergeRequestService.handleEvent(request);
+        saveGitUserDecorator.handleEvent(request);
     }
 
     private MergeRequestEvent getMergeRequestEvent(String request) {
