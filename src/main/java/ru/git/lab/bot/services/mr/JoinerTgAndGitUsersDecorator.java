@@ -54,7 +54,9 @@ public class JoinerTgAndGitUsersDecorator implements MergeRequestService {
 
     private void joinToTgChat(TgGitUsersEntity user, Long gitId) {
         Long tgId = user.getTgId();
-        Optional<ChatsTgGitUsersEntity> byTgId = chatsTgGitUsersRepository.findById(tgId);
+        Optional<ChatsTgGitUsersEntity> byTgId = chatsTgGitUsersRepository.findAllByTgId(tgId)
+                .stream()
+                .findFirst();
         byTgId.ifPresent(e -> {
             if (Objects.isNull(e.getGitId())) {
                 e.setGitId(gitId);

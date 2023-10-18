@@ -34,8 +34,8 @@ public class MergeRequestHistoryDecorator implements MergeRequestService {
         try {
             return objectMapper.writeValueAsString(event);
         } catch (JsonProcessingException e) {
-            log.error("Failed saving MR history");
-            return StringUtils.EMPTY;
+            log.error("Failed writing mr object to string for MR history", e);
+            return "Error";
         }
     }
 }

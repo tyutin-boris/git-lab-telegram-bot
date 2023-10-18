@@ -20,3 +20,12 @@ java -Dspring.profiles.active=prod -jar git-lab-telegram-bot-1.0-SNAPSHOT.jar
 1. Добавление чатов для которых пользователь хочет осуществлять уведомление.
 2. Удаление чатов
 3. Реализация связи учетных записей в телеграмме и GitLab.
+
+Для тестирования.
+
+1. При добавлении чата сохраняем данные в chats
+   insert into chats(id, type, title)
+   values (-1002018570984, '2', 'TestBotChanel');
+2. Начало личной переписки с ботом
+   insert into tg_users (id, first_name, last_name, username)
+   values (586815794, 'Boris', 'Tyutin', 'btyutin');

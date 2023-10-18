@@ -14,7 +14,7 @@ import java.time.OffsetDateTime;
 @Entity
 @Setter
 @Getter
-@Table(name = "pipeline_hisory")
+@Table(name = "pipeline_history")
 @NoArgsConstructor
 public class PipelineHistoryEntity {
 

@@ -10,4 +10,6 @@ import java.util.List;
 public interface ChatsTgGitUsersRepository extends JpaRepository<ChatsTgGitUsersEntity, Long> {
 
     List<ChatsTgGitUsersEntity> findAllByGitId(Long gitId);
+
+    List<ChatsTgGitUsersEntity> findAllByTgId(Long tgId);
 }
