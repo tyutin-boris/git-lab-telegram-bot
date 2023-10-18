@@ -84,34 +84,28 @@ public class AddGitUsernameScenariosService implements BotCommunicationScenarios
 
         if (privateMessage.isPresent() && BotCommands.ADD_GIT_USERNAME.equals(privateMessage.get().getBotCommand())) {
             if (Objects.equals(REQUEST_USERNAME.getNumber(), privateMessage.get().getScenariosTaskNumber())) {
-                String text = message.getText();
-                Optional<GitUserEntity> gitUser = gitUserRepository.findByUsername(text);
+                String gitUsername = message.getText();
+                Optional<TgGitUsersEntity> tgGitUserOpt = tgGitUsersRepository.findByGitUsername(gitUsername);
+                Optional<GitUserEntity> gitUser = gitUserRepository.findByUsername(gitUsername);
+                if (tgGitUserOpt.isEmpty()) {
+                    TgGitUsersEntity tgGitUser = new TgGitUsersEntity();
+                    tgGitUser.setTgId(message.getFrom().getId());
+                    tgGitUser.setGitUsername(gitUsername);
+                    gitUser.ifPresent(u -> tgGitUser.setGitId(u.getId()));
 
-                if (gitUser.isPresent()) {
-                    TgGitUsersEntity tgGitUsers = new TgGitUsersEntity();
-                    tgGitUsers.setGitId(gitUser.get().getId());
-                    tgGitUsers.setTgId(message.getFrom().getId());
-
-                    tgGitUsersRepository.save(tgGitUsers);
-
-                    PrivateChatMessageEntity newEntity = new PrivateChatMessageEntity();
-
-                    newEntity.setChatId(message.getChatId());
-                    newEntity.setTgUserId(message.getFrom().getId());
-                    newEntity.setBotCommand(BotCommands.ADD_GIT_USERNAME);
-                    newEntity.setCreateDate(OffsetDateTime.now());
-                    newEntity.setScenariosTaskNumber(RECEIVE_USERNAME.getNumber());
-                    newEntity.setText(text);
-
-                    privateChatMessageRepository.save(newEntity);
-                } else {
-                    ChatResponse value = ChatResponse.builder()
-                            .chatId(message.getChatId())
-                            .text("Пользователя с таким username: " + text + " не найден.")
-                            .build();
-
-                    return Optional.of(value);
+                    tgGitUsersRepository.save(tgGitUser);
                 }
+
+                PrivateChatMessageEntity newEntity = new PrivateChatMessageEntity();
+
+                newEntity.setChatId(message.getChatId());
+                newEntity.setTgUserId(message.getFrom().getId());
+                newEntity.setBotCommand(BotCommands.ADD_GIT_USERNAME);
+                newEntity.setCreateDate(OffsetDateTime.now());
+                newEntity.setScenariosTaskNumber(RECEIVE_USERNAME.getNumber());
+                newEntity.setText(gitUsername);
+
+                privateChatMessageRepository.save(newEntity);
             }
         }
         ChatResponse value = ChatResponse.builder()
