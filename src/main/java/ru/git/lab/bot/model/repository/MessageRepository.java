@@ -14,7 +14,7 @@ import java.util.UUID;
 @Repository
 public interface MessageRepository extends JpaRepository<MessageEntity, Integer> {
 
-    @Query("SELECT m.id, m.chatId FROM MessageEntity m WHERE m.mrId = :mrId AND m.authorId = :authorId")
+    @Query("SELECT new ru.git.lab.bot.dto.MessageToDelete(m.id, m.chatId) FROM MessageEntity m WHERE m.mrId = :mrId AND m.authorId = :authorId")
     List<MessageToDelete> getMessageToDelete(@Param("mrId") Long mrId, @Param("authorId") Long authorId);
 
     Optional<MessageEntity> findByMrIdAndAuthorId(Long mrId, Long authorId);
