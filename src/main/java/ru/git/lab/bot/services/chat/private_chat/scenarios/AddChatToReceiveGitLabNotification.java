@@ -80,7 +80,7 @@ public class AddChatToReceiveGitLabNotification implements BotCommunicationScena
 
             ChatResponse response = ChatResponse.builder()
                     .chatId(message.getChatId())
-                    .text("Пожалуйста ввидите название чата для которого вы хотите получать уведомления от GitLab")
+                    .text("Пожалуйста выберите чат для которого вы хотите получать уведомления от GitLab")
                     .buttons(buttons)
                     .build();
 
