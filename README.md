@@ -1,5 +1,7 @@
 # git-lab-telegram-bot
 
+java -Dspring.profiles.active=prod -jar git-lab-telegram-bot-1.0-SNAPSHOT.jar
+
 Бизнес процессы для взаимодействия с GitLab.
 
 1. Отправка уведомления об открытии нового МРа
