@@ -15,7 +15,6 @@ import ru.git.lab.bot.services.senders.api.MessageSender;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @Service
@@ -41,14 +40,14 @@ public class MessageServiceImpl implements MessageService {
     @Transactional
     public void deleteMessages(List<MessageToDelete> messages) {
         for (MessageToDelete message : messages) {
-            UUID messageId = message.getMessageId();
+            Integer id = message.getId();
             Long chatId = message.getChatId();
-            Integer telegramMessageId = message.getTelegramMessageId();
-            boolean messageWasDelete = messageSender.deleteMessage(chatId, telegramMessageId);
+
+            boolean messageWasDelete = messageSender.deleteMessage(chatId, id);
 
             if (messageWasDelete) {
-                messageRepository.deleteById(messageId);
-                log.debug("Message was delete. id " + messageId + ", chatId " + chatId);
+                messageRepository.deleteById(id);
+                log.debug("Message was delete. id " + id + ", chatId " + chatId);
             }
         }
     }

@@ -23,6 +23,9 @@ public class MergeRequestServiceImpl implements MergeRequestService {
     @Override
     public void handleEvent(MergeRequestEvent event) {
         MergeRequestDto mergeRequest = mergeRequestMapper.toDto(event);
-        eventHandlers.get(mergeRequest.getAction()).handleEvent(mergeRequest);
+        Action action = mergeRequest.getAction();
+
+        log.debug("Choose handler for MR action: {}", action);
+        eventHandlers.get(action).handleEvent(mergeRequest);
     }
 }

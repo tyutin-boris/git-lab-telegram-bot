@@ -22,6 +22,7 @@ public class SaveGitUserDecorator implements MergeRequestService {
 
     @Override
     public void handleEvent(MergeRequestEvent event) {
+        log.debug("Try to save user if not exist");
         UserDto user = userDtoMapper.toDto(event.getUser());
 
         gitUserService.saveUserIfNotExist(user);

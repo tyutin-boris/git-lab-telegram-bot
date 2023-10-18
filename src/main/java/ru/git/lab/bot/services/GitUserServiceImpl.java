@@ -25,8 +25,9 @@ public class GitUserServiceImpl implements GitUserService {
         Optional.ofNullable(user)
                 .ifPresent(u -> {
                     if (!gitUserRepository.existsByIdAndUsernameAndEmail(u.getId(), u.getUsername(), u.getEmail())) {
-                        GitUserEntity gitUserEntity = userMapper.toEntity(user);
-                        gitUserRepository.save(gitUserEntity);
+                        GitUserEntity entity = userMapper.toEntity(user);
+                        gitUserRepository.save(entity);
+                        log.debug("Save user with id: {}, username: {}", entity.getId(), entity.getUsername());
                     }
                 });
     }

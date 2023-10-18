@@ -19,6 +19,7 @@ public class MergeRequestController {
 
     @PostMapping
     public void mergeRequestEvent(@RequestBody MergeRequestEvent request) {
+        log.debug("Receive MR message");
         saveGitUserDecorator.handleEvent(request);
     }
 }

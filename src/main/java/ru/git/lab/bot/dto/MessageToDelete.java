@@ -1,18 +1,13 @@
 package ru.git.lab.bot.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.UUID;
-
 @Data
+@AllArgsConstructor
 public class MessageToDelete {
-    UUID messageId;
-    Long chatId;
-    Integer telegramMessageId;
 
-    public MessageToDelete(UUID messageId, Long chatId, Integer telegramMessageId) {
-        this.messageId = messageId;
-        this.chatId = chatId;
-        this.telegramMessageId = telegramMessageId;
-    }
+    Integer id;
+
+    Long chatId;
 }
