@@ -74,12 +74,28 @@ public class TgMrMessageServiceImpl implements TgMrMessageService {
         tgMrMessageRepository.save(entity);
     }
 
+    @Override
+    public void updateTgIdAndDraftStatus(Integer tgId, TgMrMessageEntity entity) {
+        entity.setTgId(tgId);
+        entity.setDraft(false);
+        tgMrMessageRepository.save(entity);
+        log.debug("Update tgId: {}, for tg message with id: {}", tgId, entity.getId());
+    }
+
+    @Override
+    public void updateText(String text, TgMrMessageEntity entity) {
+        entity.setText(text);
+        tgMrMessageRepository.save(entity);
+        log.debug("Update test for message with tgId: {}, id: {}", entity.getTgId(), entity.getId());
+    }
+
     private TgMrMessageEntity createMessage(Long chatId, String text, MergeRequestDto mergeRequest) {
         TgMrMessageEntity tgMrMessageEntity = new TgMrMessageEntity();
 
         tgMrMessageEntity.setChatId(chatId);
         tgMrMessageEntity.setMrId(mergeRequest.getMrId());
-        tgMrMessageEntity.setAuthorId(mergeRequest.getAuthor().getId());
+        tgMrMessageEntity.setAuthorId(mergeRequest.getAuthor()
+                                              .getId());
         tgMrMessageEntity.setText(text);
         tgMrMessageEntity.setDraft(mergeRequest.isDraft());
         tgMrMessageEntity.setCreateDateTime(OffsetDateTime.now());

@@ -22,4 +22,8 @@ public interface TgMrMessageService {
     Optional<TgMrMessageEntity> findTgMrMessageById(Long id);
 
     void save(TgMrMessageEntity entity);
+
+    void updateTgIdAndDraftStatus(Integer tgid, TgMrMessageEntity entity);
+
+    void updateText(String text, TgMrMessageEntity entity);
 }
