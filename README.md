@@ -33,5 +33,18 @@ java -Dspring.profiles.active=prod -jar git-lab-telegram-bot-1.0-SNAPSHOT.jar
 Запуск на сервере https://timeweb.cloud/
 
 1. screen -ls - список запушенных виртуальных терминалов
-2. 
-3. Выйти из в терминала ctrl + a d
+2. создание нового скрина
+3. Запуск бота
+java -Dspring.profiles.active=prod -jar git-lab-telegram-bot-1.1.1-SNAPSHOT.jar
+
+4. Выйти из в терминала ctrl + a d
+
+Подключение Webhooks GitLab
+1. Для получения оповешьений о MR
+http://83.222.10.198:9000/liga-bot/merges/requests
+2. Для сохранения истории pipeline (Нужно для истьории, что бы постороить модель)
+http://83.222.10.198:9000/liga-bot/pipelines/histories
+
+Подключение к H2 бд на сервере
+ 
+http://83.222.10.198:9000/liga-bot/h2-console

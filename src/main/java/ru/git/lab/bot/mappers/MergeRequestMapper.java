@@ -9,7 +9,9 @@ import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.Reviewer;
 import ru.git.lab.bot.dto.MergeRequestDto;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Mapper(componentModel = "spring")
 public abstract class MergeRequestMapper implements ToDtoMapper<MergeRequestEvent, MergeRequestDto> {
@@ -35,7 +37,9 @@ public abstract class MergeRequestMapper implements ToDtoMapper<MergeRequestEven
 
     @Named("getReviewerName")
     public String getReviewerName(List<Reviewer> reviewers) {
-        return reviewers.stream()
+        return Optional.ofNullable(reviewers)
+                .orElse(Collections.emptyList())
+                .stream()
                 .findFirst()
                 .map(Reviewer::getName)
                 .orElse(StringUtils.EMPTY);
