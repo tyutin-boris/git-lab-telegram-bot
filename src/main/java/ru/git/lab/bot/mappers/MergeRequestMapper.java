@@ -23,7 +23,7 @@ public abstract class MergeRequestMapper implements ToDtoMapper<MergeRequestEven
     @Mapping(source = "objectAttributes.sourceBranch", target = "sourceBranch")
     @Mapping(source = "objectAttributes.targetBranch", target = "targetBranch")
     @Mapping(source = "objectAttributes.url", target = "mrUrl")
-    @Mapping(source = "objectAttributes.action", target = "action")
+    @Mapping(source = "objectAttributes.action", target = "action", defaultValue = "INDEFINITELY")
     @Mapping(source = "objectAttributes.detailedMergeStatus", target = "detailedMergeStatus", qualifiedByName = "getDetailedMergeStatus")
     @Mapping(source = "objectAttributes.authorId", target = "author.id")
     @Mapping(source = "project.name", target = "projectName")
