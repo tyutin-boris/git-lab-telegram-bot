@@ -29,3 +29,9 @@ java -Dspring.profiles.active=prod -jar git-lab-telegram-bot-1.0-SNAPSHOT.jar
 2. Начало личной переписки с ботом
    insert into tg_users (id, first_name, last_name, username)
    values (586815794, 'Boris', 'Tyutin', 'btyutin');
+
+Запуск на сервере https://timeweb.cloud/
+
+1. screen -ls - список запушенных виртуальных терминалов
+2. 
+3. Выйти из в терминала ctrl + a d
