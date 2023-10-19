@@ -33,11 +33,15 @@ java -Dspring.profiles.active=prod -jar git-lab-telegram-bot-1.0-SNAPSHOT.jar
 Запуск на сервере https://timeweb.cloud/
 
 1. screen -ls - список запушенных виртуальных терминалов
-2. создание нового скрина
+2. создание нового скрина с логфайлом
+screen -S bot-1.1 -L -Logfile bot-1.1.log
+
 3. Запуск бота
 java -Dspring.profiles.active=prod -jar git-lab-telegram-bot-1.1.1-SNAPSHOT.jar
 
 4. Выйти из в терминала ctrl + a d
+5. Удалить
+   screen -XS <session-id> quit
 
 Подключение Webhooks GitLab
 1. Для получения оповешьений о MR
