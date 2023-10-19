@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.git.lab.bot.api.mr.Action;
 import ru.git.lab.bot.dto.MergeRequestDto;
 import ru.git.lab.bot.model.entities.TgMrMessageEntity;
-import ru.git.lab.bot.services.api.MessageService;
+import ru.git.lab.bot.services.api.TgMrMessageService;
 import ru.git.lab.bot.services.api.MrTextMessageService;
 import ru.git.lab.bot.services.mr.handlers.api.MrEventHandler;
 import ru.git.lab.bot.services.senders.api.MessageSender;
@@ -18,7 +18,7 @@ import static ru.git.lab.bot.api.mr.Action.UPDATE;
 @RequiredArgsConstructor
 public class MrUpdateEventHandler implements MrEventHandler {
 
-    private final MessageService messageService;
+    private final TgMrMessageService messageService;
     private final MessageSender messageSender;
     private final MrTextMessageService mrTextMessageService;
 

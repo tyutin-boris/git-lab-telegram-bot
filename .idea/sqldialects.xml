@@ -14,5 +14,6 @@
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V1.7__create_tg_git_user.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V1.8__create_pipeline_history.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V1.9__create_merge_request_history.sql" dialect="PostgreSQL" />
+    <file url="PROJECT" dialect="PostgreSQL" />
   </component>
 </project>

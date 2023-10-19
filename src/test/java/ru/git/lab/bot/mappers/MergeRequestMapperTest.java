@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import ru.git.lab.bot.api.mr.Action;
-import ru.git.lab.bot.api.mr.DetailedMergeStatus;
 import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.ObjectAttributes;
 import ru.git.lab.bot.api.mr.Project;
@@ -67,7 +66,6 @@ class MergeRequestMapperTest {
         dto.setMrId(1L);
         dto.setUser(user);
         dto.setAuthor(author);
-        dto.setDetailedMergeStatus(DetailedMergeStatus.MERGEABLE);
         dto.setProjectName("projectName");
         dto.setTitle("title");
         dto.setDescription("description");
@@ -88,7 +86,6 @@ class MergeRequestMapperTest {
         objectAttributes.setDescription("description");
         objectAttributes.setSourceBranch("source");
         objectAttributes.setTargetBranch("target");
-        objectAttributes.setDetailedMergeStatus(DetailedMergeStatus.MERGEABLE.getName());
         objectAttributes.setUrl("mrUrl");
         objectAttributes.setAction(Action.OPEN);
 

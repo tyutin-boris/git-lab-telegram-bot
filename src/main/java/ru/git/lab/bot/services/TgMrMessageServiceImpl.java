@@ -4,12 +4,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.git.lab.bot.dto.MergeRequestDto;
 import ru.git.lab.bot.dto.MessageToDelete;
 import ru.git.lab.bot.model.entities.TgMrMessageEntity;
 import ru.git.lab.bot.model.repository.TgMrMessageRepository;
-import ru.git.lab.bot.services.api.MessageService;
+import ru.git.lab.bot.services.api.TgMrMessageService;
 import ru.git.lab.bot.services.senders.api.MessageSender;
 
 import java.time.OffsetDateTime;
@@ -19,16 +18,18 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MessageServiceImpl implements MessageService {
+public class TgMrMessageServiceImpl implements TgMrMessageService {
 
     private final MessageSender messageSender;
+
     private final TgMrMessageRepository tgMrMessageRepository;
 
     @Override
-    public void saveMessage(Message message, MergeRequestDto mergeRequest) {
-        TgMrMessageEntity tgMrMessageEntity = createMessage(message, mergeRequest);
-        tgMrMessageRepository.save(tgMrMessageEntity);
-        log.debug("Save message with tgId " + tgMrMessageEntity.getTgId() + ", authorId " + tgMrMessageEntity.getAuthorId());
+    public Long saveMessage(Long chatId, String text, MergeRequestDto mergeRequest) {
+        TgMrMessageEntity tgMrMessageEntity = createMessage(chatId, text, mergeRequest);
+        TgMrMessageEntity savedEntity = tgMrMessageRepository.save(tgMrMessageEntity);
+        log.debug("Save message with tgId: {}, authorId {} ", tgMrMessageEntity.getTgId(), tgMrMessageEntity.getAuthorId());
+        return savedEntity.getId();
     }
 
     @Override
@@ -55,8 +56,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public TgMrMessageEntity getMessageByMrIdAndAuthorId(Long mrId, Long authorId) {
         return tgMrMessageRepository.findByMrIdAndAuthorId(mrId, authorId)
-                .orElseThrow(() -> new RuntimeException(
-                        "Message not found. mrId: " + mrId + ", " + "authorId: " + authorId));
+                .orElseThrow(() -> new RuntimeException("Message not found. mrId: " + mrId + ", " + "authorId: " + authorId));
     }
 
     @Override
@@ -64,13 +64,24 @@ public class MessageServiceImpl implements MessageService {
         return tgMrMessageRepository.findByMrIdAndAuthorId(mrId, authorId);
     }
 
-    private TgMrMessageEntity createMessage(Message message, MergeRequestDto mergeRequest) {
+    @Override
+    public Optional<TgMrMessageEntity> findTgMrMessageById(Long id) {
+        return tgMrMessageRepository.findById(id);
+    }
+
+    @Override
+    public void save(TgMrMessageEntity entity) {
+        tgMrMessageRepository.save(entity);
+    }
+
+    private TgMrMessageEntity createMessage(Long chatId, String text, MergeRequestDto mergeRequest) {
         TgMrMessageEntity tgMrMessageEntity = new TgMrMessageEntity();
 
-        tgMrMessageEntity.setTgId(message.getMessageId());
-        tgMrMessageEntity.setChatId(message.getChatId());
+        tgMrMessageEntity.setChatId(chatId);
         tgMrMessageEntity.setMrId(mergeRequest.getMrId());
         tgMrMessageEntity.setAuthorId(mergeRequest.getAuthor().getId());
+        tgMrMessageEntity.setText(text);
+        tgMrMessageEntity.setDraft(mergeRequest.isDraft());
         tgMrMessageEntity.setCreateDateTime(OffsetDateTime.now());
 
         return tgMrMessageEntity;

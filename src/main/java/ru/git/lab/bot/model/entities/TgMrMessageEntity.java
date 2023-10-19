@@ -33,6 +33,12 @@ public class TgMrMessageEntity {
     @Column(name = "author_id", nullable = false)
     private Long authorId;
 
+    @Column(name ="text")
+    private String text;
+
+    @Column(name ="is_draft")
+    private boolean isDraft;
+
     @Column(name = "create_date_time", nullable = false)
     private OffsetDateTime createDateTime;
 }

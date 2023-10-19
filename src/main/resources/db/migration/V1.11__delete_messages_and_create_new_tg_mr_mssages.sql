@@ -5,7 +5,9 @@ CREATE TABLE IF NOT EXISTS tg_mr_messages
     chat_id          BIGINT    NOT NULL,
     mr_id            BIGINT    NOT NULL,
     author_id        BIGINT    NOT NULL,
-    create_date_time TIMESTAMP NOT NULL
+    create_date_time TIMESTAMP NOT NULL,
+    test             TEXT,
+    is_draft         BOOLEAN   NOT NULL DEFAULT FALSE
 );
 
 INSERT INTO tg_mr_messages (tg_id, chat_id, mr_id, author_id, create_date_time)
