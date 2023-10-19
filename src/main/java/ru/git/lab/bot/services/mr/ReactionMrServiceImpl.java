@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.git.lab.bot.dto.MergeRequestDto;
 import ru.git.lab.bot.model.entities.ApproveEntity;
-import ru.git.lab.bot.model.entities.MessageEntity;
+import ru.git.lab.bot.model.entities.TgMrMessageEntity;
 import ru.git.lab.bot.services.api.ApproveService;
 import ru.git.lab.bot.services.api.MessageService;
 import ru.git.lab.bot.services.api.MrTextMessageService;
@@ -32,7 +32,7 @@ public class ReactionMrServiceImpl implements ReactionMrService {
         List<ApproveEntity> approvalsForMr = approveService.findAllByMrId(mrId);
         String text = mrTextMessageService.createMergeRequestTextMessageWithApprove(mergeRequest, approvalsForMr);
 
-        MessageEntity messageEntity = messageService.getMessageByMrIdAndAuthorId(mrId, authorId);
-        sender.updateMessage(text, messageEntity.getChatId(), messageEntity.getId());
+        TgMrMessageEntity tgMrMessageEntity = messageService.getMessageByMrIdAndAuthorId(mrId, authorId);
+        sender.updateMessage(text, tgMrMessageEntity.getChatId(), tgMrMessageEntity.getTgId());
     }
 }

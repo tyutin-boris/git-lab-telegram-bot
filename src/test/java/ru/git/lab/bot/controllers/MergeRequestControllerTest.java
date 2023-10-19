@@ -1,6 +1,5 @@
 package ru.git.lab.bot.controllers;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -10,7 +9,7 @@ import ru.git.lab.bot.builders.MergeRequestEventTestBuilder;
 import ru.git.lab.bot.model.entities.ApproveEntity;
 import ru.git.lab.bot.model.entities.ChatsTgGitUsersEntity;
 import ru.git.lab.bot.model.entities.GitUserEntity;
-import ru.git.lab.bot.model.entities.MessageEntity;
+import ru.git.lab.bot.model.entities.TgMrMessageEntity;
 import ru.git.lab.bot.model.repository.*;
 import ru.git.lab.bot.services.mr.handlers.*;
 import ru.git.lab.bot.services.senders.api.MessageSender;
@@ -47,7 +46,7 @@ public class MergeRequestControllerTest {
     private GitUserRepository gitUserRepository;
 
     @Autowired
-    private MessageRepository messageRepository;
+    private TgMrMessageRepository tgMrMessageRepository;
 
     @Autowired
     private ApproveRepository approveRepository;
@@ -253,11 +252,11 @@ public class MergeRequestControllerTest {
     }
 
     private void checkMessageSave(long mrId, long authorId) {
-        MessageEntity messageEntity = messageRepository.findByMrIdAndAuthorId(mrId, authorId)
+        TgMrMessageEntity tgMrMessageEntity = tgMrMessageRepository.findByMrIdAndAuthorId(mrId, authorId)
                 .orElse(null);
 
-        assertThat(messageEntity).isNotNull();
-        assertThat(messageEntity.getChatId()).isEqualTo(chatId);
+        assertThat(tgMrMessageEntity).isNotNull();
+        assertThat(tgMrMessageEntity.getChatId()).isEqualTo(chatId);
 
     }
 

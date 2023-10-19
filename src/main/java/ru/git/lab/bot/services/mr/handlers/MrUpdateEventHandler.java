@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.git.lab.bot.api.mr.Action;
 import ru.git.lab.bot.dto.MergeRequestDto;
-import ru.git.lab.bot.model.entities.MessageEntity;
+import ru.git.lab.bot.model.entities.TgMrMessageEntity;
 import ru.git.lab.bot.services.api.MessageService;
 import ru.git.lab.bot.services.api.MrTextMessageService;
 import ru.git.lab.bot.services.mr.handlers.api.MrEventHandler;
@@ -30,9 +30,9 @@ public class MrUpdateEventHandler implements MrEventHandler {
         log.debug("Merge request action " + getAction() + ". MR id: " + mrId);
 
         String text = mrTextMessageService.createMergeRequestTextMessage(mergeRequest);
-        MessageEntity message = messageService.getMessageByMrIdAndAuthorId(mrId, authorId);
+        TgMrMessageEntity message = messageService.getMessageByMrIdAndAuthorId(mrId, authorId);
 
-        messageSender.updateMessage(text, message.getChatId(), message.getId());
+        messageSender.updateMessage(text, message.getChatId(), message.getTgId());
     }
 
     @Override

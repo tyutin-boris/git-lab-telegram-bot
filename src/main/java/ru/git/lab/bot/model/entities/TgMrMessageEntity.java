@@ -13,23 +13,26 @@ import java.time.OffsetDateTime;
 @Entity
 @Setter
 @Getter
-@Table(name = "messages")
+@Table(name = "tg_mr_messages")
 @NoArgsConstructor
-public class MessageEntity {
+public class TgMrMessageEntity {
 
     @Id
     @Column(nullable = false)
-    Integer id;
+    private Long id;
 
-    @Column(name = "chat_id", nullable = false)
-    Long chatId;
+    @Column(name = "tg_id")
+    private Integer tgId;
+
+    @Column(name = "chat_id")
+    private Long chatId;
 
     @Column(name = "mr_id", nullable = false)
-    Long mrId;
+    private Long mrId;
 
     @Column(name = "author_id", nullable = false)
-    Long authorId;
+    private Long authorId;
 
     @Column(name = "create_date_time", nullable = false)
-    OffsetDateTime createDateTime;
+    private OffsetDateTime createDateTime;
 }

@@ -6,14 +6,13 @@ import org.springframework.stereotype.Service;
 import ru.git.lab.bot.api.mr.DetailedMergeStatus;
 import ru.git.lab.bot.dto.MergeRequestDto;
 import ru.git.lab.bot.model.entities.ChatsTgGitUsersEntity;
-import ru.git.lab.bot.model.entities.MessageEntity;
+import ru.git.lab.bot.model.entities.TgMrMessageEntity;
 import ru.git.lab.bot.model.repository.ChatsTgGitUsersRepository;
 import ru.git.lab.bot.services.api.MessageService;
 import ru.git.lab.bot.services.api.MrTextMessageService;
 import ru.git.lab.bot.services.mr.api.CreateMrService;
 import ru.git.lab.bot.services.senders.api.MessageSender;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +45,7 @@ public class CreateMrServiceImpl implements CreateMrService {
             return;
         }
 
-        Optional<MessageEntity> messageEntity = messageService.findByMrIdAndAuthorId(mrId, authorId);
+        Optional<TgMrMessageEntity> messageEntity = messageService.findByMrIdAndAuthorId(mrId, authorId);
 
         if (messageEntity.isPresent()) {
             log.debug("Message already sent. " + mrIdAndAuthorIdLog);
