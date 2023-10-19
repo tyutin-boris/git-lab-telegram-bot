@@ -8,6 +8,7 @@ import ru.git.lab.bot.model.repository.PipelineHistoryRepository;
 import ru.git.lab.bot.services.pipelines.api.PipelineHistoryService;
 
 import java.time.OffsetDateTime;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -20,10 +21,13 @@ public class PipelineHistoryServiceImpl implements PipelineHistoryService {
     public void save(String message) {
         PipelineHistoryEntity pipelineHistoryEntity = new PipelineHistoryEntity();
 
-        pipelineHistoryEntity.setMessage(message);
+        String receivedMessage = Optional.ofNullable(message)
+                .orElse("Error");
+
+        pipelineHistoryEntity.setMessage(receivedMessage);
         pipelineHistoryEntity.setCreateDate(OffsetDateTime.now());
 
         pipelineHistoryRepository.save(pipelineHistoryEntity);
-        log.debug("Сохранено pipeline сообшение");
+        log.debug("Save pipeline message");
     }
 }
