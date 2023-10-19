@@ -5,11 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.git.lab.bot.api.mr.Action;
 import ru.git.lab.bot.dto.MergeRequestDto;
-import ru.git.lab.bot.model.entities.MessageEntity;
-import ru.git.lab.bot.services.api.MessageService;
+import ru.git.lab.bot.model.entities.TgMrMessageEntity;
+import ru.git.lab.bot.services.api.TgMrMessageService;
 import ru.git.lab.bot.services.api.MrTextMessageService;
 import ru.git.lab.bot.services.mr.handlers.api.MrEventHandler;
 import ru.git.lab.bot.services.senders.api.MessageSender;
+
+import java.util.Objects;
 
 import static ru.git.lab.bot.api.mr.Action.UPDATE;
 
@@ -18,7 +20,7 @@ import static ru.git.lab.bot.api.mr.Action.UPDATE;
 @RequiredArgsConstructor
 public class MrUpdateEventHandler implements MrEventHandler {
 
-    private final MessageService messageService;
+    private final TgMrMessageService tgMrMessageService;
     private final MessageSender messageSender;
     private final MrTextMessageService mrTextMessageService;
 
@@ -29,10 +31,16 @@ public class MrUpdateEventHandler implements MrEventHandler {
 
         log.debug("Merge request action " + getAction() + ". MR id: " + mrId);
 
+        TgMrMessageEntity message = tgMrMessageService.getMessageByMrIdAndAuthorId(mrId, authorId);
         String text = mrTextMessageService.createMergeRequestTextMessage(mergeRequest);
-        MessageEntity message = messageService.getMessageByMrIdAndAuthorId(mrId, authorId);
 
-        messageSender.updateMessage(text, message.getChatId(), message.getId());
+        if(Objects.isNull(message.getTgId())) {
+            messageSender.sendMessage(text, message.getChatId())
+                    .ifPresent(sent -> tgMrMessageService.updateTgIdAndDraftStatus(sent.getMessageId(), message));
+        } else {
+            messageSender.updateMessage(text, message.getChatId(), message.getTgId());
+            tgMrMessageService.updateText(text, message);
+        }
     }
 
     @Override

@@ -52,3 +52,8 @@ http://83.222.10.198:9000/liga-bot/pipelines/histories
 Подключение к H2 бд на сервере
  
 http://83.222.10.198:9000/liga-bot/h2-console
+
+
+
+1.1.2
+1. Мры в Draft не отправляются.

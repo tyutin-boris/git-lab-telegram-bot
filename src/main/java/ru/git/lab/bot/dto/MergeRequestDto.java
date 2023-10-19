@@ -2,7 +2,6 @@ package ru.git.lab.bot.dto;
 
 import lombok.Data;
 import ru.git.lab.bot.api.mr.Action;
-import ru.git.lab.bot.api.mr.DetailedMergeStatus;
 
 @Data
 public class MergeRequestDto {
@@ -14,8 +13,6 @@ public class MergeRequestDto {
     AuthorDto author;
 
     Action action;
-
-    DetailedMergeStatus detailedMergeStatus;
 
     String projectName;
 
@@ -30,4 +27,6 @@ public class MergeRequestDto {
     String targetBranch;
 
     String mrUrl;
+
+    boolean isDraft;
 }

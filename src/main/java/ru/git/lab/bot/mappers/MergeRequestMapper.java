@@ -4,7 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import ru.git.lab.bot.api.mr.DetailedMergeStatus;
 import ru.git.lab.bot.api.mr.MergeRequestEvent;
 import ru.git.lab.bot.api.mr.Reviewer;
 import ru.git.lab.bot.dto.MergeRequestDto;
@@ -24,16 +23,11 @@ public abstract class MergeRequestMapper implements ToDtoMapper<MergeRequestEven
     @Mapping(source = "objectAttributes.targetBranch", target = "targetBranch")
     @Mapping(source = "objectAttributes.url", target = "mrUrl")
     @Mapping(source = "objectAttributes.action", target = "action", defaultValue = "INDEFINITELY")
-    @Mapping(source = "objectAttributes.detailedMergeStatus", target = "detailedMergeStatus", qualifiedByName = "getDetailedMergeStatus")
+    @Mapping(source = "objectAttributes.title", target = "draft", qualifiedByName = "getIsDraft")
     @Mapping(source = "objectAttributes.authorId", target = "author.id")
     @Mapping(source = "project.name", target = "projectName")
     @Mapping(source = "reviewers", target = "reviewerName", qualifiedByName = "getReviewerName")
     public abstract MergeRequestDto toDto(MergeRequestEvent event);
-
-    @Named("getDetailedMergeStatus")
-    public DetailedMergeStatus getDetailedMergeStatus(String value) {
-        return DetailedMergeStatus.getStatus(value);
-    }
 
     @Named("getReviewerName")
     public String getReviewerName(List<Reviewer> reviewers) {
@@ -43,5 +37,10 @@ public abstract class MergeRequestMapper implements ToDtoMapper<MergeRequestEven
                 .findFirst()
                 .map(Reviewer::getName)
                 .orElse(StringUtils.EMPTY);
+    }
+
+    @Named("getIsDraft")
+    public boolean getIsDraft(String title) {
+        return title.contains("Draft:");
     }
 }

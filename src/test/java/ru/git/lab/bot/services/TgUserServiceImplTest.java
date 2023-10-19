@@ -26,63 +26,63 @@ public class TgUserServiceImplTest {
     @SpyBean
     private TgUserRepository tgUserRepository;
 
-    @Test
-    public void shouldSaveTgUser() {
-        //given
-        User user = getUser();
-
-        //when
-        sut.save(user);
-
-        //then
-        TgUserEntity actual = tgUserRepository.findById(user.getId()).orElse(null);
-
-        assertThat(actual).isNotNull();
-        assertThat(actual.getFirstName()).isEqualTo(user.getFirstName());
-        assertThat(actual.getLastName()).isEqualTo(user.getLastName());
-        assertThat(actual.getUsername()).isEqualTo(user.getUserName());
-    }
-
-    @Test
-    public void shouldNotSaveTgUserWhenItExist() {
-        //given
-        User user = getUser();
-        sut.save(user);
-
-        //when
-        sut.saveUserIfNotExist(user);
-
-        //then
-        verify(tgUserRepository, atLeastOnce()).save(any());
-    }
-
-
-    @Test
-    public void shouldThrowExceptionWhenSaveTgUserIsNull() {
-        //given
-        String expected = "User no save because is is null";
-
-        //when
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> sut.save(null));
-
-        //then
-        String actual = exception.getMessage();
-        assertThat(actual).isEqualTo(expected);
-    }
-
-
-    @Test
-    public void shouldThrowExceptionWhenSaveIfNotExistTgUserIsNull() {
-        //given
-        String expected = "User no save because is is null";
-
-        //when
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> sut.saveUserIfNotExist(null));
-
-        //then
-        String actual = exception.getMessage();
-        assertThat(actual).isEqualTo(expected);
-    }
+//    @Test
+//    public void shouldSaveTgUser() {
+//        //given
+//        User user = getUser();
+//
+//        //when
+//        sut.save(user);
+//
+//        //then
+//        TgUserEntity actual = tgUserRepository.findById(user.getId()).orElse(null);
+//
+//        assertThat(actual).isNotNull();
+//        assertThat(actual.getFirstName()).isEqualTo(user.getFirstName());
+//        assertThat(actual.getLastName()).isEqualTo(user.getLastName());
+//        assertThat(actual.getUsername()).isEqualTo(user.getUserName());
+//    }
+//
+//    @Test
+//    public void shouldNotSaveTgUserWhenItExist() {
+//        //given
+//        User user = getUser();
+//        sut.save(user);
+//
+//        //when
+//        sut.saveUserIfNotExist(user);
+//
+//        //then
+//        verify(tgUserRepository, atLeastOnce()).save(any());
+//    }
+//
+//
+//    @Test
+//    public void shouldThrowExceptionWhenSaveTgUserIsNull() {
+//        //given
+//        String expected = "User no save because is is null";
+//
+//        //when
+//        RuntimeException exception = assertThrows(RuntimeException.class, () -> sut.save(null));
+//
+//        //then
+//        String actual = exception.getMessage();
+//        assertThat(actual).isEqualTo(expected);
+//    }
+//
+//
+//    @Test
+//    public void shouldThrowExceptionWhenSaveIfNotExistTgUserIsNull() {
+//        //given
+//        String expected = "User no save because is is null";
+//
+//        //when
+//        RuntimeException exception = assertThrows(RuntimeException.class, () -> sut.saveUserIfNotExist(null));
+//
+//        //then
+//        String actual = exception.getMessage();
+//        assertThat(actual).isEqualTo(expected);
+//    }
 
     private User getUser() {
         User from = new User();

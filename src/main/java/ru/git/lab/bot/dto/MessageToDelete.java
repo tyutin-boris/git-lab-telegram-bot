@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class MessageToDelete {
 
-    Integer id;
+    Integer tgId;
 
     Long chatId;
 }

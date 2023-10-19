@@ -3,21 +3,17 @@ package ru.git.lab.bot.services.mr;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.git.lab.bot.api.mr.DetailedMergeStatus;
 import ru.git.lab.bot.dto.MergeRequestDto;
 import ru.git.lab.bot.model.entities.ChatsTgGitUsersEntity;
-import ru.git.lab.bot.model.entities.MessageEntity;
+import ru.git.lab.bot.model.entities.TgMrMessageEntity;
 import ru.git.lab.bot.model.repository.ChatsTgGitUsersRepository;
-import ru.git.lab.bot.services.api.MessageService;
 import ru.git.lab.bot.services.api.MrTextMessageService;
+import ru.git.lab.bot.services.api.TgMrMessageService;
 import ru.git.lab.bot.services.mr.api.CreateMrService;
 import ru.git.lab.bot.services.senders.api.MessageSender;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import static ru.git.lab.bot.api.mr.DetailedMergeStatus.DRAFT_STATUS;
 
 @Slf4j
 @Service
@@ -26,7 +22,7 @@ public class CreateMrServiceImpl implements CreateMrService {
 
     private final MessageSender sender;
 
-    private final MessageService messageService;
+    private final TgMrMessageService tgMrMessageService;
 
     private final ChatsTgGitUsersRepository chatsTgGitUsersRepository;
 
@@ -37,16 +33,10 @@ public class CreateMrServiceImpl implements CreateMrService {
         long mrId = mergeRequest.getMrId();
         long authorId = mergeRequest.getAuthor()
                 .getId();
-        DetailedMergeStatus detailedMergeStatus = mergeRequest.getDetailedMergeStatus();
 
         String mrIdAndAuthorIdLog = "Mr with id " + mrId + " and authorId " + authorId;
 
-        if (DRAFT_STATUS.equals(detailedMergeStatus)) {
-            log.info("Message not sent because has draft status. " + mrIdAndAuthorIdLog);
-            return;
-        }
-
-        Optional<MessageEntity> messageEntity = messageService.findByMrIdAndAuthorId(mrId, authorId);
+        Optional<TgMrMessageEntity> messageEntity = tgMrMessageService.findByMrIdAndAuthorId(mrId, authorId);
 
         if (messageEntity.isPresent()) {
             log.debug("Message already sent. " + mrIdAndAuthorIdLog);
@@ -65,9 +55,29 @@ public class CreateMrServiceImpl implements CreateMrService {
 
         String text = mrTextMessageService.createMergeRequestTextMessage(mergeRequest);
 
-        for (Long id : chatIds) {
-            sender.sendMessage(text, id)
-                    .ifPresent(message -> messageService.saveMessage(message, mergeRequest));
+        List<Long> messageIds = chatIds.stream()
+                .map(chatId -> tgMrMessageService.saveMessage(chatId, text, mergeRequest))
+                .toList();
+
+        messageIds.stream()
+                .map(tgMrMessageService::findTgMrMessageById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(this::sendMessageToTg)
+                .forEach(tgMrMessageService::save);
+    }
+
+    private TgMrMessageEntity sendMessageToTg(TgMrMessageEntity entity) {
+        if (entity.isDraft()) {
+            log.debug("mr with id: {} has draft status", entity.getMrId());
+            return entity;
         }
+
+        sender.sendMessage(entity.getText(), entity.getChatId())
+                .ifPresent(sent -> {
+                    entity.setTgId(sent.getMessageId());
+                });
+
+        return entity;
     }
 }
