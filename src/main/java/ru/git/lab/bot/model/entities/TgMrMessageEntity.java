@@ -42,6 +42,9 @@ public class TgMrMessageEntity {
     @Column(name ="is_draft")
     private boolean isDraft;
 
+    @Column(name ="is_delete")
+    private boolean isDelete;
+
     @Column(name = "create_date_time", nullable = false)
     private OffsetDateTime createDateTime;
 }

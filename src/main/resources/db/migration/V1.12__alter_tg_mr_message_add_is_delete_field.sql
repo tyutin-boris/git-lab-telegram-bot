@@ -1,0 +1,2 @@
+ALTER TABLE IF EXISTS tg_mr_messages
+    ADD COLUMN IF NOT EXISTS is_delete BOOLEAN DEFAULT false;
