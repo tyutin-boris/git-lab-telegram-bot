@@ -1,0 +1,107 @@
+{
+  "object_kind": "pipeline",
+  "object_attributes": {
+    "id": 1794453,
+    "iid": 4746,
+    "ref": "GISMUITSMA-12510",
+    "tag": false,
+    "sha": "33f2da488f740bfa10bedaea9db4f85e5c271051",
+    "before_sha": "0000000000000000000000000000000000000000",
+    "source": "merge_request_event",
+    "status": "running",
+    "detailed_status": "running",
+    "stages": [
+      "build"
+    ],
+    "created_at": "2023-10-19 08:59:34 UTC",
+    "finished_at": null,
+    "duration": null,
+    "queued_duration": 11,
+    "variables": []
+  },
+  "merge_request": {
+    "id": 438681,
+    "iid": 960,
+    "title": "GISMUITSMA-12510 Реализация формирования ИД Визы по подразделению",
+    "source_branch": "GISMUITSMA-12510",
+    "source_project_id": 4109,
+    "target_branch": "NUAT",
+    "target_project_id": 4109,
+    "state": "opened",
+    "merge_status": "unchecked",
+    "detailed_merge_status": "unchecked",
+    "url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-visa-backend/-/merge_requests/960"
+  },
+  "user": {
+    "id": 6663,
+    "name": "Малькин Данила Вячеславович",
+    "username": "dvmalkin",
+    "avatar_url": "https://gitlab.akb-it.ru/uploads/-/system/user/avatar/6663/avatar.png",
+    "email": "[REDACTED]"
+  },
+  "project": {
+    "id": 4109,
+    "name": "bp-visa-backend",
+    "description": "Реализация бизнес-процесса \"Виза\". Серверная логика",
+    "web_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-visa-backend",
+    "avatar_url": null,
+    "git_ssh_url": "git@gitlab.akb-it.ru:GISMU2.0/blank-visa-inv/bp-visa-backend.git",
+    "git_http_url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-visa-backend.git",
+    "namespace": "blank-visa-inv",
+    "visibility_level": 0,
+    "path_with_namespace": "GISMU2.0/blank-visa-inv/bp-visa-backend",
+    "default_branch": "NUAT",
+    "ci_config_path": null
+  },
+  "commit": {
+    "id": "33f2da488f740bfa10bedaea9db4f85e5c271051",
+    "message": "Удалил импорт\n",
+    "title": "Удалил импорт",
+    "timestamp": "2023-10-19T11:59:18+03:00",
+    "url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-visa-backend/-/commit/33f2da488f740bfa10bedaea9db4f85e5c271051",
+    "author": {
+      "name": "dvmalkin",
+      "email": "dvmalkin@phoenixit.ru"
+    }
+  },
+  "builds": [
+    {
+      "id": 6884546,
+      "stage": "build",
+      "name": "build and sonar",
+      "status": "running",
+      "created_at": "2023-10-19 08:59:34 UTC",
+      "started_at": "2023-10-19 08:59:45 UTC",
+      "finished_at": null,
+      "duration": 0.60932635,
+      "queued_duration": 10.780466,
+      "failure_reason": null,
+      "when": "on_success",
+      "manual": false,
+      "allow_failure": false,
+      "user": {
+        "id": 6663,
+        "name": "Малькин Данила Вячеславович",
+        "username": "dvmalkin",
+        "avatar_url": "https://gitlab.akb-it.ru/uploads/-/system/user/avatar/6663/avatar.png",
+        "email": "[REDACTED]"
+      },
+      "runner": {
+        "id": 11662,
+        "description": "gitlab-runner-gitlab-runner-55f9586cc-5b98f",
+        "runner_type": "group_type",
+        "active": true,
+        "is_shared": false,
+        "tags": [
+          "itsm-gismu-gitlab-runner",
+          "d8s-runner"
+        ]
+      },
+      "artifacts_file": {
+        "filename": null,
+        "size": null
+      },
+      "environment": null
+    }
+  ]
+}
