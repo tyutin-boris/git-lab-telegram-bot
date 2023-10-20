@@ -22,10 +22,10 @@ public class MessageChatsEntity {
     private Long id;
 
     @Column(name = "tg_mr_messages_id")
-    private Integer tgMrMessagesId;
+    private Long tgMrMessagesId;
 
     @Column(name = "tg_id")
-    private Long tgId;
+    private Integer tgId;
 
     @Column(name = "chat_id")
     private Long chatId;

@@ -268,7 +268,7 @@ public class MergeRequestControllerTest {
                 .orElse(null);
 
         assertThat(tgMrMessageEntity).isNotNull();
-        assertThat(tgMrMessageEntity.getChatId()).isEqualTo(chatId);
+        assertThat(tgMrMessageEntity.getChatIds()).isEqualTo(chatId);
 
     }
 
