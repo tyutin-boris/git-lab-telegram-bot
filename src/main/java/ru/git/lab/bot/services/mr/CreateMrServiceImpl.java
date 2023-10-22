@@ -1,5 +1,6 @@
 package ru.git.lab.bot.services.mr;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class CreateMrServiceImpl implements CreateMrService {
     private final MrTextMessageService mrTextMessageService;
 
     @Override
+    @Transactional
     public void sendAndSaveMessage(MergeRequestDto mergeRequest) {
         long mrId = mergeRequest.getMrId();
         long authorId = mergeRequest.getAuthor()
@@ -37,24 +39,33 @@ public class CreateMrServiceImpl implements CreateMrService {
 
         Optional<TgMrMessageEntity> message = tgMrMessageService.findByMrId(mrId);
 
-        if (message.isEmpty()) {
-            List<Long> chatIds = chatsTgGitUsersRepository.findAllByGitId(authorId)
-                    .stream()
-                    .map(ChatsTgGitUsersEntity::getChatId)
-                    .toList();
+        List<Long> chatIds = chatsTgGitUsersRepository.findAllByGitId(authorId)
+                .stream()
+                .map(ChatsTgGitUsersEntity::getChatId)
+                .toList();
 
-            if (chatIds.isEmpty()) {
-                log.debug("Chat list is empty, message not sent. mrId: {}, authorId: {}", mrId, authorId);
-                return;
-            }
-
-            String text = mrTextMessageService.createMergeRequestTextMessage(mergeRequest);
-            Long messageId = tgMrMessageService.save(chatIds, text, mergeRequest);
-
-            TgMrMessageEntity savedMessage = tgMrMessageService.getById(messageId);
-            TgMrMessageEntity sentMessage = sendMessageToTg(savedMessage);
-            tgMrMessageService.save(sentMessage);
+        if (chatIds.isEmpty()) {
+            log.debug("Chat list is empty, message not sent. mrId: {}, authorId: {}", mrId, authorId);
+            return;
         }
+
+        String text = mrTextMessageService.createMergeRequestTextMessage(mergeRequest);
+
+        Long messageId;
+
+        if (message.isEmpty()) {
+            messageId = tgMrMessageService.save(chatIds, text, mergeRequest);
+        } else {
+            TgMrMessageEntity tgMrMessage = message.get();
+            messageId = tgMrMessage.getId();
+            tgMrMessage.setDelete(false);
+            tgMrMessage.setText(text);
+            tgMrMessage.setDraft(mergeRequest.isDraft());
+        }
+
+        TgMrMessageEntity savedMessage = tgMrMessageService.getById(messageId);
+        TgMrMessageEntity sentMessage = sendMessageToTg(savedMessage);
+        tgMrMessageService.save(sentMessage);
     }
 
     private TgMrMessageEntity sendMessageToTg(TgMrMessageEntity entity) {

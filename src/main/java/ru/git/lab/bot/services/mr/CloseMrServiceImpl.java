@@ -1,5 +1,6 @@
 package ru.git.lab.bot.services.mr;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class CloseMrServiceImpl implements CloseMrService {
     private final TgMrMessageService messageService;
 
     @Override
+    @Transactional
     public void deleteMessage(Long mrId) {
         Optional<TgMrMessageEntity> message = messageService.findByMrId(mrId);
 

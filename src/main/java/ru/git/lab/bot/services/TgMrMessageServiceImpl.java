@@ -27,7 +27,6 @@ public class TgMrMessageServiceImpl implements TgMrMessageService {
     private final TgMrMessageRepository tgMrMessageRepository;
 
     @Override
-    @Transactional
     public Long save(List<Long> chatIds, String text, MergeRequestDto mergeRequest) {
         TgMrMessageEntity tgMrMessageEntity = createMessage(chatIds, text, mergeRequest);
         TgMrMessageEntity savedEntity = tgMrMessageRepository.save(tgMrMessageEntity);
@@ -36,7 +35,6 @@ public class TgMrMessageServiceImpl implements TgMrMessageService {
         return id;
     }
 
-    @Transactional
     @Override
     public void delete(TgMrMessageEntity messages) {
         Set<MessageChatsEntity> chats = messages.getChats();
