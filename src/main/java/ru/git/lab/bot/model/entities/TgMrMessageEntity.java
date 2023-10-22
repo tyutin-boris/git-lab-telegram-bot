@@ -1,16 +1,19 @@
 package ru.git.lab.bot.model.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.OffsetDateTime;
+import java.util.Set;
 
 @Entity
 @Setter
@@ -24,24 +27,24 @@ public class TgMrMessageEntity {
     @Column(nullable = false)
     private Long id;
 
-    @Column(name = "tg_id")
-    private Integer tgId;
-
-    @Column(name = "chat_id")
-    private Long chatId;
-
     @Column(name = "mr_id", nullable = false)
     private Long mrId;
 
     @Column(name = "author_id", nullable = false)
     private Long authorId;
 
-    @Column(name ="text")
+    @Column(name = "text")
     private String text;
 
-    @Column(name ="is_draft")
+    @Column(name = "is_draft")
     private boolean isDraft;
+
+    @Column(name = "is_delete")
+    private boolean isDelete;
 
     @Column(name = "create_date_time", nullable = false)
     private OffsetDateTime createDateTime;
+
+    @OneToMany(mappedBy = "tgMrMessage", cascade = CascadeType.PERSIST)
+    private Set<MessageChatsEntity> chats;
 }

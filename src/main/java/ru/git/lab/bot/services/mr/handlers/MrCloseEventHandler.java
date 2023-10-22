@@ -20,11 +20,10 @@ public class MrCloseEventHandler implements MrEventHandler {
     @Override
     public void handleEvent(MergeRequestDto mergeRequest) {
         long mrId = mergeRequest.getMrId();
-        long authorId = mergeRequest.getAuthor().getId();
 
         log.debug("Merge event action " + getAction() + ". MR id: " + mrId);
 
-        closeMrService.deleteMessage(mrId, authorId);
+        closeMrService.deleteMessage(mrId);
     }
 
     @Override
