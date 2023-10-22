@@ -1,5 +1,6 @@
 package ru.git.lab.bot.services.mr.handlers;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,38 +31,34 @@ public class MrUpdateEventHandler implements MrEventHandler {
     private final MrTextMessageService mrTextMessageService;
 
     @Override
+    @Transactional
     public void handleEvent(MergeRequestDto mergeRequest) {
         long mrId = mergeRequest.getMrId();
-        long authorId = mergeRequest.getAuthor().getId();
+        long authorId = mergeRequest.getAuthor()
+                .getId();
 
         log.debug("Merge request action " + getAction() + ". MR id: " + mrId);
 
         TgMrMessageEntity message = tgMrMessageService.getMessageByMrIdAndAuthorId(mrId, authorId);
+
+        log.debug("try update tg message. id: {}", message.getId());
         String text = mrTextMessageService.createMergeRequestTextMessage(mergeRequest);
         Set<MessageChatsEntity> chats = message.getChats();
 
         for (MessageChatsEntity chat : chats) {
             if (Objects.isNull(chat.getTgId())) {
                 sendMessage(message, text, chat);
+                log.debug("Sent tg message id: {}, chatId: {}", message.getId(), chat.getChatId());
+            } else if (mergeRequest.isDraft()) {
+                deleteMessage(message, text, chat);
+                log.debug("Tg message was deleted. id: {}, chatId: {}", message.getId(), chat.getChatId());
             } else {
                 updateMessage(message, text, chat);
+                log.debug("Updated tg message. id: {}, chatId: {}", message.getId(), chat.getChatId());
             }
         }
 
         tgMrMessageService.save(message);
-    }
-
-    private void sendMessage(TgMrMessageEntity message, String text, MessageChatsEntity chat) {
-        messageSender.sendMessage(text, chat.getChatId())
-                .ifPresent(sent -> setTgIdAndChangeDraftStatus(sent.getMessageId(), chat, message));
-    }
-
-    private void updateMessage(TgMrMessageEntity message, String text, MessageChatsEntity chat) {
-        Integer tgId = Optional.of(chat.getTgId())
-                .orElseThrow(() -> new RuntimeException("Update messages is failure because tg is null. tgMrMessageId: " + message.getId()));
-
-        messageSender.updateMessage(text, chat.getChatId(), tgId);
-        tgMrMessageService.updateText(text, message);
     }
 
     @Override
@@ -69,9 +66,32 @@ public class MrUpdateEventHandler implements MrEventHandler {
         return UPDATE;
     }
 
-    private void setTgIdAndChangeDraftStatus(Integer tgId, MessageChatsEntity chat, TgMrMessageEntity message) {
+    private void sendMessage(TgMrMessageEntity message, String text, MessageChatsEntity chat) {
+        messageSender.sendMessage(text, chat.getChatId())
+                .ifPresent(sent -> saveMessage(sent.getMessageId(), chat, message));
+    }
+
+    private void deleteMessage(TgMrMessageEntity message, String text, MessageChatsEntity chat) {
+        boolean isDeleted = messageSender.deleteMessage(chat.getChatId(), chat.getTgId());
+
+        message.setText(text);
+        message.setDelete(isDeleted);
+        message.setDraft(true);
+        chat.setTgId(null);
+    }
+
+    private void updateMessage(TgMrMessageEntity message, String text, MessageChatsEntity chat) {
+        Integer tgId = Optional.of(chat.getTgId())
+                .orElseThrow(() -> new RuntimeException("Update messages is failure because tg is null. tgMrMessageId: " + message.getId()));
+
+        message.setText(text);
+        messageSender.updateMessage(text, chat.getChatId(), tgId);
+    }
+
+    private void saveMessage(Integer tgId, MessageChatsEntity chat, TgMrMessageEntity message) {
         chat.setTgId(tgId);
         message.setDraft(false);
+        message.setDelete(false);
         log.debug("Update tgId: {}, for tg message with id: {}, and draft status false", tgId, message.getId());
     }
 }
