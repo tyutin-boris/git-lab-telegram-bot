@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.git.lab.bot.dto.MergeRequestDto;
-import ru.git.lab.bot.dto.MessageToDelete;
 import ru.git.lab.bot.model.entities.MessageChatsEntity;
 import ru.git.lab.bot.model.entities.TgMrMessageEntity;
 import ru.git.lab.bot.model.repository.TgMrMessageRepository;
@@ -28,6 +27,7 @@ public class TgMrMessageServiceImpl implements TgMrMessageService {
     private final TgMrMessageRepository tgMrMessageRepository;
 
     @Override
+    @Transactional
     public Long save(List<Long> chatIds, String text, MergeRequestDto mergeRequest) {
         TgMrMessageEntity tgMrMessageEntity = createMessage(chatIds, text, mergeRequest);
         TgMrMessageEntity savedEntity = tgMrMessageRepository.save(tgMrMessageEntity);
@@ -88,24 +88,25 @@ public class TgMrMessageServiceImpl implements TgMrMessageService {
         Long authorId = mergeRequest.getAuthor()
                 .getId();
 
+        TgMrMessageEntity tgMrMessage = new TgMrMessageEntity();
+        tgMrMessage.setMrId(mrId);
+        tgMrMessage.setAuthorId(authorId);
+        tgMrMessage.setText(text);
+        tgMrMessage.setDraft(mergeRequest.isDraft());
+        tgMrMessage.setCreateDateTime(OffsetDateTime.now());
+
         Set<MessageChatsEntity> chats = chatIds.stream()
-                .map(chatId -> createMessageChats(mrId, chatId))
+                .map(chatId -> createMessageChats(tgMrMessage, chatId))
                 .collect(Collectors.toSet());
 
-        TgMrMessageEntity tgMrMessageEntity = new TgMrMessageEntity();
-        tgMrMessageEntity.setMrId(mrId);
-        tgMrMessageEntity.setAuthorId(authorId);
-        tgMrMessageEntity.setText(text);
-        tgMrMessageEntity.setDraft(mergeRequest.isDraft());
-        tgMrMessageEntity.setChats(chats);
-        tgMrMessageEntity.setCreateDateTime(OffsetDateTime.now());
+        tgMrMessage.setChats(chats);
 
-        return tgMrMessageEntity;
+        return tgMrMessage;
     }
 
-    private MessageChatsEntity createMessageChats(Long tgMrMessageId, Long chatId) {
+    private MessageChatsEntity createMessageChats(TgMrMessageEntity tgMrMessage, Long chatId) {
         MessageChatsEntity entity = new MessageChatsEntity();
-        entity.setTgMrMessagesId(tgMrMessageId);
+        entity.setTgMrMessage(tgMrMessage);
         entity.setChatId(chatId);
         return entity;
     }

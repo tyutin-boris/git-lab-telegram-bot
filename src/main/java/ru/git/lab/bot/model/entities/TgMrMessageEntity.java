@@ -1,11 +1,11 @@
 package ru.git.lab.bot.model.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -45,7 +45,6 @@ public class TgMrMessageEntity {
     @Column(name = "create_date_time", nullable = false)
     private OffsetDateTime createDateTime;
 
-    @OneToMany
-    @JoinColumn(name = "tg_mr_messages_id")
+    @OneToMany(mappedBy = "tgMrMessage", cascade = CascadeType.PERSIST)
     private Set<MessageChatsEntity> chats;
 }
