@@ -18,5 +18,5 @@ public class Commit {
 
     private String url;
 
-    private List<Author> author;
+    private Author author;
 }

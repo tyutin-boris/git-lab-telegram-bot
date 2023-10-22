@@ -44,5 +44,5 @@ public class PipeObjectAttributes {
     @JsonProperty("queued_duration")
     private String queuedDuration;
 
-    private Map<String, String> variables;
+    private List<String> variables;
 }

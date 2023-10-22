@@ -43,7 +43,7 @@ public class Builds {
 
     private List<User> users;
 
-    private String runner;
+    private Runner runner;
 
     @JsonProperty("artifacts_file")
     private ArtifactsFile artifactsFile;

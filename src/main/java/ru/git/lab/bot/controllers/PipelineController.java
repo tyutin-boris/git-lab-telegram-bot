@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.git.lab.bot.api.pipeline.PipelineEvent;
-import ru.git.lab.bot.services.pipelines.api.PipelineHistoryService;
 import ru.git.lab.bot.services.pipelines.api.PipelineService;
 
 @Slf4j
