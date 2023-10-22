@@ -1,10 +1,12 @@
 package ru.git.lab.bot.services.mr;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.git.lab.bot.dto.MergeRequestDto;
 import ru.git.lab.bot.model.entities.ChatsTgGitUsersEntity;
+import ru.git.lab.bot.model.entities.MessageChatsEntity;
 import ru.git.lab.bot.model.entities.TgMrMessageEntity;
 import ru.git.lab.bot.model.repository.ChatsTgGitUsersRepository;
 import ru.git.lab.bot.services.api.MrTextMessageService;
@@ -29,19 +31,13 @@ public class CreateMrServiceImpl implements CreateMrService {
     private final MrTextMessageService mrTextMessageService;
 
     @Override
+    @Transactional
     public void sendAndSaveMessage(MergeRequestDto mergeRequest) {
         long mrId = mergeRequest.getMrId();
         long authorId = mergeRequest.getAuthor()
                 .getId();
 
-        String mrIdAndAuthorIdLog = "Mr with id " + mrId + " and authorId " + authorId;
-
-        Optional<TgMrMessageEntity> messageEntity = tgMrMessageService.findByMrIdAndAuthorId(mrId, authorId);
-
-        if (messageEntity.isPresent()) {
-            log.debug("Message already sent. " + mrIdAndAuthorIdLog);
-            return;
-        }
+        Optional<TgMrMessageEntity> message = tgMrMessageService.findByMrId(mrId);
 
         List<Long> chatIds = chatsTgGitUsersRepository.findAllByGitId(authorId)
                 .stream()
@@ -49,34 +45,43 @@ public class CreateMrServiceImpl implements CreateMrService {
                 .toList();
 
         if (chatIds.isEmpty()) {
-            log.debug("Chat list is empty, message not sant. " + mrIdAndAuthorIdLog);
+            log.debug("Chat list is empty, message not sent. mrId: {}, authorId: {}", mrId, authorId);
             return;
         }
 
         String text = mrTextMessageService.createMergeRequestTextMessage(mergeRequest);
 
-        List<Long> messageIds = chatIds.stream()
-                .map(chatId -> tgMrMessageService.saveMessage(chatId, text, mergeRequest))
-                .toList();
+        Long messageId;
 
-        messageIds.stream()
-                .map(tgMrMessageService::findTgMrMessageById)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(this::sendMessageToTg)
-                .forEach(tgMrMessageService::save);
+        if (message.isEmpty()) {
+            messageId = tgMrMessageService.save(chatIds, text, mergeRequest);
+        } else {
+            TgMrMessageEntity tgMrMessage = message.get();
+            messageId = tgMrMessage.getId();
+            tgMrMessage.setDelete(false);
+            tgMrMessage.setText(text);
+            tgMrMessage.setDraft(mergeRequest.isDraft());
+        }
+
+        TgMrMessageEntity savedMessage = tgMrMessageService.getById(messageId);
+        TgMrMessageEntity sentMessage = sendMessageToTg(savedMessage);
+        tgMrMessageService.save(sentMessage);
     }
 
     private TgMrMessageEntity sendMessageToTg(TgMrMessageEntity entity) {
         if (entity.isDraft()) {
-            log.debug("mr with id: {} has draft status", entity.getMrId());
+            log.debug("Mr with id: {} has draft status", entity.getMrId());
             return entity;
         }
 
-        sender.sendMessage(entity.getText(), entity.getChatId())
-                .ifPresent(sent -> {
-                    entity.setTgId(sent.getMessageId());
-                });
+        List<MessageChatsEntity> messageChats = entity.getChats()
+                .stream()
+                .toList();
+
+        for (MessageChatsEntity messageChat : messageChats) {
+            sender.sendMessage(entity.getText(), messageChat.getChatId())
+                    .ifPresent(sent -> messageChat.setTgId(sent.getMessageId()));
+        }
 
         return entity;
     }
