@@ -1,5 +1,6 @@
 package ru.git.lab.bot.api.pipeline;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -24,6 +25,7 @@ public class PipeObjectAttributes {
 
     private String source;
 
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     private PipelineStatus status;
 
     @JsonProperty("detailed_status")

@@ -5,6 +5,8 @@ import lombok.Data;
 import ru.git.lab.bot.api.mr.Project;
 import ru.git.lab.bot.api.mr.User;
 
+import java.util.List;
+
 @Data
 public class PipelineEvent {
 
@@ -23,5 +25,5 @@ public class PipelineEvent {
 
     private Commit commit;
 
-    private Builds builds;
+    private List<Builds> builds;
 }
