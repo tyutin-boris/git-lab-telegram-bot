@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS message_chats
     chat_id           BIGINT    NOT NULL,
 
     CONSTRAINT tg_mr_message_fk
-        FOREIGN KEY (message_id)
+        FOREIGN KEY (tg_mr_messages_id)
             REFERENCES tg_mr_messages (id)
 );
 
