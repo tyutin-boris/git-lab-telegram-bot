@@ -33,7 +33,6 @@ public class PipelineEntity {
     @Column(nullable = false)
     private PipelineStatus status;
 
-    @Column(nullable = false)
     private String text;
 
     @Column(name = "create_date", nullable = false)

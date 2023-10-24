@@ -37,18 +37,19 @@ public class PipelineServiceImpl implements PipelineService {
 
         PipelineStatus status = getStatus(eventOpt);
         Long mrId = getMrId(eventOpt);
-
         String text = pipelineTestMessageService.createText(event);
+
         savePipeline(mrId, status, text);
 
-        boolean isDraft = isDraft(eventOpt);
+        if (isDraft(eventOpt)) {
+            log.debug("Mr has draft");
+            return;
+        }
 
-        if (!isDraft) {
-            String username = getUsername(eventOpt, mrId);
-            switch (status) {
-                case PENDING, RUNNING -> pipelineLog(mrId, status);
-                case FAILED, SUCCESS -> sendPipelineStatusNotification(username, text);
-            }
+        String username = getUsername(eventOpt, mrId);
+        switch (status) {
+            case PENDING, RUNNING -> pipelineLog(mrId, status);
+            case FAILED, SUCCESS -> sendPipelineStatusNotification(username, text);
         }
     }
 
@@ -78,11 +79,13 @@ public class PipelineServiceImpl implements PipelineService {
     }
 
     private void savePipeline(Long mrId, PipelineStatus pipelineStatus, String text) {
+
         PipelineEntity pipelineEntity = new PipelineEntity();
         pipelineEntity.setMrId(mrId);
         pipelineEntity.setStatus(pipelineStatus);
         pipelineEntity.setText(text);
         pipelineEntity.setCreateDate(OffsetDateTime.now());
+
         pipelineRepository.save(pipelineEntity);
     }
 
