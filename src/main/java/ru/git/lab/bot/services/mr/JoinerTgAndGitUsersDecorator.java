@@ -34,7 +34,7 @@ public class JoinerTgAndGitUsersDecorator implements MergeRequestService {
         UserDto dto = userDtoMapper.toDto(event.getUser());
 
         tgGitUsersRepository.findByGitUsername(dto.getUsername())
-                .ifPresent(user -> {
+                .forEach(user -> {
                     log.debug("Founded user by tg id: {}", user.getTgId());
                     Long gitId = dto.getId();
                     joinGitToTg(user, gitId);

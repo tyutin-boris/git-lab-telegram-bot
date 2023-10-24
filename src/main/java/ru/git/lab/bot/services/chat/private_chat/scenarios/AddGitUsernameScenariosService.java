@@ -18,6 +18,7 @@ import ru.git.lab.bot.model.repository.TgUserRepository;
 import ru.git.lab.bot.services.chat.api.BotCommunicationScenariosService;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -85,7 +86,7 @@ public class AddGitUsernameScenariosService implements BotCommunicationScenarios
         if (privateMessage.isPresent() && BotCommands.ADD_GIT_USERNAME.equals(privateMessage.get().getBotCommand())) {
             if (Objects.equals(REQUEST_USERNAME.getNumber(), privateMessage.get().getScenariosTaskNumber())) {
                 String gitUsername = message.getText();
-                Optional<TgGitUsersEntity> tgGitUserOpt = tgGitUsersRepository.findByGitUsername(gitUsername);
+                List<TgGitUsersEntity> tgGitUserOpt = tgGitUsersRepository.findByGitUsername(gitUsername);
                 Optional<GitUserEntity> gitUser = gitUserRepository.findByUsername(gitUsername);
                 if (tgGitUserOpt.isEmpty()) {
                     TgGitUsersEntity tgGitUser = new TgGitUsersEntity();

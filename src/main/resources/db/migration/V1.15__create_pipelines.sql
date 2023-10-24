@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS pipelines (
+    id BIGINT NOT NULL PRIMARY KEY,
+    mr_id BIGINT NOT NULL,
+    status TEXT NOT NULL,
+    text TEXT NOT NULL,
+    create_date TIMESTAMP NOT NULL
+);

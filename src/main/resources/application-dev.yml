@@ -1,3 +1,7 @@
+server:
+  port: 9000
+  servlet:
+    context-path: /liga-bot
 bot:
   name: TestNNLigaGitLabBot
   token: 6525258392:AAHjB2fEs8Fdi7JtSDom4acCHV-VCbbowF8
