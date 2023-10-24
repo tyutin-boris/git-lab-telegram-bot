@@ -32,7 +32,7 @@ public class CreateMrServiceImpl implements CreateMrService {
 
     @Override
     @Transactional
-    public void sendAndSaveMessage(MergeRequestDto mergeRequest) {
+    public void  sendAndSaveMessage(MergeRequestDto mergeRequest) {
         long mrId = mergeRequest.getMrId();
         long authorId = mergeRequest.getAuthor()
                 .getId();

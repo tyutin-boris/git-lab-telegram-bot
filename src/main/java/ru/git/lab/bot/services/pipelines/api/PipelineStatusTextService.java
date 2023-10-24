@@ -5,4 +5,6 @@ import ru.git.lab.bot.api.pipeline.PipelineStatus;
 public interface PipelineStatusTextService {
 
     String createText(PipelineStatus status);
+
+    String createText(Long mrId);
 }

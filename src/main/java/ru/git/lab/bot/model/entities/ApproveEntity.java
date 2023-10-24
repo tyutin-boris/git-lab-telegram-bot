@@ -25,4 +25,7 @@ public class ApproveEntity {
 
     @Column(name = "author_name", nullable = false)
     String authorName;
+
+    @Column(name = "is_delete", nullable = false)
+    Boolean isDelete;
 }

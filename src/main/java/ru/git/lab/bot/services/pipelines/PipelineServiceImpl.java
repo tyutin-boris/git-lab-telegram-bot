@@ -53,6 +53,13 @@ public class PipelineServiceImpl implements PipelineService {
         }
     }
 
+    @Override
+    public PipelineStatus getStatusForNewestByMrId(Long mrId) {
+        return pipelineRepository.findTopByMrIdOrderByCreateDateDesc(mrId)
+                .map(PipelineEntity::getStatus)
+                .orElseThrow(() -> new RuntimeException("Pipeline for mrId: " + mrId + "not found"));
+    }
+
     private boolean isDraft(Optional<PipelineEvent> event) {
         return event.map(PipelineEvent::getMergeRequest)
                 .map(MergeRequest::getTitle)

@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.git.lab.bot.dto.MergeRequestDto;
 import ru.git.lab.bot.model.entities.ApproveEntity;
-import ru.git.lab.bot.model.entities.TgMrMessageEntity;
 import ru.git.lab.bot.services.api.ApproveService;
 import ru.git.lab.bot.services.api.MrTextMessageService;
 import ru.git.lab.bot.services.api.TgMrMessageService;
@@ -23,8 +22,6 @@ public class ReactionMrServiceImpl implements ReactionMrService {
 
     private final TgMrMessageService messageService;
 
-    private final ApproveService approveService;
-
     private final MrTextMessageService mrTextMessageService;
 
     @Override
@@ -33,11 +30,10 @@ public class ReactionMrServiceImpl implements ReactionMrService {
         long authorId = mergeRequest.getAuthor()
                 .getId();
 
-        List<ApproveEntity> approvalsForMr = approveService.findAllByMrId(mrId);
-        String text = mrTextMessageService.createMergeRequestTextMessageWithApprove(mergeRequest, approvalsForMr);
+        String text = mrTextMessageService.createMergeRequestTextMessage(mergeRequest);
 
-        TgMrMessageEntity tgMrMessageEntity = messageService.getMessageByMrIdAndAuthorId(mrId, authorId);
-        tgMrMessageEntity.getChats()
+        messageService.getMessageByMrIdAndAuthorId(mrId, authorId)
+                .getChats()
                 .forEach(chat -> sender.updateMessage(text, chat.getChatId(), chat.getTgId()));
     }
 }

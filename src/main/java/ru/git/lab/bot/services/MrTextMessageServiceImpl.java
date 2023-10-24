@@ -8,8 +8,10 @@ import ru.git.lab.bot.dto.AuthorDto;
 import ru.git.lab.bot.dto.MergeRequestDto;
 import ru.git.lab.bot.model.entities.ApproveEntity;
 import ru.git.lab.bot.model.entities.GitUserEntity;
-import ru.git.lab.bot.services.api.MrTextMessageService;
+import ru.git.lab.bot.services.api.ApproveService;
 import ru.git.lab.bot.services.api.GitUserService;
+import ru.git.lab.bot.services.api.MrTextMessageService;
+import ru.git.lab.bot.services.pipelines.api.PipelineStatusTextService;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,6 +28,10 @@ public class MrTextMessageServiceImpl implements MrTextMessageService {
 
     private final GitUserService gitUserService;
 
+    private final ApproveService approveService;
+
+    private final PipelineStatusTextService pipelineStatusTextService;
+
     @Override
     public String createMergeRequestTextMessage(MergeRequestDto mergeRequest) {
         String projectText = getProjectText(mergeRequest.getProjectName());
@@ -36,8 +42,21 @@ public class MrTextMessageServiceImpl implements MrTextMessageService {
         String branch = getBranchText(mergeRequest.getSourceBranch(), mergeRequest.getTargetBranch());
         String createdAt = getCreatedAtText();
         String mrUrl = getMrUrlText(mergeRequest.getMrUrl());
+        String approvals = getApprovals(mergeRequest);
+        String pipelines = pipelineStatusTextService.createText(mergeRequest.getMrId());
 
-        return projectText + title + description + author + reviewer + branch + createdAt + mrUrl;
+        return projectText + title + description + author + reviewer + branch + createdAt + mrUrl + approvals + pipelines;
+    }
+
+    private String getApprovals(MergeRequestDto mergeRequest) {
+        StringBuilder stringBuilder = new StringBuilder();
+        approveService.findAllByMrIdAndIsDeleteFalse(mergeRequest.getMrId())
+                .forEach(a -> {
+                    String approveMessage = "\n\n" + likeEmoji + " " + "<b>" + a.getAuthorName() + " approved </b>";
+                    stringBuilder.append(approveMessage);
+                });
+
+        return stringBuilder.toString();
     }
 
     @Override
