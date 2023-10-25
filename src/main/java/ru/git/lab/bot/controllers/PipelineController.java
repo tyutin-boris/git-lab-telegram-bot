@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.git.lab.bot.api.pipeline.PipelineEvent;
+import ru.git.lab.bot.services.pipelines.api.PipelineHandler;
 import ru.git.lab.bot.services.pipelines.api.PipelineService;
 
 @Slf4j
@@ -15,7 +16,7 @@ import ru.git.lab.bot.services.pipelines.api.PipelineService;
 @RequiredArgsConstructor
 public class PipelineController {
 
-    private final PipelineService pipelineHistoryDecorator;
+    private final PipelineHandler pipelineHistoryDecorator;
 
     @PostMapping("/histories")
     public void savePipelineHistory(@RequestBody PipelineEvent event) {

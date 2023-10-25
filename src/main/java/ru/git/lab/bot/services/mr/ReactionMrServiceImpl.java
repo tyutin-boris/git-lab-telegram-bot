@@ -4,14 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.git.lab.bot.dto.MergeRequestDto;
-import ru.git.lab.bot.model.entities.ApproveEntity;
-import ru.git.lab.bot.services.api.ApproveService;
 import ru.git.lab.bot.services.api.MrTextMessageService;
 import ru.git.lab.bot.services.api.TgMrMessageService;
 import ru.git.lab.bot.services.mr.api.ReactionMrService;
 import ru.git.lab.bot.services.senders.api.MessageSender;
-
-import java.util.List;
 
 @Slf4j
 @Service
@@ -30,7 +26,7 @@ public class ReactionMrServiceImpl implements ReactionMrService {
         long authorId = mergeRequest.getAuthor()
                 .getId();
 
-        String text = mrTextMessageService.createMergeRequestTextMessage(mergeRequest);
+        String text = mrTextMessageService.createMrMessage(mrId);
 
         messageService.getMessageByMrIdAndAuthorId(mrId, authorId)
                 .getChats()

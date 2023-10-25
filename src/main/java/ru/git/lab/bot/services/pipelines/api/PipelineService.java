@@ -5,7 +5,7 @@ import ru.git.lab.bot.api.pipeline.PipelineStatus;
 
 public interface PipelineService {
 
-    void handle(PipelineEvent event);
-
     PipelineStatus getStatusForNewestByMrId(Long mrId);
+
+    void save(Long mrId, PipelineStatus status, String text);
 }

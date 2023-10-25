@@ -6,21 +6,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.git.lab.bot.api.pipeline.PipelineEvent;
+import ru.git.lab.bot.services.pipelines.api.PipelineHandler;
 import ru.git.lab.bot.services.pipelines.api.PipelineHistoryService;
-import ru.git.lab.bot.services.pipelines.api.PipelineService;
 
 import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PipelineHistoryDecorator implements PipelineService {
+public class PipelineHistoryDecorator implements PipelineHandler {
 
     private final static String ERROR = "Error";
 
     private final ObjectMapper objectMapper;
 
-    private final PipelineService pipelineServiceImpl;
+    private final PipelineHandler pipelineHandlerImpl;
 
     private final PipelineHistoryService pipelineHistoryService;
 
@@ -29,7 +29,7 @@ public class PipelineHistoryDecorator implements PipelineService {
         String pipeline = getPipeline(event);
         pipelineHistoryService.save(pipeline);
 
-        pipelineServiceImpl.handle(event);
+        pipelineHandlerImpl.handle(event);
     }
 
     private String getPipeline(PipelineEvent event) {

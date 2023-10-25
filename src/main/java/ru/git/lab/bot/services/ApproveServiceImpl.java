@@ -38,6 +38,16 @@ public class ApproveServiceImpl implements ApproveService {
         approveRepository.deleteAll(approvals);
     }
 
+    @Override
+    public List<ApproveEntity> findAllByMrIdAndIsDeleteFalse(Long mrId) {
+        return approveRepository.findAllByMrIdAndIsDeleteFalse(mrId);
+    }
+
+    @Override
+    public void saveAll(List<ApproveEntity> approvals) {
+        approveRepository.saveAll(approvals);
+    }
+
     private ApproveEntity createApproveEntity(Long mrId, UserDto user) {
         ApproveEntity approveEntity = new ApproveEntity();
 

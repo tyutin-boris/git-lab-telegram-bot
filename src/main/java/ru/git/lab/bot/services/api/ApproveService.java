@@ -15,4 +15,6 @@ public interface ApproveService {
     void deleteAll(List<ApproveEntity> approvalsForMr);
 
     List<ApproveEntity> findAllByMrIdAndIsDeleteFalse(Long mrId);
+
+    void saveAll(List<ApproveEntity> approvals);
 }

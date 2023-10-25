@@ -81,6 +81,12 @@ public class TgMrMessageServiceImpl implements TgMrMessageService {
                 .orElseThrow(() -> new RuntimeException("TgMrMessages not found. id " + id));
     }
 
+    @Override
+    public TgMrMessageEntity getByMrId(Long mrId) {
+        return tgMrMessageRepository.findByMrId(mrId)
+                .orElseThrow(() -> new RuntimeException("Mr with id: " + mrId + " not found"));
+    }
+
     private TgMrMessageEntity createMessage(List<Long> chatIds, String text, MergeRequestDto mergeRequest) {
         Long mrId = mergeRequest.getMrId();
         Long authorId = mergeRequest.getAuthor()
