@@ -9,6 +9,7 @@ import ru.git.lab.bot.model.repository.PipelineRepository;
 import ru.git.lab.bot.services.pipelines.api.PipelineService;
 
 import java.time.OffsetDateTime;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -18,10 +19,9 @@ public class PipelineServiceImpl implements PipelineService {
     private final PipelineRepository pipelineRepository;
 
     @Override
-    public PipelineStatus getStatusForNewestByMrId(Long mrId) {
+    public Optional<PipelineStatus> getStatusForNewestByMrId(Long mrId) {
         return pipelineRepository.findTopByMrIdOrderByCreateDateDesc(mrId)
-                .map(PipelineEntity::getStatus)
-                .orElseThrow(() -> new RuntimeException("Pipeline for mrId: " + mrId + "not found"));
+                .map(PipelineEntity::getStatus);
     }
 
     @Override

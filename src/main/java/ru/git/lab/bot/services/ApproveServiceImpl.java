@@ -54,6 +54,7 @@ public class ApproveServiceImpl implements ApproveService {
         approveEntity.setMrId(mrId);
         approveEntity.setAuthorId(user.getId());
         approveEntity.setAuthorName(user.getName());
+        approveEntity.setIsDelete(false);
         return approveEntity;
     }
 }

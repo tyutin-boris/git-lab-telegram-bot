@@ -35,6 +35,7 @@ public class MrApprovedEventHandler implements MrEventHandler {
             approveService.save(mrId, user);
         } else {
             approvalsForMrByAuthorId.forEach(approveEntity -> approveEntity.setIsDelete(false));
+            approveService.saveAll(approvalsForMrByAuthorId);
         }
 
         reactionMrService.addReactionToMessage(mergeRequest);

@@ -20,9 +20,9 @@
     "variables": []
   },
   "merge_request": {
-    "id": 438681,
+    "id": 440072,
     "iid": 960,
-    "title": "GISMUITSMA-12510 Реализация формирования ИД Визы по подразделению",
+    "title": "GISMUITSMA-12158 Добавил заполнение департамента и региона для дела полученного от ЕПГУ",
     "source_branch": "GISMUITSMA-12510",
     "source_project_id": 4109,
     "target_branch": "NUAT",
@@ -33,9 +33,9 @@
     "url": "https://gitlab.akb-it.ru/GISMU2.0/blank-visa-inv/bp-visa-backend/-/merge_requests/960"
   },
   "user": {
-    "id": 6663,
+    "id": 6651,
     "name": "Малькин Данила Вячеславович",
-    "username": "dvmalkin",
+    "username": "btyutin",
     "avatar_url": "https://gitlab.akb-it.ru/uploads/-/system/user/avatar/6663/avatar.png",
     "email": "[REDACTED]"
   },
@@ -80,9 +80,9 @@
       "manual": false,
       "allow_failure": false,
       "user": {
-        "id": 6663,
+        "id": 6651,
         "name": "Малькин Данила Вячеславович",
-        "username": "dvmalkin",
+        "username": "btyutin",
         "avatar_url": "https://gitlab.akb-it.ru/uploads/-/system/user/avatar/6663/avatar.png",
         "email": "[REDACTED]"
       },
