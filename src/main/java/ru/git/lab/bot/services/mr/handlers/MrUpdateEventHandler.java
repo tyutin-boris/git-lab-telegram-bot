@@ -14,7 +14,6 @@ import ru.git.lab.bot.services.mr.handlers.api.MrEventHandler;
 import ru.git.lab.bot.services.senders.api.MessageSender;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 
 import static ru.git.lab.bot.api.mr.Action.UPDATE;
@@ -43,7 +42,7 @@ public class MrUpdateEventHandler implements MrEventHandler {
 
         log.debug("try update tg message. id: {}", tgMrMessage.getId());
         String newText = mrTextMessageService.createMergeRequestText(mergeRequest);
-        String message = mrTextMessageService.createMrMessage(mrId);
+        String message = mrTextMessageService.createMrMessage(mrId, newText);
         Set<MessageChatsEntity> chats = tgMrMessage.getChats();
 
         for (MessageChatsEntity chat : chats) {

@@ -57,6 +57,14 @@ public class MrTextMessageServiceImpl implements MrTextMessageService {
         return mrText + approvals + pipelines;
     }
 
+    @Override
+    public String createMrMessage(Long mrId, String mrText) {
+        String approvals = getApprovals(mrId);
+        String pipelines = pipelineStatusTextService.createText(mrId);
+
+        return mrText + approvals + pipelines;
+    }
+
     private String getMrText(Long mrId) {
         return tgMrMessageService.findByMrId(mrId)
                 .map(TgMrMessageEntity::getText)
