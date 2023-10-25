@@ -34,15 +34,14 @@ public class MrUpdateEventHandler implements MrEventHandler {
     @Transactional
     public void handleEvent(MergeRequestDto mergeRequest) {
         long mrId = mergeRequest.getMrId();
-        long authorId = mergeRequest.getAuthor()
-                .getId();
+        long authorId = mergeRequest.getAuthor().getId();
 
         log.debug("Merge request action " + getAction() + ". MR id: " + mrId);
 
         TgMrMessageEntity message = tgMrMessageService.getMessageByMrIdAndAuthorId(mrId, authorId);
 
         log.debug("try update tg message. id: {}", message.getId());
-        String text = mrTextMessageService.createMergeRequestTextMessage(mergeRequest);
+        String text = mrTextMessageService.createMrMessage(mrId);
         Set<MessageChatsEntity> chats = message.getChats();
 
         for (MessageChatsEntity chat : chats) {
@@ -58,6 +57,12 @@ public class MrUpdateEventHandler implements MrEventHandler {
             }
         }
 
+        updateTgMrMessage(mergeRequest, message);
+    }
+
+    private void updateTgMrMessage(MergeRequestDto mergeRequest, TgMrMessageEntity message) {
+        String newText = mrTextMessageService.createMergeRequestText(mergeRequest);
+        message.setText(newText);
         tgMrMessageService.save(message);
     }
 

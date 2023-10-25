@@ -21,4 +21,6 @@ public interface TgMrMessageService {
     Optional<TgMrMessageEntity> findByMrId(Long mrId);
 
     TgMrMessageEntity getById(Long id);
+
+    TgMrMessageEntity getByMrId(Long mrId);
 }

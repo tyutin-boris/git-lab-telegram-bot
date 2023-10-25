@@ -31,7 +31,9 @@ public class MrUnapprovedEventHandler implements MrEventHandler {
         long userId = mergeRequest.getUser().getId();
 
         List<ApproveEntity> approvalsForMrByAuthorId = approveService.findAllByMrIdAndAuthorId(mrId, userId);
-        approveService.deleteAll(approvalsForMrByAuthorId);
+        approvalsForMrByAuthorId.forEach(approveEntity -> approveEntity.setIsDelete(true));
+
+        approveService.saveAll(approvalsForMrByAuthorId);
 
         reactionMrService.addReactionToMessage(mergeRequest);
 

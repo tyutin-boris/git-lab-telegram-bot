@@ -32,7 +32,7 @@ public class CreateMrServiceImpl implements CreateMrService {
 
     @Override
     @Transactional
-    public void sendAndSaveMessage(MergeRequestDto mergeRequest) {
+    public void  sendAndSaveMessage(MergeRequestDto mergeRequest) {
         long mrId = mergeRequest.getMrId();
         long authorId = mergeRequest.getAuthor()
                 .getId();
@@ -49,7 +49,7 @@ public class CreateMrServiceImpl implements CreateMrService {
             return;
         }
 
-        String text = mrTextMessageService.createMergeRequestTextMessage(mergeRequest);
+        String text = mrTextMessageService.createMergeRequestText(mergeRequest);
 
         Long messageId;
 
@@ -78,8 +78,10 @@ public class CreateMrServiceImpl implements CreateMrService {
                 .stream()
                 .toList();
 
+        String message = mrTextMessageService.createMrMessage(entity.getMrId());
+
         for (MessageChatsEntity messageChat : messageChats) {
-            sender.sendMessage(entity.getText(), messageChat.getChatId())
+            sender.sendMessage(message, messageChat.getChatId())
                     .ifPresent(sent -> messageChat.setTgId(sent.getMessageId()));
         }
 

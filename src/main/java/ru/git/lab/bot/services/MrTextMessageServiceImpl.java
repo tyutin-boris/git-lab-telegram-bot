@@ -6,14 +6,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.git.lab.bot.dto.AuthorDto;
 import ru.git.lab.bot.dto.MergeRequestDto;
-import ru.git.lab.bot.model.entities.ApproveEntity;
 import ru.git.lab.bot.model.entities.GitUserEntity;
-import ru.git.lab.bot.services.api.MrTextMessageService;
+import ru.git.lab.bot.model.entities.TgMrMessageEntity;
+import ru.git.lab.bot.services.api.ApproveService;
 import ru.git.lab.bot.services.api.GitUserService;
+import ru.git.lab.bot.services.api.MrTextMessageService;
+import ru.git.lab.bot.services.api.TgMrMessageService;
+import ru.git.lab.bot.services.pipelines.api.PipelineStatusTextService;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -26,8 +28,14 @@ public class MrTextMessageServiceImpl implements MrTextMessageService {
 
     private final GitUserService gitUserService;
 
+    private final ApproveService approveService;
+
+    private final PipelineStatusTextService pipelineStatusTextService;
+
+    private final TgMrMessageService tgMrMessageService;
+
     @Override
-    public String createMergeRequestTextMessage(MergeRequestDto mergeRequest) {
+    public String createMergeRequestText(MergeRequestDto mergeRequest) {
         String projectText = getProjectText(mergeRequest.getProjectName());
         String title = getTitleText(mergeRequest.getTitle());
         String description = getDescriptionText(mergeRequest.getDescription());
@@ -41,13 +49,28 @@ public class MrTextMessageServiceImpl implements MrTextMessageService {
     }
 
     @Override
-    public String createMergeRequestTextMessageWithApprove(MergeRequestDto mergeRequest, List<ApproveEntity> approves) {
-        String mergeRequestTextMessage = createMergeRequestTextMessage(mergeRequest);
-        StringBuilder stringBuilder = new StringBuilder(mergeRequestTextMessage);
-        approves.forEach(a -> {
-            String approveMessage = "\n\n" + likeEmoji + " " + "<b>" + a.getAuthorName() + " approved </b>";
-            stringBuilder.append(approveMessage);
-        });
+    public String createMrMessage(Long mrId) {
+        String mrText = getMrText(mrId);
+        String approvals = getApprovals(mrId);
+        String pipelines = pipelineStatusTextService.createText(mrId);
+
+        return mrText + approvals + pipelines;
+    }
+
+    private String getMrText(Long mrId) {
+        return tgMrMessageService.findByMrId(mrId)
+                .map(TgMrMessageEntity::getText)
+                .orElseThrow(() -> new RuntimeException("Mr with id " + mrId + " not found"));
+    }
+
+    private String getApprovals(Long mrId) {
+        StringBuilder stringBuilder = new StringBuilder();
+        approveService.findAllByMrIdAndIsDeleteFalse(mrId)
+                .forEach(a -> {
+                    String approveMessage = "\n\n" + likeEmoji + " " + "<b>" + a.getAuthorName() + " approved </b>";
+                    stringBuilder.append(approveMessage);
+                });
+
         return stringBuilder.toString();
     }
 
