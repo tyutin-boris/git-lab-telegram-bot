@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS tg_message_history (
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    text TEXT NOT NULL,
+    create_date TIMESTAMP NOT NULL
+);

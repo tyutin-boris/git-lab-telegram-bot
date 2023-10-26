@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.*;
 import ru.git.lab.bot.dto.ChatResponse;
 import ru.git.lab.bot.dto.ChatType;
+import ru.git.lab.bot.services.api.TgMessageHistoryService;
 import ru.git.lab.bot.services.bot.api.BotService;
 import ru.git.lab.bot.services.chat.api.ChatService;
 
@@ -20,11 +21,14 @@ import static ru.git.lab.bot.dto.ChatType.stringToChatType;
 public class BotServiceImpl implements BotService {
 
     private final Map<ChatType, ChatService> chatService;
+    private final TgMessageHistoryService tgMessageHistoryService;
 
     @Override
     public Optional<ChatResponse> handleReceivedUpdate(Update update) {
         log.debug("Update id: " + update.getUpdateId());
         ChatType chatType = stringToChatType(getChat(update).getType());
+
+        tgMessageHistoryService.save(update);
 
         return chatService.get(chatType).handle(update);
     }
