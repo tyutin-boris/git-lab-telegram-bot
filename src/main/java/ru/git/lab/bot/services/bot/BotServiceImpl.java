@@ -3,16 +3,19 @@ package ru.git.lab.bot.services.bot;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.*;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.Chat;
+import org.telegram.telegrambots.meta.api.objects.ChatMemberUpdated;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.git.lab.bot.dto.ChatResponse;
 import ru.git.lab.bot.dto.ChatType;
+import ru.git.lab.bot.services.api.TgMessageHistoryService;
 import ru.git.lab.bot.services.bot.api.BotService;
 import ru.git.lab.bot.services.chat.api.ChatService;
 
 import java.util.Map;
 import java.util.Optional;
-
-import static ru.git.lab.bot.dto.ChatType.stringToChatType;
 
 @Slf4j
 @Service
@@ -21,21 +24,29 @@ public class BotServiceImpl implements BotService {
 
     private final Map<ChatType, ChatService> chatService;
 
+    private final TgMessageHistoryService tgMessageHistoryService;
+
     @Override
     public Optional<ChatResponse> handleReceivedUpdate(Update update) {
         log.debug("Update id: " + update.getUpdateId());
-        ChatType chatType = stringToChatType(getChat(update).getType());
+        tgMessageHistoryService.save(update);
 
-        return chatService.get(chatType).handle(update);
+        ChatType chatType = getChat(update)
+                .map(Chat::getType)
+                .map(ChatType::stringToChatType)
+                .orElse(ChatType.INDEFINITELY);
+
+        return chatService.get(chatType)
+                .handle(update);
     }
 
-    private Chat getChat(Update update) {
+    private Optional<Chat> getChat(Update update) {
         Optional<Chat> chatFormMessage = Optional.ofNullable(update.getMessage())
                 .map(Message::getChat);
 
         if (chatFormMessage.isPresent()) {
             log.debug("Get chat from message");
-            return chatFormMessage.get();
+            return chatFormMessage;
         }
 
         Optional<Chat> chatFormMember = Optional.ofNullable(update.getMyChatMember())
@@ -43,7 +54,7 @@ public class BotServiceImpl implements BotService {
 
         if (chatFormMember.isPresent()) {
             log.debug("Get chat from my member");
-            return chatFormMember.get();
+            return chatFormMember;
         }
 
         Optional<Chat> chatFomCallback = Optional.ofNullable(update.getCallbackQuery())
@@ -52,9 +63,9 @@ public class BotServiceImpl implements BotService {
 
         if (chatFomCallback.isPresent()) {
             log.debug("Get chat from callback");
-            return chatFomCallback.get();
+            return chatFomCallback;
         }
 
-        throw new RuntimeException("Chat not found. Update id " + update.getUpdateId());
+        return Optional.empty();
     }
 }

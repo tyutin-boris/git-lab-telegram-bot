@@ -47,7 +47,9 @@ public class MrUpdateEventHandler implements MrEventHandler {
 
         for (MessageChatsEntity chat : chats) {
             Integer tgId = chat.getTgId();
-            if (Objects.isNull(tgId)) {
+            if (Objects.isNull(tgId) && mergeRequest.isDraft()) {
+                tgMrMessage.setText(newText);
+            } else if (Objects.isNull(tgId)) {
                 messageSender.sendMessage(message, chat.getChatId())
                         .ifPresent(sent -> saveMessage(sent.getMessageId(), newText, chat, tgMrMessage));
                 log.debug("Sent tg message id: {}, chatId: {}", tgMrMessage.getId(), chat.getChatId());
