@@ -27,9 +27,11 @@ public class ChatServiceImpl implements ChatService {
                 .orElseThrow(() -> new RuntimeException("Chat is null"));
 
         ChatEntity entity = new ChatEntity();
+        String title = Optional.ofNullable(chatNotNull.getTitle()).orElse("N/D");
+
         entity.setId(chatNotNull.getId());
         entity.setType(ChatType.stringToChatType(chatNotNull.getType()));
-        entity.setTitle(chatNotNull.getTitle());
+        entity.setTitle(title);
 
         chatRepository.save(entity);
     }
